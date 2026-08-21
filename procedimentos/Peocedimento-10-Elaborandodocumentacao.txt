@@ -1,0 +1,365 @@
+!======================================================================
+! PROCEDIMENTO 010 - DOCUMENTAÇÃO DA TOPOLOGIA DE REDE
+!======================================================================
+!
+! Objetivo:
+! Registrar e organizar as informações da infraestrutura de rede,
+! permitindo identificar equipamentos, interfaces, endereçamento,
+! conexões e funções de cada elemento da topologia.
+!
+! Ambiente:
+! Cisco Packet Tracer
+!
+!======================================================================
+
+!======================================================================
+! 01 - IDENTIFICAÇÃO DO AMBIENTE
+!======================================================================
+
+! A topologia utilizada neste laboratório possui:
+!
+! - 01 Router Cisco
+! - 02 Switches Cisco
+! - 01 Servidor
+! - 04 Desktops
+!
+! A rede utiliza o segmento IPv4:
+!
+! Rede:       192.168.1.0/24
+! Máscara:    255.255.255.0
+! Gateway:    192.168.1.254
+!
+!======================================================================
+
+
+!======================================================================
+! 02 - DOCUMENTAÇÃO DO ROUTER
+!======================================================================
+
+! Equipamento:
+! RT-1941-1
+!
+! Função:
+! Gateway da rede local e ponto de gerenciamento da infraestrutura.
+!
+! Interface utilizada:
+! GigabitEthernet 0/0
+!
+! Endereço IPv4:
+! 192.168.1.254
+!
+! Máscara:
+! 255.255.255.0
+!
+! Gateway:
+! O próprio equipamento atua como Gateway da rede LAN.
+!
+!======================================================================
+
+
+!======================================================================
+! 03 - DOCUMENTAÇÃO DOS SWITCHES
+!======================================================================
+
+!----------------------------------------------------------------------
+! SWITCH 01
+!----------------------------------------------------------------------
+
+! Host:
+! SW-L2-2960-1
+!
+! Função:
+! Conectividade dos dispositivos da primeira parte da rede local.
+!
+! Interface virtual de gerenciamento:
+! VLAN 1
+!
+! Endereço IPv4:
+! 192.168.1.250
+!
+! Máscara:
+! 255.255.255.0
+!
+! Gateway:
+! 192.168.1.254
+
+
+!----------------------------------------------------------------------
+! SWITCH 02
+!----------------------------------------------------------------------
+
+! Host:
+! SW-L2-2960-2
+!
+! Função:
+! Conectividade dos dispositivos da segunda parte da rede local.
+!
+! Interface virtual de gerenciamento:
+! VLAN 1
+!
+! Endereço IPv4:
+! 192.168.1.251
+!
+! Máscara:
+! 255.255.255.0
+!
+! Gateway:
+! 192.168.1.254
+
+
+!======================================================================
+! 04 - DOCUMENTAÇÃO DO SERVIDOR
+!======================================================================
+
+! Host:
+! Server-01
+!
+! Tipo de configuração:
+! Endereço IPv4 estático
+!
+! Endereço IPv4:
+! 192.168.1.1
+!
+! Gateway:
+! 192.168.1.254
+!
+! Função no laboratório:
+! Servidor utilizado como ponto de apoio para serviços e
+! procedimentos administrativos da infraestrutura.
+!
+!======================================================================
+
+
+!======================================================================
+! 05 - DOCUMENTAÇÃO DOS COMPUTADORES
+!======================================================================
+
+!----------------------------------------------------------------------
+! DESKTOP 01
+!----------------------------------------------------------------------
+
+! Host:
+! Desktop-01
+!
+! IPv4:
+! 192.168.1.10
+!
+! Gateway:
+! 192.168.1.254
+
+
+!----------------------------------------------------------------------
+! DESKTOP 02
+!----------------------------------------------------------------------
+
+! Host:
+! Desktop-02
+!
+! IPv4:
+! 192.168.1.11
+!
+! Gateway:
+! 192.168.1.254
+
+
+!----------------------------------------------------------------------
+! DESKTOP 03
+!----------------------------------------------------------------------
+
+! Host:
+! Desktop-03
+!
+! IPv4:
+! 192.168.1.12
+!
+! Gateway:
+! 192.168.1.254
+
+
+!----------------------------------------------------------------------
+! DESKTOP 04
+!----------------------------------------------------------------------
+
+! Host:
+! Desktop-04
+!
+! IPv4:
+! 192.168.1.13
+!
+! Gateway:
+! 192.168.1.254
+
+
+!======================================================================
+! 06 - TABELA DE ENDEREÇAMENTO
+!======================================================================
+
+! Equipamento       Interface       IPv4
+!
+! RT-1941-1         Gig0/0          192.168.1.254
+! SW-L2-2960-1      VLAN 1          192.168.1.250
+! SW-L2-2960-2      VLAN 1          192.168.1.251
+! Server-01         Ethernet        192.168.1.1
+! Desktop-01        Ethernet        192.168.1.10
+! Desktop-02        Ethernet        192.168.1.11
+! Desktop-03        Ethernet        192.168.1.12
+! Desktop-04        Ethernet        192.168.1.13
+
+
+!======================================================================
+! 07 - MAPA DE CONECTIVIDADE
+!======================================================================
+
+! O servidor está conectado ao SW-L2-2960-1.
+!
+! O SW-L2-2960-1 possui conexão com:
+!
+! - Server-01
+! - Desktop-01
+! - Desktop-02
+! - SW-L2-2960-2
+!
+! O SW-L2-2960-2 possui conexão com:
+!
+! - SW-L2-2960-1
+! - Desktop-03
+! - Desktop-04
+! - RT-1941-1
+!
+! O Router RT-1941-1 fornece o Gateway IPv4 da rede.
+
+
+!======================================================================
+! 08 - PADRÃO DE DOCUMENTAÇÃO
+!======================================================================
+
+! Para documentar uma infraestrutura de rede, registrar no mínimo:
+!
+! 01. Nome ou identificação do equipamento;
+! 02. Modelo do dispositivo;
+! 03. Função desempenhada;
+! 04. Interface utilizada;
+! 05. Endereço IPv4;
+! 06. Máscara de rede;
+! 07. Gateway;
+! 08. VLAN, quando aplicável;
+! 09. Equipamento conectado na outra extremidade;
+! 10. Observações sobre a configuração.
+
+
+!======================================================================
+! 09 - DOCUMENTAÇÃO DAS INTERFACES
+!======================================================================
+
+! Cada interface deve possuir uma identificação que permita
+! compreender sua finalidade.
+!
+! Exemplo:
+!
+! interface gigabitEthernet 0/0
+! description Gateway da Rede LAN
+!
+! A utilização do comando description facilita a manutenção,
+! identificação e interpretação da topologia.
+
+
+!======================================================================
+! 10 - REGISTRO DAS CONFIGURAÇÕES
+!======================================================================
+
+! Depois da configuração dos equipamentos, recomenda-se registrar
+! as informações obtidas por meio dos comandos de consulta.
+!
+! Exemplos:
+!
+! show running-config
+! show startup-config
+! show ip interface brief
+! show ip route
+! show vlan brief
+!
+! Os resultados podem ser armazenados juntamente com a documentação
+! para facilitar futuras atividades de manutenção e auditoria.
+
+
+!======================================================================
+! 11 - TESTES DE CONECTIVIDADE
+!======================================================================
+
+! A documentação deve registrar também os testes realizados.
+!
+! Exemplos de testes:
+!
+! ping 192.168.1.254
+! ping 192.168.1.250
+! ping 192.168.1.251
+! ping 192.168.1.1
+! ping 192.168.1.10
+! ping 192.168.1.11
+! ping 192.168.1.12
+! ping 192.168.1.13
+!
+! O objetivo é confirmar a comunicação entre os dispositivos
+! pertencentes à mesma infraestrutura.
+
+
+!======================================================================
+! 12 - EVIDÊNCIAS DO LABORATÓRIO
+!======================================================================
+
+! A documentação pode conter evidências visuais das etapas
+! executadas no ambiente de simulação.
+!
+! Recomenda-se registrar:
+!
+! - Topologia completa;
+! - Configuração do Router;
+! - Configuração dos Switches;
+! - Endereçamento dos computadores;
+! - Configuração do servidor;
+! - Testes de ping;
+! - Tabelas de endereçamento;
+! - Saída dos principais comandos show.
+
+
+!======================================================================
+! 13 - MODELO DE IDENTIFICAÇÃO
+!======================================================================
+
+! Nome do laboratório:
+! Procedimento 010 - Documentação da Topologia
+!
+! Rede:
+! 192.168.1.0/24
+!
+! Gateway:
+! 192.168.1.254
+!
+! Equipamentos:
+! 01 Router
+! 02 Switches
+! 01 Servidor
+! 04 Desktops
+!
+! Status:
+! Laboratório documentado.
+
+
+!======================================================================
+! 14 - CONCLUSÃO
+!======================================================================
+
+! A documentação permite representar de forma organizada a estrutura
+! física e lógica da rede.
+!
+! Além de facilitar o aprendizado, esse registro auxilia atividades
+! de suporte, manutenção, diagnóstico, expansão e auditoria da
+! infraestrutura.
+!
+! Uma documentação adequada deve permitir que outra pessoa consiga
+! compreender a topologia e reproduzir suas configurações sem
+! depender exclusivamente do autor do laboratório.
+!
+!======================================================================
+! FIM DO PROCEDIMENTO 010
+!======================================================================
