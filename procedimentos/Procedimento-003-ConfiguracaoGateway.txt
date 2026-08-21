@@ -1,0 +1,111 @@
+! ============================================================
+! PROCEDIMENTO 003 - CONFIGURACAO DO GATEWAY E SVI
+! ============================================================
+! Professor: Ygor Silva
+! Curso: CCNA v7 - 200-301
+! Ambiente: Cisco Packet Tracer 9.0
+! ============================================================
+! Objetivo: configurar o gateway IPv4 e a interface virtual
+! utilizada para o gerenciamento do Switch Layer 2.
+! ============================================================
+
+! Acesso ao modo EXEC privilegiado
+enable
+
+```
+! Entrada no modo de configuracao global
+configure terminal
+
+	! Definindo o gateway utilizado pelo Switch para
+	! comunicacao com outras redes IPv4.
+	!
+	! Em equipamentos Layer 2, essa configuracao permite
+	! que o trafego destinado a redes externas seja encaminhado
+	! para o roteador ou dispositivo definido como gateway.
+	!
+	! O endereco abaixo representa o gateway da rede utilizada
+	! neste laboratorio.
+	ip default-gateway 192.168.1.254
+
+	! Selecionando a interface virtual associada a VLAN 1.
+	!
+	! A SVI (Switch Virtual Interface) fornece um endereco
+	! IP para o gerenciamento do equipamento.
+	!
+	! Em ambientes de producao, recomenda-se avaliar a criacao
+	! de uma VLAN exclusiva para gerenciamento.
+	interface vlan 1
+	
+		! Identificando a finalidade da interface virtual.
+		!
+		! O comando description auxilia na documentacao da
+		! infraestrutura e facilita a identificacao do recurso.
+		description Interface de Gerenciamento - SW-L2-2960-1
+	
+		! Definindo o endereco IPv4 utilizado para gerenciamento.
+		!
+		! O endereco precisa pertencer a uma rede compativel
+		! com a configuracao do gateway utilizado pelo switch.
+		ip address 192.168.1.250 255.255.255.0
+	
+		! Ativando a interface virtual.
+		no shutdown
+	
+		! Finalizando a configuracao e retornando ao
+		! modo EXEC privilegiado.
+		end
+```
+
+! Salvando a configuracao ativa na memoria de inicializacao
+copy running-config startup-config
+
+! Conferindo a configuracao atualmente carregada
+show running-config
+
+! Consultando as VLANs existentes no equipamento
+show vlan brief
+
+! Verificando o estado das interfaces e seus enderecos IPv4
+show ip interface brief
+
+==============================================================================================
+
+! Configuracao do segundo Switch
+
+! Entrada no modo EXEC privilegiado
+enable
+
+```
+! Acesso ao modo de configuracao global
+configure terminal
+
+	! Definicao do gateway IPv4 utilizado pelo equipamento
+	ip default-gateway 192.168.1.254
+
+	! Selecionando a interface virtual de gerenciamento
+	interface vlan 1
+	
+		! Identificacao da funcao da interface
+		description Interface de Gerenciamento - SW-L2-2960-2
+	
+		! Endereco IPv4 destinado ao gerenciamento do switch
+		ip address 192.168.1.251 255.255.255.0
+	
+		! Ativando a interface virtual
+		no shutdown
+	
+		! Encerrando o modo de configuracao
+		end
+```
+
+! Gravando as alteracoes para a configuracao de inicializacao
+copy running-config startup-config
+
+! Visualizando a configuracao ativa
+show running-config
+
+! Consultando as VLANs configuradas
+show vlan brief
+
+! Verificando o estado das interfaces e enderecos IPv4
+show ip interface brief
