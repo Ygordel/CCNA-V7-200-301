@@ -1,0 +1,96 @@
+! ==============================================================
+! PROCEDIMENTO - ATUALIZACAO DO CISCO IOS NO SWITCH 2960
+! Equipamento: Cisco Catalyst 2960
+! Ambiente: Cisco Packet Tracer / GNS3
+! Objetivo: realizar a substituicao da imagem do IOS armazenada
+! na memoria Flash e definir a nova imagem para inicializacao.
+! ==============================================================
+
+! ==============================================================
+! PRE-REQUISITO
+! ==============================================================
+
+! Antes de iniciar a atualizacao, recomenda-se possuir uma copia
+! de seguranca da configuracao e da imagem atual do equipamento.
+!
+! O backup permite recuperar o ambiente caso ocorra algum
+! problema durante a transferencia ou inicializacao do novo IOS.
+
+
+! ==============================================================
+! ACESSO AO MODO EXEC PRIVILEGIADO
+! ==============================================================
+
+enable
+
+	! ==========================================================
+	! TRANSFERENCIA DA NOVA IMAGEM DO IOS
+	! ==========================================================
+
+	! Copiando a nova imagem do Cisco IOS a partir do servidor
+	! TFTP para a memoria Flash do Switch.
+	!
+	! O servidor utilizado neste laboratorio possui o endereco:
+	! 192.168.1.1
+	copy tftp: flash:
+
+		! Endereco IPv4 do servidor TFTP
+		192.168.1.1
+
+		! Arquivo de imagem IOS que sera transferido
+		c2960-lanbasek9-mz.150-2.SE4.bin
+
+	! Conferindo os arquivos existentes na memoria Flash
+	! apos a transferencia.
+	show flash:
+
+
+	! ==========================================================
+	! DEFINICAO DA IMAGEM DE INICIALIZACAO
+	! ==========================================================
+
+	! Entrada no modo de configuracao global
+	configure terminal
+
+		! Indicando ao equipamento qual imagem do IOS devera
+		! ser utilizada durante o processo de inicializacao.
+		!
+		! O nome informado precisa corresponder ao arquivo
+		! armazenado na memoria Flash.
+		boot system c2960-lanbasek9-mz.150-2.SE4.bin
+
+		! Retorno ao modo EXEC privilegiado
+		end
+
+
+! ==============================================================
+! VALIDACAO DA CONFIGURACAO DE BOOT
+! ==============================================================
+
+! Consultando as informacoes utilizadas durante a inicializacao
+! do Switch.
+show boot
+
+
+! ==============================================================
+! GRAVACAO DA CONFIGURACAO
+! ==============================================================
+
+! Armazenando a configuracao atual na NVRAM para preservar
+! a definicao da nova imagem de inicializacao.
+write
+
+
+! ==============================================================
+! REINICIALIZACAO DO EQUIPAMENTO
+! ==============================================================
+
+! Reiniciando o Switch para que a nova imagem configurada
+! seja carregada durante o processo de boot.
+!
+! ATENCAO:
+! A reinicializacao interrompe temporariamente o funcionamento
+! do equipamento. Execute esta etapa somente depois de confirmar
+! que o arquivo foi transferido corretamente e que a configuracao
+! de boot aponta para a imagem desejada.
+reload
