@@ -1,0 +1,151 @@
+! ============================================================
+! PROCEDIMENTO 004 - CONFIGURACAO DO SSH NO SWITCH CISCO
+! ============================================================
+! Professor: Ygor Silva
+! Curso: CCNA v7 - 200-301
+! Ambiente: Cisco Packet Tracer 9.0
+! ============================================================
+! Objetivo: habilitar o gerenciamento remoto do switch utilizando
+! o protocolo SSH e restringir as linhas VTY para esse protocolo.
+! ============================================================
+
+! Acesso ao modo EXEC privilegiado
+enable
+
+```
+! Entrada no modo de configuracao global
+configure terminal
+
+	! Definicao do dominio utilizado na identificacao do
+	! equipamento para a infraestrutura de criptografia.
+	ip domain-name lab.ygorsilva.local
+
+	! Geracao das chaves RSA utilizadas pelo servico SSH.
+	!
+	! O tamanho da chave utilizado neste laboratorio e de
+	! 1024 bits para manter compatibilidade com o ambiente
+	! de simulacao.
+	crypto key generate rsa general-keys modulus 1024
+
+	! Selecionando a versao 2 do protocolo SSH.
+	!
+	! A versao 2 deve ser priorizada por oferecer mecanismos
+	! de seguranca superiores aos da versao anterior.
+	ip ssh version 2
+
+	! Definindo o tempo limite para o processo de autenticacao
+	! de novas sessoes SSH.
+	!
+	! O valor utilizado neste exemplo corresponde a 60 segundos.
+	ip ssh time-out 60
+
+	! Limitando a quantidade de tentativas de autenticacao
+	! permitidas durante uma conexao SSH.
+	ip ssh authentication-retries 2
+
+	! Selecionando as linhas VTY utilizadas para o acesso remoto.
+	line vty 0 4
+	
+		! Permitindo somente conexoes SSH nas linhas VTY.
+		!
+		! Dessa forma, o acesso remoto por Telnet deixa de ser
+		! permitido nessas linhas.
+		transport input ssh
+
+		! Finalizando a configuracao.
+		end
+```
+
+! Salvando a configuracao ativa na memoria de inicializacao.
+copy running-config startup-config
+
+! Conferindo a configuracao geral do equipamento.
+show running-config
+
+! Consultando os parametros atualmente utilizados pelo SSH.
+show ip ssh
+
+! Exibindo as chaves publicas RSA existentes no equipamento.
+show crypto key mypubkey rsa
+
+! Consultando as sessoes SSH atualmente estabelecidas.
+show ssh
+
+! Verificando a configuracao IPv4 do computador utilizado
+! para realizar os testes de conectividade.
+ipconfig
+
+! Testando a comunicacao IP com os switches por ICMP.
+ping 192.168.1.250
+ping 192.168.1.251
+
+! Teste de acesso remoto utilizando Telnet.
+!
+! O teste deve ser utilizado apenas para demonstrar a diferenca
+! entre os protocolos, pois as linhas VTY foram configuradas
+! para aceitar somente SSH.
+telnet 192.168.1.250
+telnet 192.168.1.251
+
+! Estabelecendo uma sessao remota utilizando SSH.
+!
+! No parametro "-l", a letra utilizada e "l" minuscula.
+ssh -l admin 192.168.1.250
+ssh -l admin 192.168.1.251
+
+! Consultando os usuarios e sessoes conectadas ao equipamento.
+show users
+
+==============================================================================================
+
+! Configuracao do segundo Switch
+
+! Entrada no modo EXEC privilegiado
+enable
+
+```
+! Acesso ao modo de configuracao global
+configure terminal
+
+	! Definicao do dominio utilizado pelo servico SSH
+	ip domain-name lab.ygorsilva.local
+
+	! Geracao das chaves RSA para o servico SSH
+	crypto key generate rsa general-keys modulus 1024
+
+	! Ativacao da versao 2 do SSH
+	ip ssh version 2
+
+	! Definicao do tempo limite para autenticacao
+	ip ssh time-out 60
+
+	! Definicao do limite de tentativas de autenticacao
+	ip ssh authentication-retries 2
+
+	! Selecao das linhas virtuais de acesso remoto
+	line vty 0 4
+	
+		! Restricao do transporte para conexoes SSH
+		transport input ssh
+
+		! Encerramento da configuracao
+		end
+```
+
+! Salvando as alteracoes realizadas no equipamento
+copy running-config startup-config
+
+! Exibindo a configuracao ativa
+show running-config
+
+! Verificando os parametros do servico SSH
+show ip ssh
+
+! Consultando as chaves publicas RSA
+show crypto key mypubkey rsa
+
+! Consultando as sessoes SSH ativas
+show ssh
+
+! Verificando as sessoes de usuarios existentes
+show users
