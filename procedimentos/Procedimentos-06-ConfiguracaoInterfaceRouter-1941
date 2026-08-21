@@ -1,0 +1,79 @@
+! ==============================================================
+! CONFIGURAÇÃO DA INTERFACE GIGABITETHERNET DO ROUTER
+! Ambiente: Cisco Packet Tracer / GNS3
+! Equipamento: Cisco Router 1941
+! Objetivo: Configurar o Gateway IPv4 da rede local
+! ==============================================================
+
+! Acesso ao modo EXEC privilegiado
+enable
+
+	! Entrada no modo de configuração global
+	configure terminal
+
+		! Selecionando a interface física GigabitEthernet 0/0
+		interface gigabitEthernet 0/0
+
+			! Identificação da função desempenhada pela interface
+			description Gateway IPv4 da Rede LAN - Router RT-1941-1
+
+			! Definição do endereço IPv4 utilizado como Gateway da LAN
+			!
+			! O endereço configurado nesta interface será utilizado
+			! pelos dispositivos da rede local como seu Gateway padrão.
+			ip address 192.168.1.254 255.255.255.0
+
+			! Ativando administrativamente a interface física
+			!
+			! Em roteadores Cisco, as interfaces podem iniciar
+			! administrativamente desabilitadas. O comando abaixo
+			! altera o estado da interface para ativo.
+			no shutdown
+
+			! Retornando diretamente ao modo EXEC privilegiado
+			end
+
+! Gravando a configuração atual na memória NVRAM
+!
+! Dessa forma, as configurações permanecem disponíveis após
+! uma reinicialização do equipamento.
+write
+
+! ==============================================================
+! COMANDOS DE VERIFICAÇÃO
+! ==============================================================
+
+! Exibindo a configuração atualmente carregada no equipamento
+show running-config
+
+! Apresentando o estado e os endereços das interfaces IPv4
+show ip interface brief
+
+! Exibindo informações completas da interface GigabitEthernet 0/0
+show interface gigabitEthernet 0/0
+
+! Consultando a tabela de roteamento IPv4 do equipamento
+show ip route
+
+! ==============================================================
+! TESTES DE CONECTIVIDADE
+! ==============================================================
+
+! Testando a comunicação com o próprio endereço do Gateway
+ping 192.168.1.254
+
+! Testando a comunicação com o Switch de gerenciamento 01
+ping 192.168.1.250
+
+! Testando a comunicação com o Switch de gerenciamento 02
+ping 192.168.1.251
+
+! Testando a comunicação com um dispositivo da rede LAN
+ping 192.168.1.10
+
+! ==============================================================
+! TESTE DE GERENCIAMENTO REMOTO
+! ==============================================================
+
+! Estabelecendo uma sessão SSH utilizando o usuário administrador
+ssh -l admin 192.168.1.254
