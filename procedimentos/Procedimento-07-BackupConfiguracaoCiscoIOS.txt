@@ -1,0 +1,190 @@
+! ==============================================================
+! PROCEDIMENTO - BACKUP DE CONFIGURACOES E CISCO IOS
+! Equipamentos: Switch Cisco 2960 e Router Cisco 1941
+! Ambiente: Cisco Packet Tracer / GNS3
+! Objetivo: realizar copias de seguranca das configuracoes,
+! arquivos de inicializacao e imagens do Cisco IOS.
+! ==============================================================
+
+
+! ==============================================================
+ BACKUP DO SWITCH CISCO 2960
+! ==============================================================
+
+! Entrada no modo EXEC privilegiado
+enable
+
+	! Consulta das informacoes gerais do equipamento
+	!
+	! Permite identificar modelo, hardware, memoria, versao do
+	! Cisco IOS e demais informacoes utilizadas durante a
+	! administracao e diagnostico do dispositivo.
+	show version
+
+		! Exemplo de informacao apresentada pelo equipamento
+		63488K bytes of flash-simulated non-volatile configuration memory.
+		63488KB/1000=64MB
+
+	! Consulta dos parametros relacionados ao processo de boot
+	!
+	! Essa verificacao permite identificar informacoes utilizadas
+	! durante a inicializacao do Switch.
+	show boot
+	
+	! ==========================================================
+	! VERIFICACAO DA MEMORIA FLASH
+	! ==========================================================
+
+	! Lista os arquivos armazenados na memoria Flash
+	show flash:
+
+	! Exibe o conteudo do diretorio Flash
+	dir flash:
+
+		! Exemplo de capacidade observada no laboratorio
+		64016384 Bytes Total = 64 MB
+		59599664 Bytes Free  = 60 MB
+	
+	! ==========================================================
+	! BACKUP DA CONFIGURACAO
+	! ==========================================================
+
+	! Copia a configuracao atualmente ativa para a configuracao
+	! utilizada durante a inicializacao do equipamento.
+	copy running-config startup-config
+	
+	! Copia o arquivo de inicializacao da NVRAM para a memoria
+	! Flash, criando uma segunda copia local da configuracao.
+	copy startup-config flash:
+
+	! Confirma os arquivos armazenados na memoria Flash.
+	dir flash:
+	
+	! ==========================================================
+	! BACKUP PARA SERVIDOR TFTP
+	! ==========================================================
+
+	! Verifica os arquivos existentes na NVRAM.
+	dir nvram:
+
+	! Testa a comunicacao IP com o servidor utilizado no laboratorio.
+	ping 192.168.1.1
+
+	! Envia o arquivo startup-config para o servidor TFTP.
+	!
+	! O TFTP e utilizado neste laboratorio como mecanismo simples
+	! de transferencia de arquivos de configuracao.
+	copy startup-config tftp:
+
+		! Endereco IPv4 do servidor TFTP
+		192.168.1.1
+	
+	! ==========================================================
+	! BACKUP DA IMAGEM DO CISCO IOS
+	! ==========================================================
+
+	! Copia a imagem do Cisco IOS armazenada na Flash para
+	! o servidor TFTP.
+	copy flash: tftp:
+
+		! Nome da imagem utilizada no laboratorio
+		c2960-lanbase-mz.122-25.FX.bin
+
+		! Endereco do servidor TFTP
+		192.168.1.1
+	
+	! ==========================================================
+	! BACKUP MANUAL DA CONFIGURACAO EM ARQUIVO DE TEXTO
+	! ==========================================================
+
+	! Exibe a configuracao ativa para permitir sua copia
+	! para um editor de texto.
+	!
+	! Esse procedimento pode ser utilizado como uma copia
+	! adicional da configuracao do equipamento.
+	show running-config
+	
+	! Retorno ao modo EXEC usuario.
+	disable
+
+
+! ==============================================================
+! BACKUP DO ROUTER CISCO 1941
+! ==============================================================
+
+! Entrada no modo EXEC privilegiado
+enable
+	
+	! Consulta das informacoes gerais do Router.
+	!
+	! Permite verificar modelo, versao do IOS, memoria,
+	! hardware e informacoes relacionadas a inicializacao.
+	show version
+
+		! Exemplo de capacidade da memoria CompactFlash
+		249856K bytes of ATA System CompactFlash 0 (Read/Write)
+		249856KB/1000=250MB
+	
+	! ==========================================================
+	! CONSULTA DA MEMORIA FLASH
+	! ==========================================================
+
+	! Exibe os arquivos existentes na memoria Flash do Router.
+	show flash:
+
+	! Lista o conteudo do dispositivo Flash 0.
+	dir flash0:
+
+		! Exemplo de capacidade apresentada no laboratorio
+		255744000 Bytes Total = 256MB
+		33847587 Bytes Used = 34MB
+		221896413 Bytes Available = 222MB
+	
+	! ==========================================================
+	! BACKUP DA CONFIGURACAO
+	! ==========================================================
+
+	! Grava a configuracao ativa na NVRAM para que ela
+	! possa ser recuperada durante a inicializacao.
+	copy running-config startup-config
+	
+	! Cria uma copia da configuracao de inicializacao
+	! na memoria Flash.
+	copy startup-config flash:
+	
+	! Consulta o conteudo armazenado na NVRAM.
+	dir nvram:
+
+	! Verifica a conectividade com o servidor TFTP.
+	ping 192.168.1.1
+
+	! Transfere o arquivo de configuracao para o servidor TFTP.
+	copy startup-config tftp:
+
+		! Endereco IPv4 do servidor TFTP
+		192.168.1.1
+	
+	! ==========================================================
+	! BACKUP DA IMAGEM DO CISCO IOS DO ROUTER
+	! ==========================================================
+
+	! Transfere a imagem do IOS armazenada na Flash para
+	! o servidor TFTP.
+	copy flash: tftp:
+
+		! Arquivo de imagem Cisco IOS utilizado no laboratorio
+		c1900-universalk9-mz.SPA.151-4.M4.bin
+
+		! Endereco do servidor TFTP
+		192.168.1.1
+		
+	! ==========================================================
+	! COPIA MANUAL DA CONFIGURACAO
+	! ==========================================================
+
+	! Apresenta a configuracao ativa para que ela possa
+	! ser copiada e armazenada em um arquivo de texto.
+	show running-config
+	
+	! Retorno ao modo EXEC usuario.
+	disable
