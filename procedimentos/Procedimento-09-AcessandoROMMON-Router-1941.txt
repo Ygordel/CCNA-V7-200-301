@@ -1,0 +1,273 @@
+! ==============================================================
+! PROCEDIMENTO - RECUPERACAO DE CONFIGURACAO E IOS
+! Equipamentos: Cisco Router 1941 / Switch 2960 / Switch 3560
+! Ambiente: Cisco Packet Tracer / GNS3
+! Objetivo: recuperar configuracoes, redefinir parametros de
+! inicializacao e demonstrar procedimentos de recuperacao em ROMMON.
+! ==============================================================
+
+
+! ==============================================================
+! INFORMACOES PREVIAS
+! ==============================================================
+
+! Em determinados cenarios, apos uma reinicializacao ou
+! restauracao de configuracao, pode ser necessario recriar
+! as chaves RSA utilizadas pelo servico SSH.
+!
+! Caso o ambiente apresente problemas relacionados as chaves,
+! elas podem ser removidas e posteriormente geradas novamente.
+!
+! Comando para remover as chaves RSA existentes:
+! crypto key zeroize rsa
+!
+! Exemplo de geracao de uma nova chave RSA:
+! crypto key generate rsa general-keys modulus 1024
+
+
+! ==============================================================
+! ATENCAO COM AS INTERFACES
+! ==============================================================
+
+! Durante a restauracao de uma configuracao, as interfaces podem
+! permanecer administrativamente desabilitadas.
+!
+! Quando necessario, entre na interface correspondente e utilize:
+!
+! no shutdown
+!
+! A ativacao deve ser realizada individualmente nas interfaces
+! que precisam voltar ao funcionamento.
+
+
+! ==============================================================
+! ETAPA 01 - RECUPERACAO DO ROUTER CISCO 1941
+! UTILIZANDO O MODO ROMMON
+! ==============================================================
+
+! A inicializacao deve ser interrompida para acessar o ambiente
+! ROMMON (ROM Monitor).
+!
+! No Cisco Packet Tracer, utilize:
+! Ctrl+C
+!
+! Em equipamentos reais, outras combinacoes podem ser utilizadas
+! dependendo do terminal e do metodo de acesso.
+
+
+! Exibindo os comandos disponiveis no ambiente ROMMON
+rommon 1 >?
+
+
+! ==============================================================
+! ALTERACAO DO REGISTRADOR DE CONFIGURACAO
+! ==============================================================
+
+! Definindo o registrador para iniciar o equipamento sem carregar
+! automaticamente o arquivo startup-config.
+!
+! 0x2142 = ignora o startup-config durante a inicializacao.
+!
+! 0x2102 = comportamento normal, utilizando o startup-config.
+rommon 2 >confreg 0x2142
+
+
+! Reiniciando o equipamento para aplicar a configuracao definida.
+rommon 3 >reset
+
+
+! ==============================================================
+! ACESSO AO CISCO IOS APOS A REINICIALIZACAO
+! ==============================================================
+
+! Entrada no modo EXEC privilegiado
+enable
+
+	! Consultando informacoes sobre o processo de inicializacao
+	show version
+	
+	! Exibindo o conteudo atual do arquivo startup-config
+	show startup-config
+	
+	! Removendo o arquivo startup-config armazenado na NVRAM
+	erase startup-config
+
+	! Conferindo novamente o estado da configuracao de inicializacao
+	show startup-config
+	
+	! ==========================================================
+	! RESTABELECENDO O REGISTRADOR PADRAO
+	! ==========================================================
+
+	! Entrada no modo de configuracao global
+	configure terminal
+
+		! Restaurando o comportamento normal de inicializacao
+		config-register 0x2102
+		
+		! Retorno ao modo EXEC privilegiado
+		end
+	
+! Gravando a configuracao atual na NVRAM
+write
+	
+! Reiniciando o Router para aplicar as alteracoes
+reload
+
+
+! ==============================================================
+! RESTAURACAO DE UM BACKUP EXISTENTE
+! ==============================================================
+
+! Entrada no modo EXEC privilegiado
+enable
+
+	! Conferindo novamente as informacoes do equipamento
+	show version
+	
+	! Listando os arquivos existentes na memoria Flash
+	show flash:
+	
+	! Copiando o arquivo de configuracao armazenado na Flash
+	! para o arquivo startup-config da NVRAM
+	copy flash: startup-config
+
+		! Nome do arquivo utilizado como backup
+		startup-config
+	
+	! Conferindo o conteudo restaurado na NVRAM
+	show startup-config
+	
+	! Aplicando a configuracao restaurada sobre a configuracao
+	! atualmente carregada na memoria RAM.
+	copy startup-config running-config
+	
+	! IMPORTANTE:
+	! Depois da restauracao, confira o estado das interfaces.
+	! Caso alguma esteja administrativamente desativada,
+	! acesse a interface e execute:
+	!
+	! no shutdown
+	
+	! Salvando novamente a configuracao recuperada
+	write
+	
+	! Reiniciando o equipamento
+	reload
+
+
+! ==============================================================
+! ETAPA 02 - RESET DO SWITCH CISCO 2960 / 3560
+! ==============================================================
+
+! Este procedimento depende do equipamento fisico.
+!
+! No Cisco Packet Tracer, a funcionalidade de recuperacao
+! apresentada nesta etapa possui limitacoes.
+
+
+! PROCEDIMENTO UTILIZANDO O BOTAO MODE
+!
+! 01 - Aguarde o Switch concluir sua inicializacao normal.
+!
+! 02 - Pressione o botao MODE durante aproximadamente
+!      15 a 20 segundos.
+!
+! 03 - Observe os indicadores luminosos do equipamento.
+!
+! 04 - O equipamento podera reiniciar e retornar ao estado
+!      inicial de configuracao.
+
+
+! ==============================================================
+! PROCEDIMENTO ALTERNATIVO DE RECUPERACAO DO SWITCH
+! ==============================================================
+
+! Utilize este procedimento somente quando for necessario
+! recuperar o equipamento por meio do ambiente de inicializacao.
+
+
+! 01 - Mantenha o botao MODE pressionado ate o equipamento
+!      reiniciar.
+
+! 02 - Durante a inicializacao, interrompa o carregamento
+!      do IOS utilizando o procedimento suportado pelo equipamento.
+
+! 03 - Inicializando o acesso a memoria Flash:
+flash_init
+
+! 04 - Listando os arquivos armazenados na Flash:
+dir flash:
+
+! 05 - Preservando o arquivo de configuracao atual com outro nome:
+rename flash:config.text flash:config.old
+
+! 06 - Inicializando o IOS novamente:
+boot
+
+! 07 - Removendo a configuracao de inicializacao:
+erase startup-config
+
+! 08 - Excluindo o arquivo de banco de dados das VLANs:
+delete flash:vlan.dat
+
+! 09 - Reiniciando o equipamento:
+reload
+
+
+! ==============================================================
+! ETAPA 03 - RECUPERACAO DO CISCO IOS VIA TFTPDNLD
+! AMBIENTE ROMMON
+! ==============================================================
+
+! Este recurso pode ser utilizado em cenarios de recuperacao
+! quando a imagem do IOS existente na Flash estiver ausente
+! ou apresentar problemas.
+!
+! O procedimento utiliza um servidor TFTP para fornecer
+! uma nova imagem ao equipamento.
+
+
+! ==============================================================
+! DEFINICAO DOS PARAMETROS DE REDE
+! ==============================================================
+
+! Endereco IPv4 que sera utilizado pelo equipamento
+rommon 1 > IP_ADDRESS=192.168.10.20
+
+! Mascara da rede utilizada no laboratorio
+rommon 2 > IP_SUBNET_MASK=255.255.255.0
+
+! Gateway da rede
+rommon 3 > DEFAULT_GATEWAY=192.168.10.1
+
+! Endereco IPv4 do servidor TFTP
+rommon 4 > TFTP_SERVER=192.168.10.10
+
+! Nome do arquivo de imagem do Cisco IOS
+rommon 5 > TFTP_FILE=c2960-lanbasek9-mz.150-2.SE4.bin
+
+! Parametro de verificacao de checksum utilizado no procedimento
+rommon 6 > TFTP_CHECKSUM=0
+
+
+! ==============================================================
+! CONFERENCIA DOS PARAMETROS E TRANSFERENCIA
+! ==============================================================
+
+! Exibindo as variaveis configuradas no ambiente ROMMON
+rommon 7 > set
+
+! Iniciando o processo de transferencia da imagem via TFTP
+rommon 8 > tftpdnld
+
+
+! ==============================================================
+! RESTAURANDO O REGISTRADOR PADRAO
+! ==============================================================
+
+! Definindo o registrador utilizado na inicializacao normal
+rommon 9 > confreg 0x2102
+
+! Reiniciando o equipamento para utilizar a nova configuracao
+rommon 10 > reset
