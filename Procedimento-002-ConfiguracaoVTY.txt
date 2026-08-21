@@ -1,0 +1,119 @@
+! ============================================================
+! PROCEDIMENTO 002 - CONFIGURACAO DAS LINHAS VTY
+! ============================================================
+! Professor: Ygor Silva
+! Curso: CCNA v7 - 200-301
+! Ambiente: Cisco Packet Tracer 9.0
+! ============================================================
+! Objetivo: preparar as linhas VTY para gerenciamento remoto
+! utilizando a base de usuarios configurada no equipamento.
+! ============================================================
+
+! Acessando o modo EXEC privilegiado
+enable
+
+```
+! Entrando no modo de configuracao global do Cisco IOS
+configure terminal
+
+	! Selecionando as linhas VTY destinadas ao gerenciamento
+	! remoto do switch.
+	
+	! O Cisco IOS disponibiliza diversas linhas virtuais.
+	! Neste procedimento serão utilizadas as linhas 0 até 4.
+	
+	! As linhas VTY permitem estabelecer sessões remotas
+	! com o equipamento por meio da rede.
+	
+	! O acesso remoto depende de que o equipamento possua
+	! uma interface de gerenciamento devidamente configurada.
+	
+	! As linhas VTY devem ser configuradas de acordo com
+	! a necessidade administrativa do ambiente.
+	
+	! A utilização de protocolos seguros deve ser priorizada
+	! em redes de produção.
+	line vty 0 4
+
+		! Utilizando os usuarios cadastrados localmente
+		! para autenticar as sessoes de gerenciamento remoto.
+		login local
+
+		! Define uma senha para a linha VTY.
+		!
+		! Quando o login local esta configurado, a autenticacao
+		! utiliza os usuarios existentes na configuracao local.
+		password <SENHA>
+
+		! Mantem organizada a linha de comando quando mensagens
+		! de eventos sao apresentadas durante a sessao.
+		logging synchronous
+
+		! Define o limite de inatividade da sessao VTY.
+		! Neste exemplo: 5 minutos e 30 segundos.
+		exec-timeout 5 30
+
+		! Define os protocolos permitidos para conexoes
+		! recebidas pelas linhas VTY.
+		!
+		! O parametro "all" permite os protocolos suportados
+		! pelo equipamento para essa finalidade.
+		!
+		! Em ambientes reais, prefira restringir o acesso
+		! ao protocolo seguro SSH.
+		transport input all
+
+		! Retorna diretamente ao modo EXEC privilegiado.
+		end
+```
+
+! Gravando a configuracao atual na memoria de inicializacao
+! para que as alteracoes sejam preservadas apos reiniciar.
+copy running-config startup-config
+
+! Exibindo a configuracao ativa do equipamento
+show running-config
+
+==============================================================================================
+
+! Automacao da configuracao das linhas VTY do Switch 2
+
+! Entrada no modo EXEC privilegiado
+enable
+
+```
+! Acesso ao modo de configuracao global
+configure terminal
+
+	! Selecionando as linhas virtuais utilizadas para
+	! gerenciamento remoto do segundo switch.
+	line vty 0 4
+
+		! Habilitando a autenticacao por usuarios locais.
+		login local
+
+		! Definindo a senha associada a linha VTY.
+		password <SENHA>
+
+		! Evitando que mensagens do sistema prejudiquem
+		! a visualizacao da linha de comando.
+		logging synchronous
+
+		! Definindo o tempo maximo de inatividade da sessao.
+		exec-timeout 5 30
+
+		! Permitindo protocolos de transporte nas conexoes
+		! recebidas pelas linhas VTY.
+		transport input all
+
+		! Finalizando a configuracao e retornando ao
+		! modo EXEC privilegiado.
+		end
+```
+
+! Salvando as alteracoes da configuracao ativa
+! na configuracao de inicializacao.
+copy running-config startup-config
+
+! Conferindo a configuracao atualmente carregada
+show running-config
