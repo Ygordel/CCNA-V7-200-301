@@ -1,0 +1,89 @@
+! ============================================================
+! CONFIGURAÇÃO INICIAL - SWITCH CISCO
+! Professor: Ygor Silva
+! Ambiente: Cisco Packet Tracer 9.0
+! ============================================================
+
+! Acesso inicial ao equipamento
+!
+! Ao iniciar uma sessão, o switch apresenta o modo User EXEC.
+! Esse nível permite consultas e comandos básicos de operação.
+!
+Switch>
+
+! Entrada no modo privilegiado
+!
+! O modo privilegiado disponibiliza os comandos administrativos
+! necessários para realizar as configurações do equipamento.
+!
+enable
+
+! Entrada no modo de configuração global
+!
+configure terminal
+
+! Definição da identificação do equipamento
+!
+! O hostname facilita a identificação do dispositivo durante
+! a administração local ou remota.
+!
+hostname sw-l2-2960-1
+
+! Proteção das senhas presentes na configuração
+!
+service password-encryption
+
+! Inclusão de milissegundos nos registros de eventos
+!
+! A informação de horário facilita a análise dos logs
+! e a correlação de acontecimentos na rede.
+!
+service timestamps log datetime msec
+
+! Impedindo tentativas automáticas de resolução de nomes
+!
+! Essa configuração evita que o IOS tente consultar DNS
+! quando uma entrada inválida for digitada no terminal.
+!
+no ip domain-lookup
+
+! Definição da mensagem apresentada no acesso
+!
+banner motd #ACESSO RESTRITO - USO AUTORIZADO#
+
+! Proteção do modo privilegiado
+!
+enable secret <SENHA>
+
+! Cadastro dos usuários administrativos
+!
+username operador secret <SENHA>
+username admin privilege 15 secret <SENHA>
+
+! Configuração da porta Console
+!
+line console 0
+
+! Utilização da base de usuários locais
+!
+login local
+
+! Mantém a linha de comando organizada durante a geração de logs
+!
+logging synchronous
+
+! Define o período máximo de inatividade da sessão
+!
+exec-timeout 5 30
+
+! Retorno ao modo privilegiado
+!
+end
+
+! Gravação da configuração ativa na configuração de inicialização
+!
+copy running-config startup-config
+
+! Consulta da configuração atualmente carregada
+!
+show running-config
