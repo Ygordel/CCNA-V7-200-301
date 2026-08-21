@@ -1,0 +1,172 @@
+! ============================================================
+! PROCEDIMENTO 005 - CONFIGURACAO BASE DO ROTEADOR CISCO 1941
+! ============================================================
+! Professor: Ygor Silva
+! Curso: CCNA v7 - 200-301
+! Ambiente: Cisco Packet Tracer 9.0
+! ============================================================
+! Objetivo: realizar a configuracao inicial do roteador,
+! aplicar controles de seguranca e preparar o gerenciamento
+! remoto por meio do protocolo SSH.
+! ============================================================
+
+! Acesso ao modo EXEC privilegiado
+enable
+
+! Ajuste do relogio do equipamento
+!
+! O horario correto auxilia na interpretacao dos registros
+! gerados pelo IOS e na analise de eventos.
+clock set 19:54:00 05 May 2021
+
+```
+! Entrada no modo de configuracao global
+configure terminal
+
+	! Definicao da identificacao do roteador
+	hostname rt-1941-1
+
+	! Aplicacao de protecao sobre determinadas senhas
+	! armazenadas no arquivo de configuracao.
+	service password-encryption
+
+	! Adicao de informacoes detalhadas de horario aos logs.
+	!
+	! O segundo comando tambem registra o horario dos eventos
+	! relacionados ao processo de depuracao.
+	service timestamps log datetime msec
+	service timestamps debug datetime msec
+
+	! Impedindo que entradas incorretas sejam interpretadas
+	! automaticamente como nomes de dominio.
+	no ip domain-lookup
+
+	! Definicao da mensagem apresentada durante o acesso.
+	banner motd #ACESSO RESTRITO - USO AUTORIZADO#
+
+	! Definicao do tamanho minimo das senhas criadas.
+	!
+	! A configuracao utilizada neste laboratorio estabelece
+	! pelo menos oito caracteres.
+	security passwords min-length 8
+
+	! Protecao do acesso ao modo EXEC privilegiado.
+	enable secret <SENHA>
+
+	! Criacao dos usuarios locais para administracao.
+	!
+	! O usuario com nivel 15 possui o maior nivel de privilegio
+	! disponivel no modelo tradicional do Cisco IOS.
+	username operador secret <SENHA>
+	username suporte password <SENHA>
+	username admin privilege 15 secret <SENHA>
+	
+	! Definicao do dominio utilizado pelo servico SSH.
+	ip domain-name lab.ygorsilva.local
+
+	! Geracao das chaves RSA utilizadas pelo SSH.
+	!
+	! O tamanho utilizado neste laboratorio busca manter
+	! compatibilidade com o ambiente de simulacao.
+	crypto key generate rsa general-keys modulus 1024
+
+	! Ativacao da segunda versao do protocolo SSH.
+	ip ssh version 2
+
+	! Definicao do tempo limite para novas autenticacoes SSH.
+	ip ssh time-out 60
+
+	! Limitacao das tentativas de autenticacao SSH.
+	ip ssh authentication-retries 2
+	
+	! Aplicacao de bloqueio temporario apos sucessivas
+	! tentativas de autenticacao sem sucesso.
+	!
+	! Neste exemplo, duas falhas dentro de 60 segundos
+	! provocam um bloqueio de 120 segundos.
+	login block-for 120 attempts 2 within 60
+
+	! Acesso a configuracao da porta Console.
+	line console 0
+
+		! Utilizacao da base local de usuarios para autenticacao.
+		login local
+
+		! Senha complementar da linha Console.
+		password <SENHA>
+
+		! Mantem as mensagens do sistema organizadas no terminal.
+		logging synchronous
+
+		! Define o periodo de inatividade permitido na sessao.
+		exec-timeout 5 30
+		
+		! Retorno ao modo de configuracao global.
+		exit
+
+	! Acesso a linha auxiliar do roteador.
+	!
+	! Essa interface esta associada a mecanismos de acesso
+	! auxiliar e, em equipamentos atuais, possui uso limitado.
+	line aux 0
+
+		! Utilizacao dos usuarios locais para autenticacao.
+		login local
+
+		! Definicao da senha da linha auxiliar.
+		password <SENHA>
+
+		! Organizacao das mensagens exibidas no terminal.
+		logging synchronous
+
+		! Controle do tempo de inatividade da sessao.
+		exec-timeout 5 30
+		
+		! Definicao da velocidade da interface serial auxiliar.
+		speed 115200
+		
+		! Utilizacao de controle de fluxo por hardware.
+		flowcontrol hardware
+		
+		! Alguns recursos relacionados a modem podem nao
+		! estar disponiveis no ambiente de simulacao.
+		!
+		! Exemplos de configuracoes relacionadas:
+		! modem inout
+		! transport input all
+		! transport output all
+		
+		! Retorno ao modo de configuracao global.
+		exit
+
+	! Selecionando as linhas VTY destinadas ao gerenciamento remoto.
+	line vty 0 4
+
+		! Utilizacao dos usuarios locais para autenticacao.
+		login local
+
+		! Definicao da senha associada a linha VTY.
+		password <SENHA>
+
+		! Mantem organizada a apresentacao das mensagens do IOS.
+		logging synchronous
+
+		! Limita o periodo de inatividade da sessao.
+		exec-timeout 5 30
+
+		! Permitindo somente conexoes SSH nas linhas VTY.
+		transport input ssh
+
+		! Encerrando a configuracao e retornando ao
+		! modo EXEC privilegiado.
+		end
+```
+
+! Gravando a configuracao atual para a memoria de inicializacao.
+copy running-config startup-config
+
+! Consultando a configuracao ativa do roteador.
+show running-config
+
+! Exibindo informacoes das linhas fisicas e virtuais.
+show line
