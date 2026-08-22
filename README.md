@@ -1,4 +1,4 @@
-# 🌐 CCNA 200-301 — Infraestrutura de Redes
+# 🌐 CCNA 200-301 — Conectando Redes em Cisco
 
 Repositório com materiais de apoio, procedimentos, laboratórios, comandos,
 referências e recursos complementares para estudos de **Redes de Computadores
