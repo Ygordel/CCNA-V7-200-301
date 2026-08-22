@@ -1,7 +1,7 @@
 !======================================================================
 !SERVIÇOS FTP, HTTP E HTTPS
 !======================================================================
-! Autor: Ygor Delfino da Silva
+! Professor: Ygor Silva
 ! Procedimento: Configuração e testes de serviços de rede
 ! Ambiente: Cisco Packet Tracer / GNS3
 ! Data de criação: 22/08/2026
