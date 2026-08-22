@@ -133,17 +133,17 @@ Resource Records:  Name = server-02
 
 ! Registro NS indicando o servidor responsável pela zona:
 
-Resource Records:  Name = ns1.vaamonde.pti
+Resource Records:  Name = ns1.xxxxx.pti
                    Type = NS
                    Server Name = server-02
 
 
 ! Registro SOA referente à autoridade da zona:
 
-Resource Records:  Name = vaamonde.pti
+Resource Records:  Name = xxxxx.pti
                    Type = SOA
-                   Primary Server Name = ns1.vaamonde.pti
-                   Mail Box = vaamonde@vaamonde.pti
+                   Primary Server Name = ns1.xxxxx.pti
+                   Mail Box = xxxx@xxxxxx.pti
                    Minimum TTL = 3600
                    Refresh Time = 3600
                    Retry Time = 600
@@ -152,56 +152,56 @@ Resource Records:  Name = vaamonde.pti
 
 ! Registro CNAME para o domínio principal:
 
-Resource Records:  Name = vaamonde.pti
+Resource Records:  Name = xxxx.pti
                    Type = CNAME
                    Host Name = server-02
 
 
 ! Alias para o serviço Web:
 
-Resource Records:  Name = www.vaamonde.pti
+Resource Records:  Name = www.xxxxx.pti
                    Type = CNAME
                    Host Name = server-02
 
 
 ! Alias para o serviço POP3:
 
-Resource Records:  Name = pop3.vaamonde.pti
+Resource Records:  Name = pop3.xxxxx.pti
                    Type = CNAME
                    Host Name = server-02
 
 
 ! Alias para o serviço SMTP:
 
-Resource Records:  Name = smtp.vaamonde.pti
+Resource Records:  Name = smtp.xxxxx.pti
                    Type = CNAME
                    Host Name = server-02
 
 
 ! Alias para o serviço FTP:
 
-Resource Records:  Name = ftp.vaamonde.pti
+Resource Records:  Name = ftp.xxxxx.pti
                    Type = CNAME
                    Host Name = server-02
 
 
 ! Alias para o serviço TFTP:
 
-Resource Records:  Name = tftp.vaamonde.pti
+Resource Records:  Name = tftp.xxxxx.pti
                    Type = CNAME
                    Host Name = server-02
 
 
 ! Alias utilizado para o serviço NTP:
 
-Resource Records:  Name = ntp.vaamonde.pti
+Resource Records:  Name = ntp.xxxxxx.pti
                    Type = CNAME
                    Host Name = server-02
 
 
 ! Alias destinado ao serviço de Logs:
 
-Resource Records:  Name = log.vaamonde.pti
+Resource Records:  Name = log.xxxx.pti
                    Type = CNAME
                    Host Name = server-02
 
@@ -257,12 +257,12 @@ nslookup server-02
 
 ! Consulta a zona DNS utilizando o domínio configurado no laboratório.
 
-nslookup vaamonde.pti
+nslookup xxxx.pti
 
 
 ! Testa a comunicação utilizando o nome DNS em vez do endereço IPv4.
 
-ping vaamonde.pti
+ping xxxxx.pti
 
 
 !======================================================================
@@ -281,12 +281,12 @@ nslookup server-02
 
 ! 03 - Consultar o domínio configurado:
 
-nslookup vaamonde.pti
+nslookup xxxxx.pti
 
 
 ! 04 - Testar a resolução de nomes utilizando ICMP:
 
-ping vaamonde.pti
+ping xxxxxx.pti
 
 
 !======================================================================
