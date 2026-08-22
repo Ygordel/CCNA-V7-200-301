@@ -1,3 +1,11 @@
+# 🌐 CCNA 200-301 — Infraestrutura de Redes
+
+Repositório com materiais de apoio, procedimentos, laboratórios, comandos,
+referências e recursos complementares para estudos de **Redes de Computadores
+e preparação para a certificação Cisco CCNA 200-301**.
+
+---
+
 🧪 Laboratórios Cisco Packet Tracer
 
 Nesta seção estão disponíveis os arquivos de laboratório utilizados para acompanhar os procedimentos de configuração apresentados neste repositório.
@@ -36,12 +44,6 @@ O material oficial de instalação disponibilizado pela Cisco apresenta procedim
 Windows
 Linux
 macOS
-
-# 🌐 CCNA 200-301 — Infraestrutura de Redes
-
-Repositório com materiais de apoio, procedimentos, laboratórios, comandos,
-referências e recursos complementares para estudos de **Redes de Computadores
-e preparação para a certificação Cisco CCNA 200-301**.
 
 ---
 
