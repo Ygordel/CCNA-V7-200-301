@@ -1,7 +1,7 @@
 !======================================================================
 ! PROCEDIMENTO 006 - CONFIGURAÇÃO E TESTE DO SERVIÇO DHCPv4
 !======================================================================
-! Autor: Ygor Delfino da Silva
+! Prfessor: Ygor Silva
 ! Procedimento: Configuração de serviços de rede
 ! Ambiente: Cisco Packet Tracer / GNS3
 ! Data de criação: 22/08/2026
