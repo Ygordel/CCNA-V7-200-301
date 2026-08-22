@@ -197,8 +197,3 @@ https://www.youtube.com/playlist?list=PLozhsZB1lLUPBmrvMXzsFxG34LwO9K8Pu
 https://www.youtube.com/playlist?list=PLozhsZB1lLUOYOx5v5F1dnMfYWupkyPBt
 
 
-- **Infraestrutura de Redes — Material 04**
-
-Os arquivos estão disponíveis no diretório:
-
-```text
