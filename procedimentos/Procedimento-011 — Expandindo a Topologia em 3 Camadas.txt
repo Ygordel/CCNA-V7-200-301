@@ -1,0 +1,53 @@
+# 📡 011 — Expandindo a Topologia em 3 Camadas
+
+## Laboratório Prático — Cisco CCNA 200-301
+
+### 📌 Descrição
+
+Neste laboratório será realizada a expansão da infraestrutura de rede
+utilizando uma **arquitetura hierárquica de três camadas**, organizando os
+equipamentos de acordo com suas respectivas funções dentro da topologia.
+
+A estrutura será dividida em:
+
+- 🔵 **Core (Núcleo):** camada responsável pela interligação principal da
+  infraestrutura e pelo transporte do tráfego entre os diferentes segmentos
+  da rede.
+
+- 🟢 **Distribution (Distribuição):** representada por um
+  **Cisco Catalyst 3560 Layer 3 de 24 portas**, responsável pelas funções de
+  distribuição e roteamento da infraestrutura.
+
+- 🟡 **Access (Acesso):** composta por **dois switches Cisco Catalyst 2960
+  Layer 2**, responsáveis pela conexão dos dispositivos finais à rede.
+
+---
+
+## 🏗️ Arquitetura da Topologia
+
+```text
+                         ┌─────────────────────┐
+                         │        CORE         │
+                         │       NÚCLEO        │
+                         └──────────┬──────────┘
+                                    │
+                                    │
+                         ┌──────────▼──────────┐
+                         │     DISTRIBUTION    │
+                         │   Cisco Catalyst    │
+                         │      3560 - L3      │
+                         │      24 Portas       │
+                         └─────────┬──┬─────────┘
+                                   │  │
+                         ┌─────────┘  └─────────┐
+                         │                      │
+                  ┌──────▼──────┐        ┌──────▼──────┐
+                  │   ACCESS 01  │        │   ACCESS 02  │
+                  │ Cisco 2960   │        │ Cisco 2960   │
+                  │   Layer 2    │        │   Layer 2    │
+                  └──────┬───────┘        └──────┬───────┘
+                         │                       │
+                  ┌──────▼───────┐       ┌──────▼───────┐
+                  │ Dispositivos │       │ Dispositivos │
+                  │    Finais    │       │    Finais    │
+                  └──────────────┘       └──────────────┘
