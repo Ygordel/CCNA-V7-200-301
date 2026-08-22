@@ -194,16 +194,7 @@ https://www.youtube.com/playlist?list=PLozhsZB1lLUPBmrvMXzsFxG34LwO9K8Pu
 **Curso de Infraestrutura de Redes — Playlist**  
 https://www.youtube.com/playlist?list=PLozhsZB1lLUOYOx5v5F1dnMfYWupkyPBt
 
----
 
-# 📑 Materiais de Apoio em PDF
-
-Materiais complementares para consulta e revisão dos principais conceitos
-de infraestrutura de redes.
-
-- **Infraestrutura de Redes — Material 01**
-- **Infraestrutura de Redes — Material 02**
-- **Infraestrutura de Redes — Material 03**
 - **Infraestrutura de Redes — Material 04**
 
 Os arquivos estão disponíveis no diretório:
