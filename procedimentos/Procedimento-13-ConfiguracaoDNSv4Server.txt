@@ -1,7 +1,7 @@
 !======================================================================
 !CONFIGURAÇÃO E TESTES DO SERVIÇO DNSv4
 !======================================================================
-! Autor: Ygor Delfino da Silva
+! Professor: Ygor Silva
 ! Procedimento: Serviço DNSv4 em ambiente de laboratório
 ! Ambiente: Cisco Packet Tracer / GNS3
 ! Data de criação: 22/08/2026
