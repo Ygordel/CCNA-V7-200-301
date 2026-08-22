@@ -1,0 +1,363 @@
+!======================================================================
+!SERVIÇOS FTP, HTTP E HTTPS
+!======================================================================
+! Autor: Ygor Delfino da Silva
+! Procedimento: Configuração e testes de serviços de rede
+! Ambiente: Cisco Packet Tracer / GNS3
+! Data de criação: 22/08/2026
+! Versão: 1.00
+!======================================================================
+
+
+!======================================================================
+! 01 - CONCEITO DO SERVIÇO FTP
+!======================================================================
+
+! FTP (File Transfer Protocol) é um protocolo utilizado para
+! transferência de arquivos entre dispositivos conectados em rede.
+
+! O serviço permite operações como envio, recebimento, consulta e
+! gerenciamento de arquivos, de acordo com as permissões atribuídas
+! ao usuário.
+
+! Porta de controle utilizada pelo FTP:
+! TCP 21
+
+! Observação:
+! A porta TCP 20 está tradicionalmente associada ao canal de dados
+! do FTP no modo ativo.
+
+
+!======================================================================
+! 02 - CONCEITO DO SERVIÇO HTTP
+!======================================================================
+
+! HTTP (Hypertext Transfer Protocol) é utilizado para comunicação
+! entre clientes e servidores Web.
+
+! É um dos principais protocolos utilizados para disponibilização
+! de páginas e conteúdos na Web.
+
+! Porta padrão:
+! TCP 80
+
+
+!======================================================================
+! 03 - CONCEITO DO SERVIÇO HTTPS
+!======================================================================
+
+! HTTPS corresponde à utilização do HTTP com uma camada de proteção
+! baseada em TLS.
+
+! A utilização de HTTPS proporciona comunicação protegida entre o
+! cliente e o servidor, desde que o certificado e a configuração
+! estejam corretamente estabelecidos.
+
+! Porta padrão:
+! TCP 443
+
+
+!======================================================================
+! 04 - CONFIGURAÇÃO DO SERVIÇO FTP
+!======================================================================
+
+! No Cisco Packet Tracer, o serviço FTP pode ser habilitado no
+! servidor e configurado com usuários e permissões específicas.
+
+! Ativação do serviço:
+
+Service       On
+
+
+!----------------------------------------------------------------------
+! USUÁRIO COM PERMISSÃO COMPLETA
+!----------------------------------------------------------------------
+
+! Usuário:
+! vaamonde
+
+! Senha:
+! vaamonde
+
+! Permissões:
+
+! Write  = Yes
+! Read   = Yes
+! Delete = Yes
+! Rename = Yes
+! List   = Yes
+
+
+!----------------------------------------------------------------------
+! USUÁRIO COM ACESSO RESTRITO
+!----------------------------------------------------------------------
+
+! Usuário:
+! robson
+
+! Senha:
+! robson
+
+! Permissões:
+
+! Write  = No
+! Read   = Yes
+! Delete = No
+! Rename = No
+! List   = Yes
+
+
+!======================================================================
+! 05 - CONFIGURAÇÃO DOS SERVIÇOS HTTP E HTTPS
+!======================================================================
+
+! Os serviços Web do servidor devem estar habilitados para permitir
+! acesso às páginas hospedadas no laboratório.
+
+! Serviço HTTP:
+
+Service HTTP    On
+
+
+! Serviço HTTPS:
+
+Service HTTPS   On
+
+
+! O Cisco Packet Tracer possui limitações em relação à configuração
+! de certificados digitais e de uma infraestrutura de autoridade
+! certificadora (CA).
+
+
+!======================================================================
+! 06 - PÁGINA HTML DO LABORATÓRIO
+!======================================================================
+
+! A página abaixo pode ser utilizada para verificar o funcionamento
+! do serviço Web.
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Laboratório de Redes</title>
+	</head>
+
+	<body>
+		<center>
+
+		<h1>Ygor Delfino da Silva</h1>
+
+		<p>
+		Configuração dos Serviços HTTP e HTTPS
+		</p>
+
+		<p>
+		<b>Laboratório de Infraestrutura de Redes</b>
+		</p>
+
+		<p>
+		<b><i><u>Estudos para CCNA 200-301</u></i></b>
+		</p>
+
+		</center>
+	</body>
+</html>
+
+
+!======================================================================
+! 07 - TESTE LOCAL DO SERVIÇO DNS
+!======================================================================
+
+! Verificando a resolução do nome utilizado pelo serviço FTP:
+
+nslookup ftp.vaamonde.pti
+
+
+! Testando a comunicação com o servidor:
+
+ping ftp.vaamonde.pti
+
+
+!======================================================================
+! 08 - TESTE LOCAL DO SERVIÇO FTP
+!======================================================================
+
+! Iniciando uma conexão FTP com o servidor:
+
+ftp ftp.vaamonde.pti
+
+
+! Credenciais de teste:
+
+Username: vaamonde
+Password: vaamonde
+
+
+!======================================================================
+! 09 - TESTE LOCAL DO SERVIÇO HTTP
+!======================================================================
+
+! Acesso utilizando o endereço local do servidor:
+
+http://localhost
+
+
+! Acesso utilizando o endereço de loopback IPv4:
+
+http://127.0.0.1
+
+
+!======================================================================
+! 10 - TESTE REMOTO DOS SERVIÇOS WEB
+!======================================================================
+
+! Acesso remoto utilizando HTTP:
+
+http://www.vaamonde.pti
+
+
+! Acesso remoto utilizando HTTPS:
+
+https://www.vaamonde.pti
+
+
+!======================================================================
+! 11 - CRIAÇÃO DO ARQUIVO PARA TESTE FTP
+!======================================================================
+
+! Criar um arquivo de texto no computador cliente.
+
+Text Editor: vaamonde.txt
+
+
+! Visualizar os arquivos existentes no diretório:
+
+dir
+
+
+!======================================================================
+! 12 - ENVIO DE ARQUIVO PARA O SERVIDOR FTP
+!======================================================================
+
+! Estabelecer conexão com o servidor:
+
+ftp ftp.vaamonde.pti
+
+
+! Informar as credenciais:
+
+Username: vaamonde
+Password: vaamonde
+
+
+! Listar os arquivos disponíveis:
+
+dir
+
+
+! Enviar o arquivo para o servidor:
+
+put vaamonde.txt
+
+
+! Encerrar a sessão FTP:
+
+quit
+
+
+!======================================================================
+! 13 - DOWNLOAD DE ARQUIVO DO SERVIDOR FTP
+!======================================================================
+
+! Estabelecer conexão utilizando o usuário com acesso de leitura:
+
+ftp ftp.vaamonde.pti
+
+
+! Informar as credenciais:
+
+Username: robson
+Password: robson
+
+
+! Solicitar a listagem dos arquivos:
+
+dir
+
+
+! Baixar o arquivo do servidor:
+
+get vaamonde.txt
+
+
+! Encerrar a conexão:
+
+quit
+
+
+! Verificar o arquivo recebido:
+
+dir
+
+
+!======================================================================
+! 14 - TESTES REALIZADOS
+!======================================================================
+
+! DNS:
+! nslookup ftp.vaamonde.pti
+
+! Conectividade:
+! ping ftp.vaamonde.pti
+
+! FTP:
+! ftp ftp.vaamonde.pti
+
+! HTTP:
+! http://www.vaamonde.pti
+
+! HTTPS:
+! https://www.vaamonde.pti
+
+! Upload:
+! put vaamonde.txt
+
+! Download:
+! get vaamonde.txt
+
+
+!======================================================================
+! 15 - RESULTADO ESPERADO
+!======================================================================
+
+! Ao final do procedimento, espera-se confirmar:
+
+! [OK] Resolução DNS do servidor;
+! [OK] Comunicação IP com o servidor;
+! [OK] Acesso ao serviço FTP;
+! [OK] Autenticação dos usuários;
+! [OK] Aplicação das permissões FTP;
+! [OK] Upload de arquivos;
+! [OK] Download de arquivos;
+! [OK] Acesso HTTP;
+! [OK] Acesso HTTPS.
+
+
+!======================================================================
+! RESUMO
+!======================================================================
+
+! Este laboratório demonstra a utilização de três serviços importantes
+! em uma infraestrutura de rede:
+
+! FTP  -> transferência de arquivos;
+! HTTP -> publicação de conteúdo Web;
+! HTTPS -> acesso Web protegido por TLS.
+
+! Os testes permitem verificar tanto a disponibilidade dos serviços
+! quanto a resolução de nomes e o controle de acesso aos arquivos.
+
+
+!======================================================================
+! FIM DO PROCEDIMENTO 008
+!======================================================================
