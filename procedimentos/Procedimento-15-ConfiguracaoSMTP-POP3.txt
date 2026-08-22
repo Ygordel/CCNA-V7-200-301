@@ -1,0 +1,324 @@
+!======================================================================
+!SERVIÇOS DE E-MAIL SMTP E POP3
+!======================================================================
+! Professor: Ygor Silva
+! Procedimento: Configuração e testes de serviços de correio eletrônico
+! Ambiente: Cisco Packet Tracer / GNS3
+! Data de criação: 22/08/2026
+! Versão: 1.00
+!======================================================================
+
+
+!======================================================================
+! 01 - SMTP
+!======================================================================
+
+! SMTP (Simple Mail Transfer Protocol) é utilizado principalmente
+! para o envio e encaminhamento de mensagens eletrônicas entre
+! clientes e servidores de e-mail.
+
+! Porta tradicional do SMTP:
+! TCP 25
+
+! Para submissão autenticada de mensagens, é comum utilizar:
+! TCP 587
+
+! A porta 465 também pode aparecer em implementações de SMTP com
+! TLS implícito.
+
+
+!======================================================================
+! 02 - POP3
+!======================================================================
+
+! POP3 (Post Office Protocol version 3) é utilizado para acesso às
+! mensagens armazenadas em um servidor de correio eletrônico.
+
+! Porta padrão:
+! TCP 110
+
+! Versão protegida por TLS/SSL:
+! TCP 995
+
+
+!======================================================================
+! 03 - IMAP
+!======================================================================
+
+! IMAP (Internet Message Access Protocol) permite que as mensagens
+! permaneçam armazenadas no servidor e sejam sincronizadas com os
+! clientes de e-mail.
+
+! Porta padrão:
+! TCP 143
+
+! Versão protegida por TLS/SSL:
+! TCP 993
+
+
+!======================================================================
+! 04 - MAPI
+!======================================================================
+
+! MAPI (Messaging Application Programming Interface) é uma tecnologia
+! associada ao ecossistema Microsoft e utilizada na comunicação entre
+! aplicações e serviços de correio eletrônico, especialmente em
+! ambientes Microsoft Exchange.
+
+! Dependendo da implementação, diferentes protocolos e portas podem
+! participar da comunicação.
+
+
+!======================================================================
+! 05 - CONFIGURAÇÃO DO SERVIDOR DE E-MAIL
+!======================================================================
+
+! No Cisco Packet Tracer, os serviços SMTP e POP3 podem ser ativados
+! diretamente na configuração do servidor.
+
+! Serviços:
+
+SMTP Service        On
+POP3 Service        On
+
+
+! Domínio utilizado pelo laboratório:
+
+Domain Name         vaamonde.pti
+
+
+!======================================================================
+! 06 - CONTAS DE USUÁRIO
+!======================================================================
+
+! As contas abaixo são utilizadas exclusivamente para demonstração
+! do serviço de e-mail no ambiente de laboratório.
+
+User Setup
+
+User: robsonvaamonde
+Password: 123456
+Email: robsonvaamonde@vaamonde.pti
+
+User: leandroramos
+Password: 123456
+Email: leandroramos@vaamonde.pti
+
+User: josedeassis
+Password: 123456
+Email: josedeassis@vaamonde.pti
+
+User: jeffersoncosta
+Password: 123456
+Email: jeffersoncosta@vaamonde.pti
+
+User: rogeriosampaio
+Password: 123456
+Email: rogeriosampaio@vaamonde.pti
+
+User: sirlenesanches
+Password: 123456
+Email: sirlenesanches@vaamonde.pti
+
+User: denisnovais
+Password: 123456
+Email: denisnovais@vaamonde.pti
+
+User: vaamonde
+Password: 123456
+Email: vaamonde@vaamonde.pti
+
+
+!======================================================================
+! 07 - DNS PARA O SERVIÇO DE E-MAIL
+!======================================================================
+
+! O funcionamento de um ambiente de e-mail normalmente depende da
+! resolução DNS dos nomes utilizados pelos serviços.
+
+! Neste laboratório são utilizados:
+
+! Servidor SMTP:
+! smtp.vaamonde.pti
+
+! Servidor POP3:
+! pop3.vaamonde.pti
+
+! Em ambientes reais, registros específicos de DNS, como MX, possuem
+! papel importante na identificação dos servidores responsáveis pelo
+! recebimento de mensagens de um domínio.
+
+
+!======================================================================
+! 08 - TESTE DE RESOLUÇÃO DE NOMES
+!======================================================================
+
+! Consultar o endereço associado ao servidor SMTP:
+
+nslookup smtp.vaamonde.pti
+
+
+! Consultar o servidor POP3:
+
+nslookup pop3.vaamonde.pti
+
+
+!======================================================================
+! 09 - CONFIGURAÇÃO DO CLIENTE DE E-MAIL
+!======================================================================
+
+! No Cisco Packet Tracer, o cliente de e-mail pode ser configurado
+! utilizando a opção "Configure Mail".
+
+Configure Mail
+
+
+!----------------------------------------------------------------------
+! IDENTIFICAÇÃO DO USUÁRIO
+!----------------------------------------------------------------------
+
+Your Name:
+Admin SOA
+
+Email Address:
+vaamonde@vaamonde.pti
+
+
+!----------------------------------------------------------------------
+! SERVIDORES DE E-MAIL
+!----------------------------------------------------------------------
+
+Incoming Mail Server:
+pop3.vaamonde.pti
+
+Outgoing Mail Server:
+smtp.vaamonde.pti
+
+
+!----------------------------------------------------------------------
+! CREDENCIAIS
+!----------------------------------------------------------------------
+
+User Name:
+vaamonde
+
+Password:
+123456
+
+
+! Salvar as configurações:
+
+(SAVE)
+
+
+!======================================================================
+! 10 - TESTE DO SERVIÇO
+!======================================================================
+
+! Após configurar o cliente, realizar os testes de envio e recebimento
+! de mensagens entre as contas cadastradas no laboratório.
+
+! Validar inicialmente:
+
+! [OK] Resolução DNS do servidor SMTP
+! [OK] Resolução DNS do servidor POP3
+! [OK] Serviço SMTP habilitado
+! [OK] Serviço POP3 habilitado
+! [OK] Conta de usuário criada
+! [OK] Cliente de e-mail configurado
+! [OK] Envio de mensagem
+! [OK] Recebimento de mensagem
+
+
+!======================================================================
+! 11 - CLIENTES DE E-MAIL
+!======================================================================
+
+! Em ambientes corporativos podem ser utilizados diferentes clientes
+! de correio eletrônico.
+
+! Exemplos:
+
+! Microsoft Outlook
+! Thunderbird
+! Evolution
+! eM Client
+! SeaMonkey
+
+! Cliente de e-mail não deve ser confundido com Webmail.
+
+! No Webmail, o acesso às mensagens normalmente ocorre por meio de
+! um navegador Web.
+
+
+!======================================================================
+! 12 - LIMITAÇÕES DO CISCO PACKET TRACER
+!======================================================================
+
+! O serviço de e-mail disponibilizado pelo Cisco Packet Tracer possui
+! características simplificadas em relação a servidores reais.
+
+! Portanto, alguns recursos encontrados em plataformas profissionais
+! de e-mail podem não estar disponíveis no simulador.
+
+! Também podem ocorrer limitações ou comportamentos diferentes entre
+! versões do Cisco Packet Tracer.
+
+
+!======================================================================
+! 13 - RESUMO DAS PORTAS
+!======================================================================
+
+! SMTP:
+! TCP 25
+
+! SMTP Submission:
+! TCP 587
+
+! SMTP com TLS implícito:
+! TCP 465
+
+! POP3:
+! TCP 110
+
+! POP3 com TLS/SSL:
+! TCP 995
+
+! IMAP:
+! TCP 143
+
+! IMAP com TLS/SSL:
+! TCP 993
+
+
+!======================================================================
+! 14 - RESULTADO ESPERADO
+!======================================================================
+
+! Ao final do laboratório, o cliente deverá conseguir utilizar os
+! serviços de correio eletrônico configurados no servidor.
+
+! O processo deve permitir demonstrar:
+
+! 01 - Resolução dos nomes dos servidores;
+! 02 - Autenticação do usuário;
+! 03 - Envio de mensagens;
+! 04 - Recebimento de mensagens;
+! 05 - Comunicação entre clientes de e-mail.
+
+
+!======================================================================
+! CONCLUSÃO
+!======================================================================
+
+! Este laboratório apresenta o funcionamento básico de uma
+! infraestrutura de correio eletrônico utilizando SMTP e POP3.
+
+! A atividade também demonstra a importância da integração entre
+! DNS, autenticação e serviços de rede para disponibilizar uma
+! solução funcional de e-mail.
+
+
+!======================================================================
+! FIM DO PROCEDIMENTO 009
+!======================================================================
