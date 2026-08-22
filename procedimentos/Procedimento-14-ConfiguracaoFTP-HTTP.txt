@@ -74,10 +74,10 @@ Service       On
 !----------------------------------------------------------------------
 
 ! Usuário:
-! vaamonde
+! xxxxx
 
 ! Senha:
-! vaamonde
+! xxxxxx
 
 ! Permissões:
 
@@ -93,10 +93,10 @@ Service       On
 !----------------------------------------------------------------------
 
 ! Usuário:
-! robson
+! xxxxx
 
 ! Senha:
-! robson
+! xxxxx
 
 ! Permissões:
 
@@ -145,7 +145,7 @@ Service HTTPS   On
 	<body>
 		<center>
 
-		<h1>Ygor Delfino da Silva</h1>
+		<h1>Aluno</h1>
 
 		<p>
 		Configuração dos Serviços HTTP e HTTPS
@@ -170,12 +170,12 @@ Service HTTPS   On
 
 ! Verificando a resolução do nome utilizado pelo serviço FTP:
 
-nslookup ftp.vaamonde.pti
+nslookup ftp.xxxxx.pti
 
 
 ! Testando a comunicação com o servidor:
 
-ping ftp.vaamonde.pti
+ping ftp.xxxxxx.pti
 
 
 !======================================================================
@@ -184,13 +184,13 @@ ping ftp.vaamonde.pti
 
 ! Iniciando uma conexão FTP com o servidor:
 
-ftp ftp.vaamonde.pti
+ftp ftp.xxxxx.pti
 
 
 ! Credenciais de teste:
 
-Username: vaamonde
-Password: vaamonde
+Username: aluno	
+Password: aluno
 
 
 !======================================================================
@@ -213,12 +213,12 @@ http://127.0.0.1
 
 ! Acesso remoto utilizando HTTP:
 
-http://www.vaamonde.pti
+http://www.xxx.pti
 
 
 ! Acesso remoto utilizando HTTPS:
 
-https://www.vaamonde.pti
+https://www.xxxxx.pti
 
 
 !======================================================================
@@ -227,7 +227,7 @@ https://www.vaamonde.pti
 
 ! Criar um arquivo de texto no computador cliente.
 
-Text Editor: vaamonde.txt
+Text Editor: xxxxx.txt
 
 
 ! Visualizar os arquivos existentes no diretório:
@@ -241,13 +241,13 @@ dir
 
 ! Estabelecer conexão com o servidor:
 
-ftp ftp.vaamonde.pti
+ftp ftp.xxxxx.pti
 
 
 ! Informar as credenciais:
 
-Username: vaamonde
-Password: vaamonde
+Username: aluno
+Password: aluno
 
 
 ! Listar os arquivos disponíveis:
@@ -257,7 +257,7 @@ dir
 
 ! Enviar o arquivo para o servidor:
 
-put vaamonde.txt
+put xxxxx.txt
 
 
 ! Encerrar a sessão FTP:
@@ -271,13 +271,13 @@ quit
 
 ! Estabelecer conexão utilizando o usuário com acesso de leitura:
 
-ftp ftp.vaamonde.pti
+ftp ftp.xxxxxx.pti
 
 
 ! Informar as credenciais:
 
-Username: robson
-Password: robson
+Username: aluno	
+Password: aluno
 
 
 ! Solicitar a listagem dos arquivos:
@@ -287,7 +287,7 @@ dir
 
 ! Baixar o arquivo do servidor:
 
-get vaamonde.txt
+get xxxxxx.txt
 
 
 ! Encerrar a conexão:
@@ -305,25 +305,25 @@ dir
 !======================================================================
 
 ! DNS:
-! nslookup ftp.vaamonde.pti
+! nslookup ftp.xxxxx.pti
 
 ! Conectividade:
-! ping ftp.vaamonde.pti
+! ping ftp.xxxx.pti
 
 ! FTP:
-! ftp ftp.vaamonde.pti
+! ftp ftp.xxxx.pti
 
 ! HTTP:
-! http://www.vaamonde.pti
+! http://www.xxxxx.pti
 
 ! HTTPS:
-! https://www.vaamonde.pti
+! https://www.xxxx.pti
 
 ! Upload:
-! put vaamonde.txt
+! put xxxxx.txt
 
 ! Download:
-! get vaamonde.txt
+! get xxxxx.txt
 
 
 !======================================================================
