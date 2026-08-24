@@ -1,0 +1,348 @@
+!======================================================================
+!NTP — NETWORK TIME PROTOCOL
+!======================================================================
+! Professor: Ygor Silva
+! Procedimento: Configuração e sincronização de Data e Hora utilizando NTP
+! Curso: Infraestrutura de Redes
+! Ambiente: Cisco Packet Tracer / GNS3
+! Data de criação: 24/08/2026
+! Versão: 1.00
+!======================================================================
+
+
+!======================================================================
+! 01 - NTP
+!======================================================================
+
+! NTP (Network Time Protocol) é utilizado para sincronizar relógios
+! de computadores, Switches, Roteadores e outros dispositivos de rede.
+
+! A sincronização permite manter os equipamentos utilizando uma
+! referência de horário comum.
+
+! Protocolo utilizado:
+
+! NTP:
+! UDP 123
+
+
+!======================================================================
+! 02 - SERVIDOR DE REFERÊNCIA
+!======================================================================
+
+! No Brasil, o material utiliza como referência o serviço NTP.br.
+
+! Servidor apresentado na prática:
+
+! a.st1.ntp.br
+
+! IPv4:
+! 200.160.7.186
+
+! IPv6:
+! 2001:12ff:0:7::186
+
+
+!======================================================================
+! 03 - CONFIGURAÇÃO DO SERVIDOR NTP LOCAL
+!======================================================================
+
+! No Cisco Packet Tracer, o serviço NTP do servidor deve estar
+! habilitado para permitir a sincronização dos equipamentos.
+
+! Configuração utilizada no laboratório:
+
+NTP Service:        On
+Authentication:     Enable
+Key:                123456
+Password:           vaamonde
+Date:               06/05/2020
+Hour:               15:00:00
+
+
+!======================================================================
+! 04 - ACESSANDO O SWITCH OU ROUTER
+!======================================================================
+
+! Acessando o modo EXEC privilegiado:
+
+enable
+
+! Visualizando a Data e Hora atual:
+
+show clock
+
+
+!======================================================================
+! 05 - ACESSANDO A CONFIGURAÇÃO GLOBAL
+!======================================================================
+
+configure terminal
+
+
+!======================================================================
+! 06 - CONFIGURAÇÃO DO FUSO HORÁRIO
+!======================================================================
+
+! Configurando o fuso horário utilizado pelo equipamento:
+
+clock timezone BR -3
+
+! A configuração define a zona BR utilizando o deslocamento UTC -3.
+
+! OBSERVAÇÃO:
+! O material utilizado na prática apresenta uma limitação relacionada
+! ao tratamento do UTC no Cisco Packet Tracer.
+
+
+!======================================================================
+! 07 - HABILITANDO A AUTENTICAÇÃO NTP
+!======================================================================
+
+! Habilitando a autenticação das informações recebidas do servidor NTP:
+
+ntp authenticate
+
+! Esse recurso adiciona autenticação à comunicação com o servidor NTP.
+
+
+!======================================================================
+! 08 - CONFIGURANDO A CHAVE DE AUTENTICAÇÃO
+!======================================================================
+
+! Criando a chave utilizada na autenticação do NTP:
+
+ntp authentication-key 123456 md5 vaamonde
+
+! Parâmetros utilizados:
+
+! Chave:
+! 123456
+
+! Método:
+! MD5
+
+! Senha:
+! vaamonde
+
+
+!======================================================================
+! 09 - CONFIGURANDO O SERVIDOR NTP
+!======================================================================
+
+! Definindo o endereço IPv4 do servidor NTP:
+
+ntp server 192.168.3.1
+
+! Servidor NTP utilizado no laboratório:
+
+! IPv4:
+! 192.168.3.1
+
+! OBSERVAÇÃO:
+! No Cisco Packet Tracer, a prática utiliza o endereço IPv4 para
+! identificação do servidor NTP.
+
+
+!======================================================================
+! 10 - ATUALIZAÇÃO DO CALENDÁRIO
+!======================================================================
+
+! Habilitando a atualização do calendário de hardware:
+
+ntp update-calendar
+
+! Essa configuração permite sincronizar a informação de horário
+! utilizada pelo sistema com o calendário do equipamento.
+
+! OBSERVAÇÃO:
+! Conforme o material da prática, esse recurso não está disponível
+! para configuração no Switch Layer 2 2960.
+
+
+!======================================================================
+! 11 - FINALIZANDO A CONFIGURAÇÃO
+!======================================================================
+
+! Retornando ao modo EXEC privilegiado:
+
+end
+
+! Salvando a configuração:
+
+write
+
+
+!======================================================================
+! 12 - VISUALIZANDO A CONFIGURAÇÃO NTP
+!======================================================================
+
+! Filtrando as informações relacionadas ao NTP:
+
+show running-config | include ntp
+
+
+!======================================================================
+! 13 - VERIFICANDO O STATUS DO NTP
+!======================================================================
+
+! Visualizando o estado de sincronização:
+
+show ntp status
+
+! Esse comando permite verificar se o equipamento está sincronizado
+! com uma referência NTP.
+
+
+!======================================================================
+! 14 - VERIFICANDO AS ASSOCIAÇÕES NTP
+!======================================================================
+
+! Visualizando os servidores ou associações NTP conhecidas:
+
+show ntp associations
+
+
+!======================================================================
+! 15 - VERIFICANDO A DATA E HORA
+!======================================================================
+
+! Visualizando novamente o relógio do equipamento:
+
+show clock
+
+! A sincronização pode levar alguns segundos no Cisco Packet Tracer.
+
+
+!======================================================================
+! 16 - PRINCIPAIS COMANDOS
+!======================================================================
+
+! show clock
+! Exibe a Data e Hora atual do equipamento.
+
+! clock timezone BR -3
+! Define o fuso horário utilizado.
+
+! ntp authenticate
+! Habilita autenticação NTP.
+
+! ntp authentication-key
+! Define a chave e o método de autenticação.
+
+! ntp server
+! Define o servidor NTP.
+
+! ntp update-calendar
+! Atualiza o calendário do equipamento.
+
+! show ntp status
+! Apresenta o estado da sincronização NTP.
+
+! show ntp associations
+! Exibe as associações NTP.
+
+! show running-config | include ntp
+! Filtra as configurações relacionadas ao NTP.
+
+
+!======================================================================
+! 17 - CONFIGURAÇÃO COMPLETA
+!======================================================================
+
+! Sequência principal utilizada no laboratório:
+
+enable
+
+show clock
+
+configure terminal
+
+clock timezone BR -3
+
+ntp authenticate
+
+ntp authentication-key 123456 md5 vaamonde
+
+ntp server 192.168.3.1
+
+ntp update-calendar
+
+end
+
+write
+
+
+!======================================================================
+! 18 - TESTES E VERIFICAÇÃO
+!======================================================================
+
+! Visualizando a configuração:
+
+show running-config | include ntp
+
+! Verificando o estado do NTP:
+
+show ntp status
+
+! Verificando as associações:
+
+show ntp associations
+
+! Conferindo a Data e Hora:
+
+show clock
+
+
+!======================================================================
+! 19 - RESULTADO ESPERADO
+!======================================================================
+
+! Ao finalizar o procedimento, o equipamento deverá:
+
+! 01 - Possuir o fuso horário configurado;
+! 02 - Ter o serviço de autenticação NTP habilitado;
+! 03 - Possuir a chave de autenticação configurada;
+! 04 - Utilizar o servidor NTP definido;
+! 05 - Apresentar o status de sincronização;
+! 06 - Exibir a associação com o servidor NTP;
+! 07 - Apresentar a Data e Hora sincronizada.
+
+
+!======================================================================
+! 20 - AMBIENTE DO LABORATÓRIO
+!======================================================================
+
+! Simuladores:
+
+! Cisco Packet Tracer
+! GNS3
+
+! Protocolo:
+
+! NTP — Network Time Protocol
+
+! Transporte:
+
+! UDP
+
+! Porta:
+
+! 123
+
+
+!======================================================================
+! CONCLUSÃO
+!======================================================================
+
+! Este procedimento demonstra a configuração de sincronização de
+! Data e Hora utilizando o protocolo NTP em equipamentos Cisco.
+
+! A prática apresenta a configuração do fuso horário, autenticação,
+! servidor NTP, atualização do calendário e os principais comandos
+! utilizados para verificar o funcionamento do serviço.
+
+
+!======================================================================
+! FIM DO PROCEDIMENTO
+!======================================================================
