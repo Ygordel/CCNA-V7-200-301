@@ -1,32 +1,189 @@
-# 🌐 Resolução de Nomes DNS — Cisco
+!======================================================================
+!RESOLUÇÃO DE NOMES DNS — CISCO
+!======================================================================
+! Professor: Ygor Silva
+! Procedimento: Configuração e testes da resolução de nomes
+! Curso: Infraestrutura de Redes
+! Ambiente: Cisco Packet Tracer / GNS3
+! Data de criação: 24/08/2026
+! Versão: 1.00
+!======================================================================
 
-**Professor:** Ygor Silva  
-**Curso:** Infraestrutura de Redes  
-**Tecnologia:** Cisco IOS  
-**Ambiente:** Cisco Packet Tracer e GNS3
 
----
+!======================================================================
+! 01 - RESOLUÇÃO DE NOMES
+!======================================================================
 
-## 📚 Sobre
+! A resolução de nomes permite utilizar identificadores como nomes de
+! equipamentos em vez de informar diretamente seus endereços IPv4.
 
-Procedimento prático para configuração e testes de **resolução de nomes** em Switches e Roteadores Cisco.
+! Exemplo:
 
-A atividade demonstra o uso de **DNS**, registros locais, comandos de consulta, testes de conectividade e acesso remoto por SSH utilizando nomes.
+! Nome:
+! servidor
 
-## 🎯 Objetivos
+! Endereço IPv4:
+! 192.168.3.1
 
-- Configurar resolução de nomes no Cisco IOS;
-- Definir um servidor DNS;
-- Criar registros locais;
-- Consultar hosts conhecidos;
-- Testar a resolução com `ping`;
-- Utilizar nomes em conexões SSH;
-- Aplicar filtros aos comandos `show`.
 
-## ⚙️ Principais configurações
+!======================================================================
+! 02 - ACESSANDO O MODO DE CONFIGURAÇÃO
+!======================================================================
 
-```text
+! Acessando o modo EXEC privilegiado:
+
 enable
+
+! Acessando o modo de configuração global:
+
+configure terminal
+
+
+!======================================================================
+! 03 - HABILITANDO A RESOLUÇÃO DE NOMES
+!======================================================================
+
+! Habilitando o recurso de resolução de nomes no Cisco IOS:
+
+ip domain-lookup
+
+! Esse recurso permite que o equipamento realize consultas de nomes
+! utilizando os mecanismos de resolução configurados.
+
+
+!======================================================================
+! 04 - CONFIGURANDO O SERVIDOR DNS
+!======================================================================
+
+! Definindo o endereço IPv4 do servidor DNS utilizado pelo equipamento:
+
+ip name-server 192.168.3.1
+
+! Servidor DNS utilizado no laboratório:
+
+! DNS Server: 192.168.3.1
+
+
+!======================================================================
+! 05 - CRIANDO UM REGISTRO LOCAL
+!======================================================================
+
+! Criando uma associação local entre nome e endereço IPv4:
+
+ip host servidor 192.168.3.1
+
+! Associação criada:
+
+! Nome: servidor
+! IPv4: 192.168.3.1
+
+! O registro local permite utilizar o nome do equipamento sem depender
+! exclusivamente de uma consulta ao servidor DNS.
+
+
+!======================================================================
+! 06 - SALVANDO A CONFIGURAÇÃO
+!======================================================================
+
+! Retornando ao modo EXEC privilegiado:
+
+end
+
+! Salvando a configuração:
+
+write
+
+
+!======================================================================
+! 07 - VISUALIZANDO A CONFIGURAÇÃO
+!======================================================================
+
+! Visualizando somente as linhas relacionadas a IP:
+
+show running-config | include ip
+
+! O caractere Pipe (|) permite aplicar filtros aos comandos show.
+
+! Exemplos de filtros:
+
+! include  - apresenta linhas que possuem determinada informação
+! exclude  - remove linhas que possuem determinada informação
+! begin    - inicia a visualização a partir de determinado trecho
+! section  - apresenta uma seção específica da configuração
+
+
+!======================================================================
+! 08 - VISUALIZANDO OS HOSTS CONHECIDOS
+!======================================================================
+
+! Visualizando os nomes e endereços conhecidos pelo equipamento:
+
+show hosts
+
+
+!======================================================================
+! 09 - TESTANDO A RESOLUÇÃO DE NOMES
+!======================================================================
+
+! Testando o registro local:
+
+ping servidor
+
+! Testando um nome que deverá ser resolvido pelo DNS:
+
+ping server-02
+
+! Testando outro equipamento da infraestrutura:
+
+ping sw-l2-2960-3
+
+
+!======================================================================
+! 10 - TESTANDO O ACESSO SSH UTILIZANDO NOME
+!======================================================================
+
+! Utilizando o nome do equipamento para realizar uma conexão SSH:
+
+ssh -l admin sw-l2-2960-3
+
+! O equipamento deverá conseguir resolver o nome informado para o
+! endereço IPv4 correspondente antes de estabelecer a conexão.
+
+
+!======================================================================
+! 11 - PRINCIPAIS COMANDOS
+!======================================================================
+
+! ip domain-lookup
+! Habilita a resolução de nomes.
+
+! ip name-server
+! Define o servidor DNS utilizado pelo equipamento.
+
+! ip host
+! Cria uma associação local entre nome e endereço IPv4.
+
+! show hosts
+! Exibe os hosts conhecidos pelo Cisco IOS.
+
+! show running-config | include ip
+! Filtra informações relacionadas a IP na configuração.
+
+! ping
+! Permite testar resolução de nomes e conectividade IP.
+
+! ssh
+! Permite estabelecer uma conexão remota utilizando SSH.
+
+
+!======================================================================
+! 12 - CONFIGURAÇÃO COMPLETA
+!======================================================================
+
+! Sequência principal utilizada no laboratório:
+
+enable
+
 configure terminal
 
 ip domain-lookup
@@ -34,4 +191,78 @@ ip name-server 192.168.3.1
 ip host servidor 192.168.3.1
 
 end
+
 write
+
+
+!======================================================================
+! 13 - VERIFICAÇÃO E TESTES
+!======================================================================
+
+! Verificando a configuração:
+
+show running-config | include ip
+
+! Visualizando os hosts conhecidos:
+
+show hosts
+
+! Testando a resolução e conectividade:
+
+ping servidor
+ping server-02
+ping sw-l2-2960-3
+
+! Testando acesso remoto:
+
+ssh -l admin sw-l2-2960-3
+
+
+!======================================================================
+! 14 - RESULTADO ESPERADO
+!======================================================================
+
+! Ao finalizar o procedimento, o aluno deverá conseguir:
+
+! 01 - Habilitar a resolução de nomes;
+! 02 - Configurar um servidor DNS;
+! 03 - Criar registros locais;
+! 04 - Consultar os hosts conhecidos;
+! 05 - Utilizar filtros nos comandos show;
+! 06 - Testar a resolução utilizando ping;
+! 07 - Utilizar nomes em conexões SSH.
+
+
+!======================================================================
+! 15 - AMBIENTE DO LABORATÓRIO
+!======================================================================
+
+! Simuladores:
+
+! Cisco Packet Tracer
+! GNS3
+
+! Tecnologias utilizadas:
+
+! Cisco IOS
+! IPv4
+! DNS
+! ICMP
+! SSH
+
+
+!======================================================================
+! CONCLUSÃO
+!======================================================================
+
+! Este procedimento apresenta os fundamentos da resolução de nomes
+! em equipamentos Cisco, demonstrando a utilização de servidor DNS,
+! registros locais, testes de conectividade e acesso remoto.
+
+! A prática contribui para o desenvolvimento de conhecimentos em
+! administração de redes e troubleshooting utilizando Cisco IOS.
+
+
+!======================================================================
+! FIM DO PROCEDIMENTO
+!======================================================================
