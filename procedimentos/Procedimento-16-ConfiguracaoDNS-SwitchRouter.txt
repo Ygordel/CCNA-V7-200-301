@@ -1,0 +1,37 @@
+# 🌐 Resolução de Nomes DNS — Cisco
+
+**Professor:** Ygor Silva  
+**Curso:** Infraestrutura de Redes  
+**Tecnologia:** Cisco IOS  
+**Ambiente:** Cisco Packet Tracer e GNS3
+
+---
+
+## 📚 Sobre
+
+Procedimento prático para configuração e testes de **resolução de nomes** em Switches e Roteadores Cisco.
+
+A atividade demonstra o uso de **DNS**, registros locais, comandos de consulta, testes de conectividade e acesso remoto por SSH utilizando nomes.
+
+## 🎯 Objetivos
+
+- Configurar resolução de nomes no Cisco IOS;
+- Definir um servidor DNS;
+- Criar registros locais;
+- Consultar hosts conhecidos;
+- Testar a resolução com `ping`;
+- Utilizar nomes em conexões SSH;
+- Aplicar filtros aos comandos `show`.
+
+## ⚙️ Principais configurações
+
+```text
+enable
+configure terminal
+
+ip domain-lookup
+ip name-server 192.168.3.1
+ip host servidor 192.168.3.1
+
+end
+write
