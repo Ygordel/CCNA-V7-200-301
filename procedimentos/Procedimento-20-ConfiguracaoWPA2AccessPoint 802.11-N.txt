@@ -1,0 +1,253 @@
+!======================================================================
+! 020 - CONFIGURAÇÃO DE ACCESS POINT CISCO 802.11N COM WPA2
+!======================================================================
+! Professor: Ygor Silva
+! Curso: Infraestrutura de Redes
+! Procedimento: Configuração de Access Point Cisco 802.11n
+! Tecnologia: WLAN / Wi-Fi / WPA2-PSK
+! Ambiente: Cisco Packet Tracer
+! Data de criação: 24/08/2026
+! Versão: 1.00
+!======================================================================
+
+
+!======================================================================
+! 01 - OBJETIVO
+!======================================================================
+
+! Configurar um Access Point Cisco 802.11n para disponibilizar uma
+! rede sem fio utilizando autenticação WPA2-PSK.
+
+! Durante a atividade serão configurados:
+
+! - Nome da rede sem fio (SSID);
+! - Canal de operação;
+! - Área de cobertura;
+! - Método de autenticação;
+! - Chave de acesso;
+! - Tipo de criptografia;
+! - Conexão de um dispositivo cliente à rede Wi-Fi.
+
+
+!======================================================================
+! 02 - CONCEITOS BÁSICOS
+!======================================================================
+
+! Access Point (AP) é um equipamento utilizado para fornecer acesso
+! à rede por meio de uma conexão sem fio.
+
+! SSID (Service Set Identifier) corresponde ao nome utilizado para
+! identificar uma rede Wi-Fi.
+
+! WPA2-PSK utiliza uma chave pré-compartilhada para autenticar os
+! dispositivos que desejam ingressar na rede sem fio.
+
+! A utilização de autenticação e criptografia aumenta a proteção
+! da comunicação entre os dispositivos conectados à WLAN.
+
+
+!======================================================================
+! 03 - ACESSANDO O ACCESS POINT
+!======================================================================
+
+! No Cisco Packet Tracer:
+
+! 01 - Selecionar o Access Point;
+! 02 - Acessar a aba Config;
+! 03 - Selecionar a interface Port 1;
+! 04 - Conferir se a interface está habilitada.
+
+
+!======================================================================
+! 04 - CONFIGURAÇÃO DA INTERFACE WIRELESS
+!======================================================================
+
+! Status da interface:
+
+Port Status:
+On
+
+! Nome da rede sem fio:
+
+SSID:
+pti
+
+! Canal utilizado pela rede:
+
+2.4 GHz Channel:
+6
+
+! Área de cobertura configurada no laboratório:
+
+Coverage Range:
+250 metros
+
+
+!======================================================================
+! 05 - CONFIGURAÇÃO DA AUTENTICAÇÃO
+!======================================================================
+
+! Na seção Authentication selecionar:
+
+WPA2-PSK
+
+! O método WPA2-PSK utiliza uma chave pré-compartilhada para permitir
+! a autenticação dos clientes na rede wireless.
+
+! Informar uma senha para a rede:
+
+PSK Pass Phrase:
+[DEFINIR SENHA DO LABORATÓRIO]
+
+
+!======================================================================
+! 06 - CRIPTOGRAFIA
+!======================================================================
+
+! Após selecionar WPA2-PSK, configurar o método de criptografia
+! disponibilizado pelo equipamento no Cisco Packet Tracer.
+
+! A criptografia tem como objetivo proteger os dados transmitidos
+! através da rede sem fio.
+
+
+!======================================================================
+! 07 - RESUMO DA CONFIGURAÇÃO
+!======================================================================
+
+! Access Point:
+! Cisco 802.11n
+
+! Interface:
+! Port 1
+
+! Status:
+! On
+
+! SSID:
+! pti
+
+! Frequência:
+! 2.4 GHz
+
+! Canal:
+! 6
+
+! Cobertura:
+! 250 metros
+
+! Autenticação:
+! WPA2-PSK
+
+! Senha:
+! Definida pelo administrador do laboratório
+
+
+!======================================================================
+! 08 - CONFIGURAÇÕES NÃO UTILIZADAS
+!======================================================================
+
+! No laboratório não serão utilizados:
+
+! WEP
+! WPA-PSK
+! Rede sem autenticação
+
+! O objetivo é demonstrar uma configuração utilizando WPA2-PSK.
+
+
+!======================================================================
+! 09 - CONEXÃO DO CLIENTE
+!======================================================================
+
+! Após configurar o Access Point:
+
+! 01 - Selecionar o computador ou dispositivo wireless;
+! 02 - Acessar a configuração da interface sem fio;
+! 03 - Localizar o SSID "pti";
+! 04 - Selecionar a rede;
+! 05 - Informar a chave WPA2-PSK;
+! 06 - Confirmar a conexão.
+
+
+!======================================================================
+! 10 - TESTES
+!======================================================================
+
+! Após a conexão do cliente, verificar se o dispositivo recebeu
+! corretamente as configurações de rede.
+
+! Testar:
+
+! - Associação com o Access Point;
+! - Conexão com o SSID;
+! - Autenticação WPA2-PSK;
+! - Endereço IPv4;
+! - Gateway padrão;
+! - Comunicação com outros dispositivos da rede.
+
+
+! Teste de conectividade:
+
+ping [ENDEREÇO_IP_DO_GATEWAY]
+
+ping [ENDEREÇO_IP_DE_OUTRO_HOST]
+
+
+!======================================================================
+! 11 - VERIFICAÇÃO DO LABORATÓRIO
+!======================================================================
+
+! Conferir os seguintes itens:
+
+! [OK] Access Point ligado
+! [OK] Interface Port 1 habilitada
+! [OK] SSID configurado
+! [OK] Canal 2.4 GHz configurado
+! [OK] Área de cobertura definida
+! [OK] WPA2-PSK habilitado
+! [OK] Chave de acesso configurada
+! [OK] Cliente conectado
+! [OK] Comunicação de rede funcionando
+
+
+!======================================================================
+! 12 - RESULTADO ESPERADO
+!======================================================================
+
+! Ao final da atividade, o aluno deverá conseguir configurar um
+! Access Point Cisco 802.11n e conectar um dispositivo cliente a uma
+! rede WLAN protegida por WPA2-PSK.
+
+! A prática permite compreender os principais elementos envolvidos
+! na criação de uma rede wireless básica.
+
+
+!======================================================================
+! 13 - OBSERVAÇÃO
+!======================================================================
+
+! As telas e opções apresentadas neste procedimento correspondem ao
+! ambiente de simulação utilizado no Cisco Packet Tracer.
+
+! Alguns recursos podem apresentar diferenças em equipamentos físicos
+! ou em diferentes versões do simulador.
+
+
+!======================================================================
+! CONCLUSÃO
+!======================================================================
+
+! Nesta prática foi realizada a configuração básica de uma rede
+! wireless utilizando um Access Point Cisco 802.11n.
+
+! Foram abordados o SSID, canal de operação, cobertura, autenticação
+! WPA2-PSK e conexão de clientes à rede sem fio.
+
+! O exercício serve como base para estudos posteriores de WLAN,
+! segurança wireless, VLANs, autenticação e infraestrutura de redes.
+
+
+!======================================================================
+! FIM DO PROCEDIMENTO 020
+!======================================================================
