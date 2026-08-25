@@ -1,0 +1,329 @@
+!======================================================================
+! 025 - ROTEAMENTO ESTÁTICO E ROTA PADRÃO EM REDE CISCO
+!======================================================================
+! Professor: Ygor Silva
+! Curso: Infraestrutura de Redes
+! Procedimento: Configuração de Roteamento Estático
+! Tecnologia: Cisco IOS
+! Ambiente: Cisco Packet Tracer / GNS3
+! Data de criação: 25/08/2026
+! Versão: 1.00
+!======================================================================
+
+
+!======================================================================
+! 01 - OBJETIVO
+!======================================================================
+
+! Configurar comunicação entre diferentes redes utilizando rotas
+! estáticas e uma rota padrão.
+
+! A prática utiliza:
+
+! - Router Cisco 1941-1;
+! - Router Cisco 1941-2;
+! - Switch Layer 3 Cisco 3560;
+! - Redes LAN;
+! - Link WAN ponto a ponto;
+! - Rotas estáticas;
+! - Rota padrão;
+! - Testes com ICMP e Traceroute.
+
+
+!======================================================================
+! 02 - TOPOLOGIA LÓGICA
+!======================================================================
+
+! REDE LAN 1
+! 192.168.1.0/24
+!        |
+! Router 1941-1
+! 10.0.0.1/30
+!        |
+!        | WAN
+!        |
+! 10.0.0.2/30
+! Router 1941-2
+! 192.168.2.254/24
+!        |
+! Switch Layer 3
+! 192.168.2.1/24
+!        |
+! REDE LAN 3
+! 192.168.3.0/24
+
+
+!======================================================================
+! 03 - CONCEITO DE ROTA ESTÁTICA
+!======================================================================
+
+! A rota estática é configurada manualmente pelo administrador.
+
+! Ela pode ser utilizada em redes simples ou em enlaces onde existe
+! um caminho conhecido para alcançar determinada rede.
+
+! Sintaxe básica:
+
+! ip route REDE_DESTINO MÁSCARA PRÓXIMO_SALTO
+
+
+!======================================================================
+! 04 - CONFIGURAÇÃO DO ROUTER 1941-2
+!======================================================================
+
+enable
+configure terminal
+
+
+!----------------------------------------------------------------------
+! INTERFACE WAN
+!----------------------------------------------------------------------
+
+interface gigabitEthernet 0/1
+
+description Interface de WAN com o Router 1941-1
+
+ip address 10.0.0.2 255.255.255.252
+
+no shutdown
+
+exit
+
+
+!----------------------------------------------------------------------
+! INTERFACE LAN
+!----------------------------------------------------------------------
+
+interface gigabitEthernet 0/0
+
+description Interface de LAN com o Switch Layer 3 3560
+
+speed 100
+
+duplex full
+
+ip address 192.168.2.254 255.255.255.0
+
+no shutdown
+
+exit
+
+
+!======================================================================
+! 05 - ROTAS ESTÁTICAS NO ROUTER 1941-2
+!======================================================================
+
+! Rota para a Rede LAN 192.168.1.0/24:
+
+ip route 192.168.1.0 255.255.255.0 10.0.0.1
+
+
+! Rota para a Rede LAN 192.168.3.0/24:
+
+ip route 192.168.3.0 255.255.255.0 192.168.2.1
+
+
+! Finalizando:
+
+end
+
+
+! Salvando a configuração:
+
+write
+
+
+!======================================================================
+! 06 - CONFIGURAÇÃO DO SWITCH LAYER 3 3560
+!======================================================================
+
+enable
+configure terminal
+
+
+! Configurando uma rota padrão:
+
+ip route 0.0.0.0 0.0.0.0 192.168.2.254
+
+
+! A rota 0.0.0.0/0 representa a rota padrão, utilizada quando não
+! existe uma rota mais específica disponível na tabela de roteamento.
+
+end
+
+
+! Salvando:
+
+write
+
+
+!======================================================================
+! 07 - CONFIGURAÇÃO DO ROUTER 1941-1
+!======================================================================
+
+enable
+configure terminal
+
+
+!----------------------------------------------------------------------
+! INTERFACE WAN
+!----------------------------------------------------------------------
+
+interface gigabitEthernet 0/1
+
+description Interface de WAN com o Router 1941-2
+
+ip address 10.0.0.1 255.255.255.252
+
+no shutdown
+
+exit
+
+
+!======================================================================
+! 08 - ROTAS ESTÁTICAS NO ROUTER 1941-1
+!======================================================================
+
+! Rota para a Rede 192.168.2.0/24:
+
+ip route 192.168.2.0 255.255.255.0 gigabitEthernet 0/1
+
+
+! Rota para a Rede 192.168.3.0/24:
+
+ip route 192.168.3.0 255.255.255.0 gigabitEthernet 0/1
+
+
+! Finalizando:
+
+end
+
+
+! Salvando:
+
+write
+
+
+!======================================================================
+! 09 - VERIFICAÇÃO DAS CONFIGURAÇÕES
+!======================================================================
+
+! Visualizando as interfaces:
+
+show running-config | section interface
+
+
+! Visualizando as rotas configuradas:
+
+show running-config | section ip route
+
+
+! Verificando o estado das interfaces:
+
+show ip interface brief
+
+
+! Visualizando a tabela de roteamento:
+
+show ip route
+
+
+!======================================================================
+! 10 - TESTES DE CONECTIVIDADE
+!======================================================================
+
+! Testando comunicação com a Rede 192.168.1.0/24:
+
+ping 192.168.1.1
+
+
+! Testando comunicação com a Rede 192.168.3.0/24:
+
+ping 192.168.3.1
+
+
+! Verificando o caminho até a Rede 192.168.1.0/24:
+
+tracert 192.168.1.1
+
+
+! Verificando o caminho até a Rede 192.168.3.0/24:
+
+tracert 192.168.3.1
+
+
+!======================================================================
+! 11 - RESUMO DAS REDES
+!======================================================================
+
+! Rede LAN 1:
+
+! 192.168.1.0/24
+
+
+! Rede de interligação entre os Routers:
+
+! 10.0.0.0/30
+
+
+! Rede LAN intermediária:
+
+! 192.168.2.0/24
+
+
+! Rede LAN 3:
+
+! 192.168.3.0/24
+
+
+!======================================================================
+! 12 - ROTA PADRÃO
+!======================================================================
+
+! A rota padrão é representada por:
+
+! 0.0.0.0 0.0.0.0
+
+
+! Exemplo utilizado no laboratório:
+
+ip route 0.0.0.0 0.0.0.0 192.168.2.254
+
+
+! Ela funciona como Gateway de Último Recurso quando o equipamento
+! não possui uma rota mais específica para determinado destino.
+
+
+!======================================================================
+! 13 - RESULTADO ESPERADO
+!======================================================================
+
+! Ao finalizar o laboratório, o aluno deverá ser capaz de:
+
+! 01 - Compreender o funcionamento do roteamento estático;
+! 02 - Configurar interfaces WAN;
+! 03 - Configurar redes ponto a ponto;
+! 04 - Criar rotas estáticas;
+! 05 - Configurar uma rota padrão;
+! 06 - Consultar a tabela de roteamento;
+! 07 - Identificar rotas configuradas manualmente;
+! 08 - Testar a conectividade entre redes;
+! 09 - Utilizar o Traceroute para identificar o caminho dos pacotes.
+
+
+!======================================================================
+! CONCLUSÃO
+!======================================================================
+
+! Neste laboratório foram configuradas rotas estáticas entre os
+! equipamentos Cisco, permitindo a comunicação entre diferentes
+! segmentos de rede.
+
+! Também foi configurada uma rota padrão no Switch Layer 3,
+! funcionando como caminho de último recurso para destinos que não
+! possuem uma rota específica.
+
+
+!======================================================================
+! FIM DO PROCEDIMENTO 025
+!======================================================================
