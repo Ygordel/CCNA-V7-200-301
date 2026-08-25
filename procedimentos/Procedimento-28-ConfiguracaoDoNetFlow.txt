@@ -1,0 +1,305 @@
+!======================================================================
+! PROCEDIMENTO-28 — CONFIGURAÇÃO DO NETFLOW
+!======================================================================
+! Professor: Ygor Silva
+! Curso: Infraestrutura de Redes
+! Tecnologia: Cisco IOS
+! Ambiente: Cisco Packet Tracer / GNS3
+! Data de criação: 25/08/2026
+! Versão: 1.00
+!======================================================================
+
+
+!======================================================================
+! 01 - OBJETIVO
+!======================================================================
+
+! Configurar o recurso NetFlow para coletar informações sobre o fluxo
+! de tráfego de rede e encaminhar esses dados para um servidor coletor.
+
+! A atividade demonstra:
+
+! - Configuração do NetFlow;
+! - Configuração do Flow Exporter;
+! - Definição do endereço do Coletor;
+! - Configuração da interface de origem;
+! - Utilização do NetFlow versão 9;
+! - Monitoramento de tráfego de entrada e saída;
+! - Consulta do cache de fluxos;
+! - Testes de geração de tráfego.
+
+
+!======================================================================
+! 02 - CONCEITO DE NETFLOW
+!======================================================================
+
+! NetFlow é um recurso utilizado para coletar informações relacionadas
+! ao fluxo de tráfego que atravessa interfaces de equipamentos Cisco.
+
+! As informações coletadas podem auxiliar na análise do tráfego de
+! entrada e saída de uma interface.
+
+! O NetFlow foi inicialmente desenvolvido pela Cisco.
+
+! O material de referência relaciona o NetFlow à RFC 3954 e informa
+! sua evolução para o IPFIX.
+
+! No Cisco Packet Tracer utilizado neste laboratório, a versão
+! disponível para configuração é a versão 9.
+
+
+!======================================================================
+! 03 - COMPONENTES DO NETFLOW
+!======================================================================
+
+! O funcionamento do NetFlow é apresentado em três componentes:
+
+! Flow Exporter
+! Responsável pelo envio das informações de fluxo.
+
+! Flow Collector
+! Responsável pelo recebimento dos dados enviados pelo equipamento.
+
+! Analysis Application
+! Responsável pela análise das informações coletadas.
+
+
+!======================================================================
+! 04 - PORTA UTILIZADA
+!======================================================================
+
+! Porta utilizada pelo NetFlow no laboratório:
+
+! UDP 9996
+
+
+!======================================================================
+! 05 - CONFIGURAÇÃO DO COLETOR
+!======================================================================
+
+! No Cisco Packet Tracer, o serviço de coleta do NetFlow deve ser
+! habilitado no servidor utilizado pelo laboratório.
+
+! Endereço do servidor coletor:
+
+! 192.168.3.1
+
+
+!======================================================================
+! 06 - CONFIGURAÇÃO DO ROUTER 1941-2
+!======================================================================
+
+! Acessando o modo EXEC Privilegiado:
+
+enable
+
+
+! Acessando o modo de Configuração Global:
+
+configure terminal
+
+
+! Configurando o endereço IPv4 do servidor coletor:
+
+ip flow-export destination 192.168.3.1 9996
+
+
+! Configurando a interface utilizada como origem dos dados:
+
+ip flow-export source gigabitEthernet 0/0
+
+
+! Configurando a versão do NetFlow:
+
+ip flow-export version 9
+
+
+!======================================================================
+! 07 - CONFIGURAÇÃO DA INTERFACE DE MONITORAMENTO
+!======================================================================
+
+! Acessando a interface GigabitEthernet 0/0:
+
+interface gigabitEthernet 0/0
+
+
+! Habilitando a coleta do fluxo de saída:
+
+ip flow egress
+
+
+! Habilitando a coleta do fluxo de entrada:
+
+ip flow ingress
+
+
+! Retornando ao modo EXEC Privilegiado:
+
+end
+
+
+!======================================================================
+! 08 - SALVANDO AS CONFIGURAÇÕES
+!======================================================================
+
+! Salvando as configurações da memória RAM na NVRAM:
+
+write
+
+
+!======================================================================
+! 09 - VERIFICAÇÃO DA CONFIGURAÇÃO
+!======================================================================
+
+! Visualizando a configuração de exportação do NetFlow:
+
+show running-config | section ip flow-export
+
+
+! Visualizando as configurações das interfaces:
+
+show running-config | section interface
+
+
+!======================================================================
+! 10 - VERIFICAÇÃO DO CACHE DO NETFLOW
+!======================================================================
+
+! Visualizando as informações armazenadas no cache local:
+
+show ip cache flow
+
+
+!======================================================================
+! 11 - GERAÇÃO DE TRÁFEGO PARA TESTE
+!======================================================================
+
+! Gerando tráfego ICMP:
+
+ping -n 1000 192.168.1.1
+
+
+! Testando acesso ao serviço FTP:
+
+ftp 192.168.3.1
+
+
+! Testando acesso ao serviço Web:
+
+www.vaamonde.pti
+
+
+! Testando resolução de nomes:
+
+nslookup vaamonde.pti
+
+
+! Os testes geram tráfego que poderá ser observado nas informações
+! coletadas pelo NetFlow.
+
+
+!======================================================================
+! 12 - FLUXO DE ENTRADA E SAÍDA
+!======================================================================
+
+! INGRESS:
+! Representa o fluxo de tráfego que entra pela interface monitorada.
+
+! EGRESS:
+! Representa o fluxo de tráfego que sai pela interface monitorada.
+
+! Neste laboratório os dois sentidos estão habilitados:
+
+ip flow ingress
+
+ip flow egress
+
+
+!======================================================================
+! 13 - RESUMO DA CONFIGURAÇÃO
+!======================================================================
+
+! Servidor Coletor:
+
+! IPv4: 192.168.3.1
+! Porta: UDP 9996
+
+! Versão:
+
+! NetFlow v9
+
+! Interface de origem:
+
+! GigabitEthernet 0/0
+
+! Monitoramento:
+
+! Entrada (Ingress)
+! Saída (Egress)
+
+
+!======================================================================
+! 14 - COMANDOS PRINCIPAIS
+!======================================================================
+
+ip flow-export destination 192.168.3.1 9996
+
+ip flow-export source gigabitEthernet 0/0
+
+ip flow-export version 9
+
+interface gigabitEthernet 0/0
+
+ip flow ingress
+
+ip flow egress
+
+show ip cache flow
+
+
+!======================================================================
+! 15 - RESULTADO ESPERADO
+!======================================================================
+
+! Ao finalizar o laboratório, o aluno deverá ser capaz de:
+
+! 01 - Compreender a finalidade do NetFlow;
+! 02 - Identificar os componentes do NetFlow;
+! 03 - Configurar um servidor coletor;
+! 04 - Definir o endereço do Flow Collector;
+! 05 - Configurar a versão do NetFlow;
+! 06 - Definir a interface de origem;
+! 07 - Monitorar tráfego de entrada;
+! 08 - Monitorar tráfego de saída;
+! 09 - Consultar o cache de fluxos;
+! 10 - Gerar tráfego para análise.
+
+
+!======================================================================
+! 16 - OBSERVAÇÃO SOBRE CERTIFICAÇÃO
+!======================================================================
+
+! O material de referência informa que o NetFlow não faz parte dos
+! conhecimentos cobrados na certificação Cisco CCNA 200-301.
+
+! A atividade permanece como laboratório complementar para estudo de
+! monitoramento e análise de fluxo de dados em redes Cisco.
+
+
+!======================================================================
+! CONCLUSÃO
+!======================================================================
+
+! Neste procedimento foi configurado o NetFlow v9 em um Router Cisco,
+! direcionando as informações de fluxo para um servidor coletor.
+
+! Também foram habilitados os fluxos de entrada e saída da interface
+! GigabitEthernet 0/0 e realizados testes para gerar tráfego de rede.
+
+! A prática permite compreender o conceito de coleta e análise de
+! informações de fluxo em uma infraestrutura Cisco.
+
+
+!======================================================================
+! FIM DO PROCEDIMENTO-28
+!======================================================================
