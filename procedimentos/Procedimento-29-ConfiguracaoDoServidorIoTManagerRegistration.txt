@@ -1,0 +1,344 @@
+!======================================================================
+! PROCEDIMENTO-29 — CONFIGURAÇÃO DO SERVIDOR IoT MANAGER REGISTRATION
+!======================================================================
+! Professor: Ygor Silva
+! Curso: Infraestrutura de Redes
+! Tecnologia: Cisco IoT
+! Ambiente: Cisco Packet Tracer
+! Tema: Internet das Coisas (IoT)
+! Versão: 1.00
+!======================================================================
+
+
+!======================================================================
+! 01 - INTERNET DAS COISAS — IoT
+!======================================================================
+
+! IoT (Internet of Things) ou Internet das Coisas representa a
+! utilização de dispositivos físicos conectados a uma rede para
+! coletar, transmitir e receber informações.
+
+! Os dispositivos IoT podem possuir sensores, atuadores e recursos
+! de comunicação capazes de interagir com outros dispositivos e
+! serviços da rede.
+
+! Exemplos de dispositivos IoT:
+
+! - Sensores;
+! - Câmeras;
+! - Lâmpadas;
+! - Ventiladores;
+! - Portas;
+! - Alarmes;
+! - Termostatos;
+! - Eletrodomésticos;
+! - Dispositivos de automação residencial.
+
+
+!======================================================================
+! 02 - OBJETIVO DO LABORATÓRIO
+!======================================================================
+
+! Configurar um servidor de registro para dispositivos IoT no
+! Cisco Packet Tracer.
+
+! A atividade demonstra:
+
+! - Ativação do serviço IoT;
+! - Configuração de uma conta de usuário;
+! - Registro de dispositivos IoT;
+! - Comunicação entre dispositivos;
+! - Utilização do servidor para gerenciamento dos dispositivos;
+! - Testes de conectividade e registro.
+
+
+!======================================================================
+! 03 - IoT REGISTRATION SERVER
+!======================================================================
+
+! O IoT Registration Server é utilizado no laboratório para realizar
+! o registro dos dispositivos IoT.
+
+! O servidor permite que os dispositivos conectados sejam associados
+! a uma conta de gerenciamento.
+
+! Para o funcionamento do laboratório, o servidor deverá possuir um
+! endereço IPv4 configurado e estar conectado à rede.
+
+
+!======================================================================
+! 04 - CONFIGURAÇÃO DO SERVIDOR
+!======================================================================
+
+! No Cisco Packet Tracer:
+
+! Server
+!   > Services
+!      > IoT
+
+! Ativar o serviço:
+
+IoT Service        On
+
+
+!======================================================================
+! 05 - CONFIGURAÇÃO DA CONTA DO IoT SERVER
+!======================================================================
+
+! Criar uma conta para utilização no registro dos dispositivos.
+
+! Exemplo de laboratório:
+
+Username:
+iot
+
+Password:
+123456
+
+
+! A conta será utilizada pelos dispositivos IoT para realizar o
+! processo de registro no servidor.
+
+
+!======================================================================
+! 06 - ENDEREÇAMENTO DO SERVIDOR
+!======================================================================
+
+! Exemplo de endereço IPv4 utilizado no laboratório:
+
+! Endereço IPv4 do Servidor IoT:
+
+192.168.3.1
+
+
+! Máscara:
+
+255.255.255.0
+
+
+! Gateway:
+
+192.168.3.254
+
+
+! O endereço deve ser ajustado de acordo com a topologia utilizada.
+
+
+!======================================================================
+! 07 - CONFIGURAÇÃO DO DISPOSITIVO IoT
+!======================================================================
+
+! Selecionar um dispositivo IoT no Cisco Packet Tracer.
+
+! Acessar:
+
+! Device
+!   > Config
+
+
+! Localizar as configurações de rede do dispositivo.
+
+! Configurar o endereço IP de acordo com a rede utilizada no
+! laboratório.
+
+
+!======================================================================
+! 08 - REGISTRO DO DISPOSITIVO IoT
+!======================================================================
+
+! No dispositivo IoT, acessar a configuração de registro.
+
+! Selecionar:
+
+! IoT Server
+
+
+! Informar o endereço do servidor:
+
+IoT Server:
+192.168.3.1
+
+
+! Informar as credenciais cadastradas no servidor:
+
+Username:
+iot
+
+Password:
+123456
+
+
+! Realizar o registro do dispositivo.
+
+
+!======================================================================
+! 09 - VERIFICAÇÃO DO REGISTRO
+!======================================================================
+
+! Após o registro, acessar o servidor:
+
+! Server
+!   > Services
+!      > IoT
+
+
+! Verificar se o dispositivo aparece na lista de dispositivos
+! registrados.
+
+
+! O dispositivo deverá apresentar uma situação de registro válida
+! no servidor.
+
+
+!======================================================================
+! 10 - TESTE DE CONECTIVIDADE
+!======================================================================
+
+! Antes de testar o serviço IoT, verificar a comunicação IP entre
+! os dispositivos.
+
+! Testar o endereço do servidor:
+
+ping 192.168.3.1
+
+
+! Verificar a configuração IPv4 do dispositivo, quando disponível:
+
+ipconfig
+
+
+! Verificar a comunicação entre os dispositivos da rede utilizando
+! o protocolo ICMP.
+
+
+!======================================================================
+! 11 - GERENCIAMENTO DOS DISPOSITIVOS
+!======================================================================
+
+! Após o registro, o servidor poderá ser utilizado no laboratório
+! para visualizar os dispositivos IoT associados à conta.
+
+! O ambiente permite demonstrar o conceito de gerenciamento
+! centralizado de dispositivos IoT.
+
+
+!======================================================================
+! 12 - AUTOMAÇÃO E ATUADORES
+!======================================================================
+
+! Os dispositivos IoT podem utilizar sensores para obter informações
+! do ambiente e atuadores para executar ações.
+
+! Exemplos:
+
+! Sensor:
+! Responsável por coletar informações.
+
+! Atuador:
+! Responsável por executar uma ação.
+
+! Exemplos de ações:
+
+! - Ligar uma lâmpada;
+! - Desligar uma lâmpada;
+! - Acionar um ventilador;
+! - Abrir ou fechar uma porta;
+! - Acionar um alarme.
+
+
+!======================================================================
+! 13 - CONCEITO DE IoT NA REDE
+!======================================================================
+
+! A comunicação de um ambiente IoT pode ser representada por:
+
+! DISPOSITIVO IoT
+!       |
+!       v
+! REDE DE COMUNICAÇÃO
+!       |
+!       v
+! IoT REGISTRATION SERVER
+!       |
+!       v
+! GERENCIAMENTO
+
+
+! O laboratório demonstra a integração entre dispositivos físicos
+! simulados, rede IP e serviço de gerenciamento.
+
+
+!======================================================================
+! 14 - VERIFICAÇÕES
+!======================================================================
+
+! Verificar:
+
+! [OK] Servidor conectado à rede
+! [OK] Endereço IPv4 configurado
+! [OK] Serviço IoT habilitado
+! [OK] Usuário criado
+! [OK] Dispositivo IoT configurado
+! [OK] Endereço do servidor informado
+! [OK] Usuário e senha informados
+! [OK] Dispositivo registrado
+! [OK] Comunicação IP funcionando
+
+
+!======================================================================
+! 15 - RESULTADO ESPERADO
+!======================================================================
+
+! Ao finalizar o laboratório, o aluno deverá ser capaz de:
+
+! 01 - Compreender o conceito de Internet das Coisas;
+! 02 - Identificar dispositivos IoT;
+! 03 - Configurar um servidor IoT;
+! 04 - Criar uma conta de usuário;
+! 05 - Configurar um dispositivo IoT;
+! 06 - Registrar um dispositivo no servidor;
+! 07 - Verificar o registro do dispositivo;
+! 08 - Testar a comunicação entre os dispositivos;
+! 09 - Compreender o gerenciamento centralizado de dispositivos IoT.
+
+
+!======================================================================
+! 16 - RESUMO
+!======================================================================
+
+! IoT:
+! Internet das Coisas.
+
+! IoT Registration Server:
+! Servidor utilizado para registrar e gerenciar dispositivos IoT
+! no ambiente de laboratório.
+
+! Dispositivo IoT:
+! Equipamento capaz de realizar comunicação e/ou automação
+! utilizando uma rede.
+
+! Sensor:
+! Coleta informações do ambiente.
+
+! Atuador:
+! Executa ações de acordo com comandos ou condições.
+
+
+!======================================================================
+! CONCLUSÃO
+!======================================================================
+
+! Neste procedimento foi apresentado o conceito de Internet das
+! Coisas e realizada a configuração de um servidor de registro
+! para dispositivos IoT no Cisco Packet Tracer.
+
+! A atividade demonstra a integração entre dispositivos IoT,
+! infraestrutura de rede, autenticação e gerenciamento centralizado.
+
+! O laboratório permite compreender os fundamentos necessários para
+! a utilização de dispositivos conectados em ambientes de IoT.
+
+
+!======================================================================
+! FIM DO PROCEDIMENTO-29
+!======================================================================
