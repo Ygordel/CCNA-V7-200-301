@@ -1,0 +1,297 @@
+!======================================================================
+! 021 - CONFIGURAÇÃO DE INTERFACES E VELOCIDADE EM SWITCHES CISCO
+!======================================================================
+! Professor: Ygor Silva
+! Curso: Infraestrutura de Redes
+! Procedimento: Configuração de Interfaces de Switches
+! Tecnologia: Cisco IOS
+! Ambiente: Cisco Packet Tracer / GNS3
+! Data de criação: 25/08/2026
+! Versão: 1.00
+!======================================================================
+
+
+!======================================================================
+! 01 - OBJETIVO
+!======================================================================
+
+! Configurar e administrar interfaces Ethernet em equipamentos Cisco,
+! realizando ajustes de descrição, velocidade, duplex, MDIX e estado
+! administrativo das portas.
+
+! A atividade utiliza um Switch Layer 3 Cisco 3560 e Switches Layer 2
+! Cisco 2960.
+
+
+!======================================================================
+! 02 - CONCEITOS
+!======================================================================
+
+! SPEED
+! Define a velocidade de operação da interface.
+
+! Exemplos:
+
+! 10 Mbps
+! 100 Mbps
+! 1000 Mbps (1 Gbps)
+
+! DUPLEX
+! Define o modo de transmissão da interface.
+
+! Half-Duplex:
+! Comunicação utilizando transmissão em um sentido por vez.
+
+! Full-Duplex:
+! Permite transmissão e recepção simultaneamente.
+
+! MDIX
+! Permite identificar automaticamente a necessidade de utilização
+! de diferentes tipos de cabeamento Ethernet.
+
+! SHUTDOWN
+! Desativa administrativamente uma interface.
+
+! NO SHUTDOWN
+! Ativa administrativamente uma interface.
+
+
+!======================================================================
+! 03 - CONFIGURAÇÃO DO SWITCH LAYER 3 3560
+!======================================================================
+
+enable
+configure terminal
+
+
+!----------------------------------------------------------------------
+! PORTA DO SERVIDOR
+!----------------------------------------------------------------------
+
+interface fastEthernet 0/1
+
+description Porta de Conexao do Servidor SERVER-02
+
+speed 100
+
+duplex full
+
+no mdix auto
+
+exit
+
+
+!----------------------------------------------------------------------
+! PORTA DO ACCESS POINT
+!----------------------------------------------------------------------
+
+interface fastEthernet 0/2
+
+description Porta de Conexao do Access Point AP-01
+
+speed 100
+
+duplex full
+
+no mdix auto
+
+exit
+
+
+!----------------------------------------------------------------------
+! PORTA DO ROUTER
+!----------------------------------------------------------------------
+
+interface fastEthernet 0/24
+
+description Porta de Conexao do Router 1941
+
+speed 100
+
+duplex full
+
+exit
+
+
+!======================================================================
+! 04 - DESABILITANDO PORTAS NÃO UTILIZADAS
+!======================================================================
+
+! As interfaces que não estão sendo utilizadas podem ser desativadas
+! para reduzir a superfície de exposição física do equipamento.
+
+interface range fastEthernet 0/3 - 23
+
+shutdown
+
+exit
+
+
+!======================================================================
+! 05 - PORTAS DE BACKBONE / TRUNK
+!======================================================================
+
+! Configuração das interfaces GigabitEthernet utilizadas para conexão
+! com outros switches.
+
+interface range gigabitEthernet 0/1 - 2
+
+description Porta de Conexao com Switch Layer 2 2960
+
+speed 1000
+
+no mdix auto
+
+end
+
+
+! Salvando a configuração:
+
+write
+
+
+!======================================================================
+! 06 - CONFIGURAÇÃO DOS SWITCHES LAYER 2 2960
+!======================================================================
+
+enable
+configure terminal
+
+
+!----------------------------------------------------------------------
+! PORTAS DOS COMPUTADORES
+!----------------------------------------------------------------------
+
+interface range fastEthernet 0/1 - 2
+
+description Portas de Conexao dos Desktops
+
+speed 100
+
+duplex full
+
+no mdix auto
+
+exit
+
+
+!----------------------------------------------------------------------
+! DESABILITANDO PORTAS NÃO UTILIZADAS
+!----------------------------------------------------------------------
+
+interface range fastEthernet 0/3 - 23
+
+shutdown
+
+exit
+
+
+!----------------------------------------------------------------------
+! BACKBONE COM SWITCH LAYER 3
+!----------------------------------------------------------------------
+
+interface gigabitEthernet 0/1
+
+description Porta de Backbone com Switch Layer 3 3560
+
+speed 1000
+
+no mdix auto
+
+exit
+
+
+!----------------------------------------------------------------------
+! BACKBONE COM OUTRO SWITCH LAYER 2
+!----------------------------------------------------------------------
+
+interface gigabitEthernet 0/2
+
+description Porta de Backbone com Switch Layer 2 2960
+
+speed 1000
+
+no mdix auto
+
+end
+
+
+! Salvando a configuração:
+
+write
+
+
+!======================================================================
+! 07 - COMANDOS DE VERIFICAÇÃO
+!======================================================================
+
+! Visualizando as configurações das interfaces:
+
+show running-config | section interface
+
+
+! Visualizando o estado das interfaces e seus endereços:
+
+show ip interface brief
+
+
+! Visualizando informações detalhadas da interface:
+
+show interfaces fastEthernet 0/1
+
+
+! Visualizando o status da porta:
+
+show interfaces fastEthernet 0/1 status
+
+
+!======================================================================
+! 08 - PONTOS IMPORTANTES
+!======================================================================
+
+! [OK] Descrição das interfaces configurada
+! [OK] Velocidade das portas configurada
+! [OK] Duplex configurado
+! [OK] MDIX configurado
+! [OK] Portas não utilizadas desativadas
+! [OK] Interfaces Gigabit configuradas
+! [OK] Configuração salva na NVRAM
+! [OK] Interfaces verificadas pelos comandos show
+
+
+!======================================================================
+! 09 - RESULTADO ESPERADO
+!======================================================================
+
+! Ao final do laboratório, o aluno deverá ser capaz de:
+
+! 01 - Identificar interfaces Ethernet em equipamentos Cisco;
+! 02 - Configurar velocidade de uma porta;
+! 03 - Configurar o modo Full-Duplex;
+! 04 - Compreender o funcionamento do MDIX;
+! 05 - Desativar interfaces não utilizadas;
+! 06 - Configurar portas de conexão entre switches;
+! 07 - Utilizar interface range;
+! 08 - Verificar o estado das interfaces;
+! 09 - Salvar as configurações do equipamento.
+
+
+!======================================================================
+! CONCLUSÃO
+!======================================================================
+
+! A atividade apresenta procedimentos fundamentais para administração
+! das interfaces de Switches Cisco.
+
+! A correta configuração de velocidade, duplex, MDIX e estado
+! administrativo das portas contribui para o funcionamento adequado
+! da infraestrutura de rede.
+
+! A utilização do comando interface range também permite aplicar
+! configurações simultaneamente em várias interfaces, facilitando
+! a administração dos equipamentos.
+
+
+!======================================================================
+! FIM DO PROCEDIMENTO 021
+!======================================================================
