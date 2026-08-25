@@ -1,0 +1,229 @@
+!======================================================================
+! 024 - ROTEAMENTO LOCAL NO SWITCH LAYER 3 3560
+!======================================================================
+! Professor: Ygor Silva
+! Curso: Infraestrutura de Redes
+! Procedimento: Configuração de Roteamento Local
+! Tecnologia: Cisco IOS
+! Equipamento: Cisco Catalyst 3560
+! Ambiente: Cisco Packet Tracer / GNS3
+! Data de criação: 25/08/2026
+! Versão: 1.00
+!======================================================================
+
+
+!======================================================================
+! 01 - CONCEITO
+!======================================================================
+
+! O Switch Layer 3 possui capacidade de realizar roteamento entre
+! redes e VLANs utilizando interfaces SVI e interfaces roteadas.
+
+! A ativação do recurso de roteamento permite utilizar protocolos
+! como RIP, RIPv2, EIGRP e OSPF, conforme os recursos disponíveis
+! no equipamento e na versão do Cisco IOS.
+
+! O Switch Layer 3 é normalmente utilizado para roteamento em
+! ambientes LAN.
+
+
+!======================================================================
+! 02 - ACESSANDO O SWITCH
+!======================================================================
+
+enable
+
+configure terminal
+
+
+!======================================================================
+! 03 - HABILITANDO O ROTEAMENTO
+!======================================================================
+
+! Habilitando o recurso de roteamento no Switch Layer 3:
+
+ip routing
+
+
+!======================================================================
+! 04 - CONFIGURAÇÃO DA INTERFACE SVI
+!======================================================================
+
+! A SVI (Switch Virtual Interface) pode atuar como Gateway da
+! rede local e também permite o roteamento entre VLANs.
+
+interface vlan 1
+
+ip address 192.168.3.254 255.255.255.0
+
+exit
+
+
+!======================================================================
+! 05 - CONFIGURAÇÃO DA INTERFACE ROTEADA
+!======================================================================
+
+! A interface FastEthernet 0/24 será utilizada para conexão com
+! o Router 1941-2.
+
+interface fastEthernet 0/24
+
+
+! Removendo a função de Switch da interface:
+
+no switchport
+
+
+! Configurando a descrição da interface:
+
+description Interface de conexao com o Router 1941-2
+
+
+! Configurando o endereço IPv4:
+
+ip address 192.168.2.1 255.255.255.0
+
+exit
+
+
+!======================================================================
+! 06 - CONFIGURAÇÃO DO GATEWAY
+!======================================================================
+
+! Configurando o Gateway utilizado pelo Switch:
+
+ip default-gateway 192.168.2.254
+
+
+! Finalizando a configuração:
+
+end
+
+
+!======================================================================
+! 07 - SALVANDO A CONFIGURAÇÃO
+!======================================================================
+
+! Salvando a configuração da memória RAM para a NVRAM:
+
+write
+
+
+!======================================================================
+! 08 - VERIFICAÇÃO DAS INTERFACES
+!======================================================================
+
+! Visualizando as configurações das interfaces:
+
+show running-config | section interface
+
+
+! Visualizando o estado das interfaces:
+
+show ip interface brief
+
+
+! Visualizando a tabela de roteamento:
+
+show ip route
+
+
+!======================================================================
+! 09 - ENDEREÇAMENTO UTILIZADO
+!======================================================================
+
+! SVI VLAN 1:
+
+! IPv4:     192.168.3.254
+! Máscara:  255.255.255.0
+
+
+! Interface FastEthernet 0/24:
+
+! IPv4:     192.168.2.1
+! Máscara:  255.255.255.0
+
+
+! Gateway do Router 1941-2:
+
+! IPv4:     192.168.2.254
+
+
+!======================================================================
+! 10 - COMANDOS PRINCIPAIS
+!======================================================================
+
+! Habilitar roteamento:
+
+ip routing
+
+
+! Configurar SVI:
+
+interface vlan 1
+
+
+! Configurar endereço IPv4:
+
+ip address 192.168.3.254 255.255.255.0
+
+
+! Transformar porta de Switch em interface roteada:
+
+no switchport
+
+
+! Configurar endereço IPv4 na interface roteada:
+
+ip address 192.168.2.1 255.255.255.0
+
+
+! Configurar Gateway:
+
+ip default-gateway 192.168.2.254
+
+
+!======================================================================
+! 11 - COMANDOS DE VERIFICAÇÃO
+!======================================================================
+
+show running-config | section interface
+
+show ip interface brief
+
+show ip route
+
+
+!======================================================================
+! 12 - RESULTADO ESPERADO
+!======================================================================
+
+! Ao finalizar o laboratório, o aluno deverá ser capaz de:
+
+! 01 - Habilitar o roteamento em um Switch Layer 3;
+! 02 - Configurar uma interface SVI;
+! 03 - Utilizar uma SVI como Gateway da rede;
+! 04 - Transformar uma porta física em interface roteada;
+! 05 - Configurar endereçamento IPv4;
+! 06 - Configurar o Gateway do equipamento;
+! 07 - Visualizar o estado das interfaces;
+! 08 - Consultar a tabela de roteamento.
+
+
+!======================================================================
+! CONCLUSÃO
+!======================================================================
+
+! Neste laboratório foi realizada a configuração do recurso de
+! roteamento local em um Switch Layer 3 Cisco Catalyst 3560.
+
+! Foram configuradas uma interface SVI para a rede local e uma
+! interface física roteada para comunicação com o Router 1941-2.
+
+! A atividade também apresenta os principais comandos utilizados
+! para verificar interfaces e tabela de roteamento.
+
+
+!======================================================================
+! FIM DO PROCEDIMENTO 024
+!======================================================================
