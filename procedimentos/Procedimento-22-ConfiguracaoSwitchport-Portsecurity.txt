@@ -1,0 +1,344 @@
+!======================================================================
+! 022 - CONFIGURAÇÃO DE PORT SECURITY EM SWITCHES CISCO
+!======================================================================
+! Professor: Ygor Silva
+! Curso: Infraestrutura de Redes
+! Procedimento: Configuração de Port Security
+! Tecnologia: Cisco IOS / Segurança de Switch
+! Ambiente: Cisco Packet Tracer / GNS3
+! Data de criação: 25/08/2026
+! Versão: 1.00
+!======================================================================
+
+
+!======================================================================
+! 01 - OBJETIVO
+!======================================================================
+
+! Configurar o recurso Port Security em interfaces de Switches Cisco,
+! permitindo controlar os endereços MAC autorizados em portas de acesso.
+
+! A prática aborda:
+
+! - Modo Access;
+! - Desativação do DTP;
+! - Port Security;
+! - Limite de endereços MAC;
+! - MAC Sticky;
+! - Violações de segurança;
+! - Aging de endereços MAC;
+! - Verificação das configurações;
+! - Recuperação de uma interface.
+
+
+!======================================================================
+! 02 - CONCEITOS
+!======================================================================
+
+! PORT SECURITY
+! Recurso de segurança utilizado para limitar quais endereços MAC
+! podem utilizar determinada interface do Switch.
+
+! ACCESS
+! Porta destinada normalmente à conexão de dispositivos finais,
+! pertencendo a uma única VLAN.
+
+! MAC ADDRESS
+! Endereço físico utilizado para identificar uma interface de rede.
+
+! MAC STICKY
+! Permite que o Switch aprenda automaticamente o endereço MAC
+! recebido pela interface e o associe à configuração de Port Security.
+
+! VIOLATION
+! Ocorre quando um dispositivo utiliza um endereço MAC que não está
+! autorizado ou quando o limite configurado é ultrapassado.
+
+
+!======================================================================
+! 03 - MODOS DE VIOLAÇÃO
+!======================================================================
+
+! PROTECT
+! Descarta quadros provenientes de endereços MAC não autorizados,
+! mantendo a interface em funcionamento.
+
+! RESTRICT
+! Descarta quadros não autorizados e registra a ocorrência da
+! violação, permitindo acompanhamento da segurança da porta.
+
+! SHUTDOWN
+! Coloca a interface em estado de bloqueio administrativo devido
+! à violação de segurança.
+
+
+!======================================================================
+! 04 - CONFIGURAÇÃO DO SWITCH LAYER 3 3560
+!======================================================================
+
+enable
+configure terminal
+
+
+!----------------------------------------------------------------------
+! PORTA DO SERVIDOR
+!----------------------------------------------------------------------
+
+interface fastEthernet 0/1
+
+! Configurando a porta como Access:
+
+switchport mode access
+
+! Desativando a negociação automática de trunk:
+
+switchport nonegotiate
+
+! Habilitando Port Security:
+
+switchport port-security
+
+! Limitando a quantidade de MAC:
+
+switchport port-security maximum 1
+
+! Aprendizado automático do endereço MAC:
+
+switchport port-security mac-address sticky
+
+! Ação em caso de violação:
+
+switchport port-security violation shutdown
+
+exit
+
+
+!======================================================================
+! 05 - PORTA DO ACCESS POINT
+!======================================================================
+
+! Um Access Point pode apresentar vários endereços MAC através da
+! mesma porta física do Switch.
+
+interface fastEthernet 0/2
+
+switchport mode access
+
+switchport port-security
+
+! Permitir até cinco endereços MAC:
+
+switchport port-security maximum 5
+
+! Aprendizado automático:
+
+switchport port-security mac-address sticky
+
+! Utilizar o modo Protect:
+
+switchport port-security violation protect
+
+! Tempo de aging configurado no laboratório:
+
+switchport port-security aging time 5
+
+exit
+
+
+!======================================================================
+! 06 - AGING DO PORT SECURITY
+!======================================================================
+
+! O recurso de aging permite estabelecer um período para tratamento
+! dos endereços MAC aprendidos pela interface.
+
+! Neste laboratório:
+
+! Tempo:
+! 5 minutos
+
+! Observação:
+! Alguns recursos de aging podem apresentar limitações no Cisco
+! Packet Tracer em comparação com equipamentos físicos.
+
+
+!======================================================================
+! 07 - CONFIGURAÇÃO DO SWITCH LAYER 2 2960
+!======================================================================
+
+enable
+configure terminal
+
+
+! Configuração simultânea das portas FastEthernet 0/1 e 0/2:
+
+interface range fastEthernet 0/1 - 2
+
+! Definindo as interfaces como Access:
+
+switchport mode access
+
+! Desabilitando negociação automática:
+
+switchport nonegotiate
+
+! Habilitando Port Security:
+
+switchport port-security
+
+! Permitindo apenas um endereço MAC:
+
+switchport port-security maximum 1
+
+! Aprendizado automático:
+
+switchport port-security mac-address sticky
+
+! Utilizando o modo Restrict:
+
+switchport port-security violation restrict
+
+end
+
+
+! Salvando a configuração:
+
+write
+
+
+!======================================================================
+! 08 - VERIFICAÇÃO DA CONFIGURAÇÃO
+!======================================================================
+
+! Visualizando as configurações das interfaces:
+
+show running-config | section interface
+
+
+! Visualizando a tabela de endereços MAC:
+
+show mac-address-table
+
+
+! Visualizando informações gerais do Port Security:
+
+show port-security
+
+
+! Visualizando os endereços MAC protegidos:
+
+show port-security address
+
+
+! Verificando o Port Security da interface FastEthernet 0/1:
+
+show port-security interface fastEthernet 0/1
+
+
+! Verificando o Port Security da interface FastEthernet 0/2:
+
+show port-security interface fastEthernet 0/2
+
+
+! Visualizando informações da interface:
+
+show interface fastEthernet 0/1
+
+
+!======================================================================
+! 09 - TESTE DE VIOLAÇÃO
+!======================================================================
+
+! Caso um dispositivo não autorizado seja conectado à interface,
+! o Switch poderá identificar uma violação de Port Security.
+
+! O comportamento dependerá do modo configurado:
+
+! Protect  -> descarta o tráfego não autorizado;
+! Restrict -> descarta e registra a violação;
+! Shutdown -> bloqueia a interface.
+
+
+!======================================================================
+! 10 - RESTABELECENDO UMA INTERFACE
+!======================================================================
+
+! Caso a interface seja colocada em estado de bloqueio, pode ser
+! necessário realizar a desativação e ativação administrativa.
+
+interface fastEthernet 0/2
+
+shutdown
+
+no shutdown
+
+
+!======================================================================
+! 11 - COMANDOS NÃO DISPONÍVEIS NO SIMULADOR
+!======================================================================
+
+! Alguns recursos de Port Security podem não estar disponíveis
+! ou apresentar limitações no Cisco Packet Tracer.
+
+! Exemplos utilizados no material de referência:
+
+! clear port-security all
+! clear port-security dynamic
+! clear port-security sticky
+
+! Também podem existir limitações relacionadas ao recurso:
+
+! errdisable recovery cause psecure-violation
+! errdisable recovery interval 60
+
+
+!======================================================================
+! 12 - BOAS PRÁTICAS
+!======================================================================
+
+! Recomenda-se:
+
+! [OK] Utilizar Port Security em portas de acesso;
+! [OK] Desativar interfaces que não estejam sendo utilizadas;
+! [OK] Definir uma quantidade adequada de endereços MAC;
+! [OK] Utilizar MAC Sticky quando apropriado;
+! [OK] Escolher corretamente o modo de violação;
+! [OK] Monitorar as violações de segurança;
+! [OK] Verificar periodicamente a tabela MAC.
+
+
+!======================================================================
+! 13 - RESULTADO ESPERADO
+!======================================================================
+
+! Ao finalizar o laboratório, o aluno deverá ser capaz de:
+
+! 01 - Configurar uma porta Access;
+! 02 - Habilitar Port Security;
+! 03 - Definir o limite de endereços MAC;
+! 04 - Utilizar MAC Sticky;
+! 05 - Configurar modos Protect, Restrict e Shutdown;
+! 06 - Configurar Port Security em diferentes tipos de dispositivos;
+! 07 - Consultar os endereços MAC aprendidos;
+! 08 - Identificar violações;
+! 09 - Restabelecer uma interface.
+
+
+!======================================================================
+! CONCLUSÃO
+!======================================================================
+
+! O Port Security é um recurso importante para aumentar a segurança
+! das portas de acesso de um Switch.
+
+! A configuração permite controlar os dispositivos autorizados,
+! limitar a quantidade de endereços MAC e definir o comportamento
+! do equipamento diante de uma tentativa de acesso não autorizado.
+
+! A prática também demonstra a importância do monitoramento por meio
+! dos comandos de verificação do Cisco IOS.
+
+
+!======================================================================
+! FIM DO PROCEDIMENTO 022
+!======================================================================
