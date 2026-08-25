@@ -1,0 +1,408 @@
+!======================================================================
+! PROCEDIMENTO-30 — CONFIGURAÇÃO DO CDP E LLDP
+!======================================================================
+! Professor: Ygor Silva
+! Curso: Infraestrutura de Redes
+! Tecnologia: Cisco IOS
+! Ambiente: Cisco Packet Tracer / GNS3
+! Tema: Descoberta de Dispositivos de Rede
+! Versão: 1.00
+!======================================================================
+
+
+!======================================================================
+! 01 - OBJETIVO
+!======================================================================
+
+! Configurar e verificar os protocolos CDP e LLDP em equipamentos Cisco.
+
+! A atividade demonstra:
+
+! - Descoberta de dispositivos vizinhos;
+! - Configuração do CDP;
+! - Configuração do LLDP;
+! - Habilitação global dos protocolos;
+! - Habilitação por interface;
+! - Consulta dos dispositivos vizinhos;
+! - Verificação das informações recebidas;
+! - Diferenças entre CDP e LLDP.
+
+
+!======================================================================
+! 02 - CDP
+!======================================================================
+
+! CDP (Cisco Discovery Protocol) é um protocolo proprietário da Cisco
+! utilizado para descobrir informações sobre equipamentos vizinhos
+! diretamente conectados.
+
+! O CDP facilita a identificação da topologia e da arquitetura da rede.
+
+! Nos equipamentos Cisco, o CDP normalmente encontra-se habilitado
+! por padrão.
+
+
+!======================================================================
+! 03 - LLDP
+!======================================================================
+
+! LLDP (Link Layer Discovery Protocol) é um protocolo padronizado
+! pela IEEE 802.1AB para descoberta de dispositivos vizinhos.
+
+! Diferentemente do CDP, o LLDP não é proprietário da Cisco e pode ser
+! utilizado em ambientes com equipamentos de diferentes fabricantes.
+
+! Nos equipamentos Cisco utilizados neste laboratório, o LLDP deverá
+! ser habilitado manualmente.
+
+
+!======================================================================
+! 04 - CARACTERÍSTICAS
+!======================================================================
+
+! CDP:
+
+! - Protocolo proprietário Cisco;
+! - Descoberta de dispositivos vizinhos;
+! - Habilitado por padrão em equipamentos Cisco;
+! - Intervalo de anúncios: 60 segundos;
+! - Hold Time: 180 segundos;
+! - CDPv2 é utilizado como padrão nos equipamentos compatíveis.
+
+
+! LLDP:
+
+! - Protocolo padronizado pela IEEE 802.1AB;
+! - Compatível com diferentes fabricantes;
+! - Desabilitado por padrão nos equipamentos Cisco deste laboratório;
+! - Intervalo de anúncios: 30 segundos;
+! - Hold Time: 120 segundos.
+
+
+!======================================================================
+! 05 - CONFIGURAÇÃO DO SWITCH LAYER 2 2960
+!======================================================================
+
+! Acessando o modo EXEC Privilegiado:
+
+enable
+
+
+! Acessando o modo de Configuração Global:
+
+configure terminal
+
+
+! Habilitando o CDP globalmente:
+
+cdp run
+
+
+! Habilitando o LLDP globalmente:
+
+lldp run
+
+
+! Retornando ao modo EXEC Privilegiado:
+
+end
+
+
+! Salvando as configurações:
+
+write
+
+
+!======================================================================
+! 06 - CONFIGURAÇÃO DO SWITCH LAYER 3 3560
+!======================================================================
+
+enable
+
+configure terminal
+
+
+! Habilitando o CDP:
+
+cdp run
+
+
+! Habilitando o LLDP:
+
+lldp run
+
+
+end
+
+
+! Salvando as configurações:
+
+write
+
+
+!======================================================================
+! 07 - CONFIGURAÇÃO DO ROUTER 1941-2
+!======================================================================
+
+enable
+
+configure terminal
+
+
+! Habilitando o CDP:
+
+cdp run
+
+
+! Habilitando o LLDP:
+
+lldp run
+
+
+! Acessando a interface de Gateway da Rede LAN:
+
+interface gigabitEthernet 0/0
+
+
+! Habilitando o CDP na interface:
+
+cdp enable
+
+
+! Habilitando o recebimento de anúncios LLDP:
+
+lldp receive
+
+
+! Habilitando o envio de anúncios LLDP:
+
+lldp transmit
+
+
+end
+
+
+! Salvando as configurações:
+
+write
+
+
+!======================================================================
+! 08 - CONFIGURAÇÃO DO ROUTER 1941-1
+!======================================================================
+
+enable
+
+configure terminal
+
+
+! Desabilitando o CDP globalmente:
+
+no cdp run
+
+
+! Desabilitando o LLDP globalmente:
+
+no lldp run
+
+
+end
+
+
+! Salvando as configurações:
+
+write
+
+
+!======================================================================
+! 09 - SEGURANÇA
+!======================================================================
+
+! CDP e LLDP podem divulgar informações sobre os equipamentos
+! conectados à rede.
+
+! Em equipamentos diretamente conectados à Internet ou em redes
+! desconhecidas, recomenda-se avaliar a necessidade de manter esses
+! protocolos habilitados.
+
+! A desativação pode reduzir a quantidade de informações de
+! infraestrutura divulgadas aos dispositivos vizinhos.
+
+
+!======================================================================
+! 10 - VERIFICAÇÃO DO CDP
+!======================================================================
+
+! Visualizando o estado do CDP:
+
+show cdp
+
+
+! Visualizando informações de todos os dispositivos conhecidos:
+
+show cdp entry *
+
+
+! Visualizando informações de um dispositivo específico:
+
+show cdp entry Router
+
+
+! Visualizando os dispositivos vizinhos:
+
+show cdp neighbors
+
+
+! Visualizando informações detalhadas dos vizinhos:
+
+show cdp neighbors detail
+
+
+! Visualizando informações do CDP em uma interface:
+
+show cdp interface gigabitEthernet 0/0
+
+
+!======================================================================
+! 11 - VERIFICAÇÃO DO LLDP
+!======================================================================
+
+! Visualizando o estado do LLDP:
+
+show lldp
+
+
+! Visualizando os dispositivos vizinhos:
+
+show lldp neighbors
+
+
+! Visualizando informações detalhadas:
+
+show lldp neighbors detail
+
+
+!======================================================================
+! 12 - COMANDOS DE CONFIGURAÇÃO
+!======================================================================
+
+! CDP global:
+
+cdp run
+
+
+! Desabilitar CDP:
+
+no cdp run
+
+
+! CDP na interface:
+
+cdp enable
+
+
+! LLDP global:
+
+lldp run
+
+
+! Desabilitar LLDP:
+
+no lldp run
+
+
+! Receber informações LLDP:
+
+lldp receive
+
+
+! Transmitir informações LLDP:
+
+lldp transmit
+
+
+!======================================================================
+! 13 - COMPARAÇÃO
+!======================================================================
+
+! CDP:
+
+! Proprietário: Cisco
+! Objetivo: descoberta de vizinhos
+! Estado padrão: habilitado em equipamentos Cisco
+
+
+! LLDP:
+
+! Padrão: IEEE 802.1AB
+! Objetivo: descoberta de vizinhos
+! Compatibilidade: múltiplos fabricantes
+! Estado padrão: desabilitado no laboratório
+
+
+!======================================================================
+! 14 - RESULTADO ESPERADO
+!======================================================================
+
+! Ao finalizar o laboratório, o aluno deverá ser capaz de:
+
+! 01 - Compreender o funcionamento do CDP;
+! 02 - Compreender o funcionamento do LLDP;
+! 03 - Identificar dispositivos vizinhos;
+! 04 - Habilitar o CDP;
+! 05 - Habilitar o LLDP;
+! 06 - Configurar CDP por interface;
+! 07 - Configurar LLDP por interface;
+! 08 - Consultar informações dos vizinhos;
+! 09 - Analisar informações de topologia;
+! 10 - Avaliar o impacto desses protocolos na segurança da rede.
+
+
+!======================================================================
+! 15 - PRINCIPAIS COMANDOS
+!======================================================================
+
+cdp run
+
+cdp enable
+
+lldp run
+
+lldp receive
+
+lldp transmit
+
+show cdp
+
+show cdp neighbors
+
+show cdp neighbors detail
+
+show cdp entry *
+
+show lldp
+
+show lldp neighbors
+
+show lldp neighbors detail
+
+
+!======================================================================
+! CONCLUSÃO
+!======================================================================
+
+! Neste procedimento foram configurados os protocolos CDP e LLDP
+! para demonstrar a descoberta de dispositivos vizinhos em uma
+! infraestrutura de rede Cisco.
+
+! O CDP é um protocolo proprietário da Cisco, enquanto o LLDP é um
+! padrão aberto baseado na IEEE 802.1AB.
+
+! Os comandos de verificação permitem identificar equipamentos
+! vizinhos e obter informações úteis para análise da topologia,
+! administração e diagnóstico da infraestrutura.
+
+
+!======================================================================
+! FIM DO PROCEDIMENTO-30
+!======================================================================
