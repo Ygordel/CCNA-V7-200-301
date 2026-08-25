@@ -1,0 +1,236 @@
+!======================================================================
+! PROCEDIMENTO-27 — CONFIGURAÇÃO DA INTERFACE LOOPBACK
+!======================================================================
+! Professor: Ygor Silva
+! Curso: Infraestrutura de Redes
+! Tecnologia: Cisco IOS
+! Ambiente: Cisco Packet Tracer / GNS3
+! Data de criação: 25/08/2026
+! Versão: 1.00
+!======================================================================
+
+
+!======================================================================
+! 01 - OBJETIVO
+!======================================================================
+
+! Configurar uma Interface Loopback em um Router Cisco e criar uma
+! rota estática para permitir a comunicação com essa interface.
+
+! A Interface Loopback é uma interface lógica e virtual utilizada
+! principalmente para testes de conectividade, gerenciamento,
+! identificação do equipamento e protocolos de roteamento.
+
+
+!======================================================================
+! 02 - CONCEITO DE LOOPBACK
+!======================================================================
+
+! A Interface Loopback é uma interface lógica do Cisco IOS.
+
+! Diferentemente das interfaces físicas, como FastEthernet,
+! GigabitEthernet e Serial, a Loopback não depende diretamente de
+! uma conexão física.
+
+! Uma das principais características da Loopback é permanecer
+! operacional enquanto o equipamento estiver funcionando, mesmo que
+! outras interfaces físicas estejam indisponíveis.
+
+! Interfaces Loopback podem ser utilizadas em:
+
+! - Testes de conectividade;
+! - Gerenciamento de equipamentos;
+! - Identificação lógica de Routers;
+! - Protocolos de roteamento;
+! - OSPF;
+! - BGP;
+! - Outros serviços de rede.
+
+
+!======================================================================
+! 03 - CONFIGURAÇÃO DO ROUTER 1941-2
+!======================================================================
+
+! Acessando o modo EXEC Privilegiado:
+
+enable
+
+
+! Acessando o modo de Configuração Global:
+
+configure terminal
+
+
+! Criando a Interface Loopback 0:
+
+interface loopback 0
+
+
+! Configurando a descrição:
+
+description Interface de Loopback do Router 1941-2
+
+
+! Configurando o endereço IPv4:
+
+ip address 10.0.0.253 255.255.255.252
+
+
+! Inicializando a interface:
+
+no shutdown
+
+
+! Retornando ao modo EXEC Privilegiado:
+
+end
+
+
+! Salvando a configuração:
+
+write
+
+
+!======================================================================
+! 04 - CONFIGURAÇÃO DO ROUTER 1941-1
+!======================================================================
+
+! Acessando o modo EXEC Privilegiado:
+
+enable
+
+
+! Acessando o modo de Configuração Global:
+
+configure terminal
+
+
+! Criando uma rota estática para alcançar a rede da Loopback
+! configurada no Router 1941-2:
+
+ip route 10.0.0.252 255.255.255.252 GigabitEthernet 0/1
+
+
+! Retornando ao modo EXEC Privilegiado:
+
+end
+
+
+! Salvando a configuração:
+
+write
+
+
+!======================================================================
+! 05 - VERIFICAÇÃO DAS CONFIGURAÇÕES
+!======================================================================
+
+! Visualizando as configurações das interfaces:
+
+show running-config | section interface
+
+
+! Visualizando o estado das interfaces:
+
+show ip interface brief
+
+
+! A Interface Loopback deverá apresentar o endereço:
+
+! 10.0.0.253
+
+
+!======================================================================
+! 06 - TESTE DE CONECTIVIDADE
+!======================================================================
+
+! Testando a comunicação com a Interface Loopback:
+
+ping 10.0.0.253
+
+
+! Verificando o caminho até a rede:
+
+tracert 10.0.0.252
+
+
+! Testando acesso remoto utilizando SSH:
+
+ssh -l admin 10.0.0.253
+
+
+!======================================================================
+! 07 - ENDEREÇAMENTO UTILIZADO
+!======================================================================
+
+! Rede da Loopback:
+
+! 10.0.0.252/30
+
+
+! Endereço configurado na Loopback:
+
+! 10.0.0.253
+
+
+! Máscara:
+
+! 255.255.255.252
+
+
+! Rota configurada no Router 1941-1:
+
+! 10.0.0.252/30
+! Saída: GigabitEthernet 0/1
+
+
+!======================================================================
+! 08 - RESULTADO ESPERADO
+!======================================================================
+
+! Ao finalizar o procedimento, o aluno deverá conseguir:
+
+! 01 - Criar uma Interface Loopback;
+! 02 - Configurar endereço IPv4 na Loopback;
+! 03 - Identificar uma interface lógica;
+! 04 - Criar uma rota estática;
+! 05 - Verificar o estado da interface;
+! 06 - Consultar a configuração do equipamento;
+! 07 - Testar a conectividade com ping;
+! 08 - Verificar o caminho utilizando tracert;
+! 09 - Utilizar a Loopback para acesso remoto via SSH.
+
+
+!======================================================================
+! 09 - COMANDOS DE VERIFICAÇÃO
+!======================================================================
+
+show running-config | section interface
+
+show ip interface brief
+
+show ip route
+
+ping 10.0.0.253
+
+tracert 10.0.0.252
+
+ssh -l admin 10.0.0.253
+
+
+!======================================================================
+! CONCLUSÃO
+!======================================================================
+
+! Neste laboratório foi configurada uma Interface Loopback no Router
+! Cisco 1941-2 e uma rota estática no Router 1941-1 para permitir
+! acesso à rede lógica da Loopback.
+
+! A prática demonstra a utilização de interfaces lógicas no Cisco IOS
+! e sua importância para testes, gerenciamento e funcionamento de
+! recursos de rede.
+
+
+!======================================================================
+! FIM DO PROCEDIMENTO-27
+!======================================================================
