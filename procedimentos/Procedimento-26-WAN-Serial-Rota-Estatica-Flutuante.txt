@@ -1,0 +1,323 @@
+!======================================================================
+! 026 - WAN SERIAL E ROTA ESTÁTICA FLUTUANTE
+!======================================================================
+! Professor: Ygor Silva
+! Curso: Infraestrutura de Redes
+! Procedimento: Configuração de Link WAN Serial e Redundância
+! Tecnologia: Cisco IOS
+! Equipamentos: Cisco Router 1941
+! Ambiente: Cisco Packet Tracer / GNS3
+! Data de criação: 25/08/2026
+! Versão: 1.00
+!======================================================================
+
+
+!======================================================================
+! 01 - OBJETIVO
+!======================================================================
+
+! Configurar uma conexão WAN Serial entre dois Routers Cisco,
+! utilizando o módulo HWIC-2T e uma rota estática flutuante como
+! mecanismo de redundância.
+
+! A atividade demonstra:
+
+! - Interface Serial;
+! - Equipamento DCE e DTE;
+! - Clock Rate;
+! - Bandwidth;
+! - Encapsulamento HDLC;
+! - Rota estática flutuante;
+! - Distância Administrativa;
+! - Redundância de WAN;
+! - Testes de conectividade.
+
+
+!======================================================================
+! 02 - CONCEITO DE WAN SERIAL
+!======================================================================
+
+! Uma interface Serial pode ser utilizada para estabelecer uma
+! conexão WAN entre equipamentos de rede.
+
+! Neste laboratório:
+
+! Router 1941-2 = DCE
+! Router 1941-1 = DTE
+
+! A interface DCE fornece a referência de clock para o enlace.
+
+
+!======================================================================
+! 03 - ADICIONANDO O MÓDULO HWIC-2T
+!======================================================================
+
+! Antes da configuração, adicionar o módulo:
+
+! HWIC-2T
+! High-Speed WAN Interface Card
+
+! Após instalar o módulo, verificar o hardware:
+
+show version
+
+show ip interface brief
+
+
+!======================================================================
+! 04 - CONFIGURAÇÃO DO ROUTER 1941-2
+!======================================================================
+
+enable
+
+configure terminal
+
+
+!----------------------------------------------------------------------
+! INTERFACE SERIAL
+!----------------------------------------------------------------------
+
+interface serial 0/0/0
+
+description Interface de Backup WAN com o Router 1941-1
+
+ip address 10.0.0.6 255.255.255.252
+
+
+! Configuração do Clock Rate no lado DCE:
+
+clock rate 2000000
+
+
+! Configuração da largura de banda:
+
+bandwidth 2000
+
+
+! Encapsulamento da interface:
+
+encapsulation hdlc
+
+
+! Inicialização da interface:
+
+no shutdown
+
+exit
+
+
+!======================================================================
+! 05 - ROTA ESTÁTICA FLUTUANTE
+!======================================================================
+
+! A rota estática flutuante funciona como uma rota de backup.
+
+! Ela possui uma Distância Administrativa maior que a rota principal.
+
+! Rota estática flutuante para a rede 192.168.1.0/24:
+
+ip route 192.168.1.0 255.255.255.0 serial 0/0/0 5
+
+
+! Finalizando:
+
+end
+
+
+! Salvando:
+
+write
+
+
+!======================================================================
+! 06 - CONFIGURAÇÃO DO ROUTER 1941-1
+!======================================================================
+
+enable
+
+configure terminal
+
+
+interface serial 0/0/0
+
+description Interface de Backup WAN com o Router 1941-2
+
+ip address 10.0.0.5 255.255.255.252
+
+bandwidth 2000
+
+encapsulation hdlc
+
+no shutdown
+
+exit
+
+
+! Rotas estáticas flutuantes:
+
+ip route 192.168.2.0 255.255.255.0 serial 0/0/0 5
+
+ip route 192.168.3.0 255.255.255.0 serial 0/0/0 5
+
+
+end
+
+
+! Salvando:
+
+write
+
+
+!======================================================================
+! 07 - DISTÂNCIA ADMINISTRATIVA
+!======================================================================
+
+! A Distância Administrativa determina a preferência entre diferentes
+! rotas para o mesmo destino.
+
+! Quanto menor o valor da AD, maior a preferência.
+
+! Neste laboratório:
+
+! Rota estática convencional:
+! AD = 1
+
+! Rota estática flutuante:
+! AD = 5
+
+
+! Portanto, a rota com AD 5 somente será utilizada quando a rota
+! principal estiver indisponível.
+
+
+!======================================================================
+! 08 - VERIFICAÇÃO DAS INTERFACES
+!======================================================================
+
+show running-config | section interface
+
+show ip interface brief
+
+
+! Verificando informações do controlador Serial:
+
+show controller serial 0/0/0
+
+
+!======================================================================
+! 09 - VERIFICAÇÃO DAS ROTAS
+!======================================================================
+
+! Visualizando a tabela completa:
+
+show ip route
+
+
+! Visualizando somente redes diretamente conectadas:
+
+show ip route connected
+
+
+! Visualizando somente rotas estáticas:
+
+show ip route static
+
+
+! Resumo da tabela de roteamento:
+
+show ip route summary
+
+
+! Visualizando as rotas configuradas:
+
+show running-config | section ip route
+
+
+!======================================================================
+! 10 - TESTE DE CONECTIVIDADE
+!======================================================================
+
+! Testando comunicação com a rede:
+
+ping -n 1000 192.168.1.1
+
+
+! Verificando o caminho percorrido pelos pacotes:
+
+tracert 192.168.1.1
+
+
+!======================================================================
+! 11 - ENDEREÇAMENTO DO LINK SERIAL
+!======================================================================
+
+! Rede utilizada:
+
+! 10.0.0.4/30
+
+
+! Router 1941-1:
+
+! 10.0.0.5
+
+
+! Router 1941-2:
+
+! 10.0.0.6
+
+
+! Máscara:
+
+! 255.255.255.252
+
+
+!======================================================================
+! 12 - RESULTADO ESPERADO
+!======================================================================
+
+! Ao finalizar o laboratório, o aluno deverá ser capaz de:
+
+! 01 - Identificar uma interface Serial;
+! 02 - Instalar o módulo HWIC-2T;
+! 03 - Identificar DCE e DTE;
+! 04 - Configurar Clock Rate;
+! 05 - Configurar Bandwidth;
+! 06 - Configurar encapsulamento HDLC;
+! 07 - Configurar uma interface Serial;
+! 08 - Criar uma rota estática flutuante;
+! 09 - Compreender a Distância Administrativa;
+! 10 - Utilizar uma rota como mecanismo de redundância;
+! 11 - Verificar interfaces e tabela de roteamento;
+! 12 - Testar a conectividade da rede.
+
+
+!======================================================================
+! OBSERVAÇÃO SOBRE O CCNA
+!======================================================================
+
+! O material de origem destaca que tecnologias de WAN Serial e
+! determinadas tecnologias legadas deixaram de fazer parte dos
+! conhecimentos cobrados no exame CCNA 200-301.
+
+! O laboratório permanece útil como atividade de aprendizado sobre
+! conceitos históricos de WAN, redundância e roteamento.
+
+
+!======================================================================
+! CONCLUSÃO
+!======================================================================
+
+! Neste laboratório foi configurado um enlace WAN Serial entre dois
+! Routers Cisco utilizando o módulo HWIC-2T.
+
+! Também foi configurada uma rota estática flutuante, utilizada como
+! caminho alternativo quando a rota principal deixa de estar
+! disponível.
+
+! A prática permite compreender conceitos importantes de redundância,
+! Distância Administrativa e seleção de rotas.
+
+
+!======================================================================
+! FIM DO PROCEDIMENTO 026
+!======================================================================
