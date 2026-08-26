@@ -181,19 +181,5 @@ localidades, disponibilidade e realização do exame.
 
 ---
 
-# 🎥 Cursos e Vídeos
-
-### Infraestrutura de Redes
-
-**Curso de Infraestrutura de Redes**  
-https://www.youtube.com/playlist?list=PLozhsZB1lLUP8-70SXyscODg5dvIwQRGG
-
-**Curso de Hardware de Servidores**  
-https://www.youtube.com/playlist?list=PLozhsZB1lLUPBmrvMXzsFxG34LwO9K8Pu
-
-### Playlist completa
-
-**Curso de Infraestrutura de Redes — Playlist**  
-https://www.youtube.com/playlist?list=PLozhsZB1lLUOYOx5v5F1dnMfYWupkyPBt
 
 
