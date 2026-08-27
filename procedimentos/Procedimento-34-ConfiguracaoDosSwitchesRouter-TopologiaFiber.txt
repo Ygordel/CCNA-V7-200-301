@@ -1,0 +1,796 @@
+!======================================================================
+! PROCEDIMENTO-34 — CONFIGURAÇÃO BASE DE SWITCHES E ROUTER
+!======================================================================
+! Professor: Ygor Silva
+! Curso: Infraestrutura de Redes
+! Tecnologia: Cisco IOS
+! Ambiente: Cisco Packet Tracer / GNS3
+! Tema: Configuração Base de Equipamentos de Rede
+! Versão: 1.00
+!======================================================================
+
+
+!======================================================================
+! 01 - OBJETIVO
+!======================================================================
+
+! Realizar a configuração inicial e padronizada de equipamentos
+! Cisco utilizados na infraestrutura de rede.
+
+! A atividade demonstra:
+
+! - Configuração do hostname;
+! - Configuração de data e hora;
+! - Histórico de comandos;
+! - Monitoramento de mensagens no terminal;
+! - Criptografia de senhas;
+! - Configuração de Syslog;
+! - Configuração de SNMP;
+! - Configuração de CDP e LLDP;
+! - Configuração de DNS;
+! - Configuração de NTP;
+! - Configuração de usuários locais;
+! - Configuração de senha privilegiada;
+! - Configuração de banner;
+! - Configuração de SSH;
+! - Configuração das linhas Console, AUX e VTY;
+! - Controle de tentativas de autenticação.
+
+
+!======================================================================
+! 02 - CONFIGURAÇÃO BASE DO SWITCH LAYER 2 2960-5
+!======================================================================
+
+enable
+
+
+! Configurando data e hora:
+
+clock set 14:00:00 26 May 2020
+
+
+! Configurando histórico de comandos:
+
+terminal history size 256
+
+
+! Habilitando monitoramento de mensagens no terminal:
+
+terminal monitor
+
+
+configure terminal
+
+
+! Configurando o hostname:
+
+hostname sw-l2-2960-5
+
+
+! Criptografando senhas:
+
+service password-encryption
+
+
+! Configurando marcação de data e hora nos Logs:
+
+service timestamps log datetime msec
+
+
+! Habilitando o recurso de Logging:
+
+logging on
+
+
+! Configurando o servidor Syslog:
+
+logging host 192.168.3.1
+
+
+! Configurando o nível de mensagens:
+
+logging trap debugging
+
+
+! Configurando comunidade SNMP somente leitura:
+
+snmp-server community ptiro ro
+
+
+! Configurando comunidade SNMP leitura e escrita:
+
+snmp-server community ptirw rw
+
+
+! Habilitando CDP:
+
+cdp run
+
+
+! Habilitando LLDP:
+
+lldp run
+
+
+! Habilitando resolução de nomes:
+
+ip domain-lookup
+
+
+! Configurando o domínio:
+
+ip domain-name vaamonde.pti
+
+
+! Configurando o servidor DNS:
+
+ip name-server 192.168.3.1
+
+
+! Configurando o Gateway padrão:
+
+ip default-gateway 192.168.99.254
+
+
+! Configurando o fuso horário:
+
+clock timezone BR -3
+
+
+! Habilitando autenticação NTP:
+
+ntp authenticate
+
+
+! Configurando chave de autenticação NTP:
+
+ntp authentication-key 123456 md5 vaamonde
+
+
+! Configurando servidor NTP:
+
+ntp server 192.168.3.1
+
+
+! Configurando mensagem de acesso:
+
+banner motd #AVISO: acesso autorizado somente a funcionarios#
+
+
+! Configurando senha do modo privilegiado:
+
+enable secret vaamonde@pti
+
+
+! Criando usuário local:
+
+username robson secret vaamonde@pti
+
+username vaamonde password vaamonde@pti
+
+username admin privilege 15 secret vaamonde@pti
+
+
+! Gerando chaves RSA para SSH:
+
+crypto key generate rsa usage-keys modulus 1024
+
+
+! Configurando SSH versão 2:
+
+ip ssh version 2
+
+
+! Configurando tempo limite do SSH:
+
+ip ssh time-out 60
+
+
+! Configurando número de tentativas de autenticação:
+
+ip ssh authentication-retries 2
+
+
+! Configurando acesso ao Console:
+
+line console 0
+
+login local
+
+password vaamonde@pti
+
+logging synchronous
+
+exec-timeout 5 30
+
+exit
+
+
+! Configurando acesso remoto VTY:
+
+line vty 0 4
+
+login local
+
+password vaamonde@pti
+
+logging synchronous
+
+exec-timeout 5 30
+
+transport input ssh
+
+end
+
+
+! Salvando as configurações:
+
+write
+
+
+!======================================================================
+! 03 - CONFIGURAÇÃO BASE DO SWITCH LAYER 2 2960-6
+!======================================================================
+
+enable
+
+
+clock set 14:00:00 26 May 2020
+
+terminal history size 256
+
+terminal monitor
+
+
+configure terminal
+
+
+hostname sw-l2-2960-6
+
+service password-encryption
+
+service timestamps log datetime msec
+
+logging on
+
+logging host 192.168.3.1
+
+logging trap debugging
+
+snmp-server community ptiro ro
+
+snmp-server community ptirw rw
+
+cdp run
+
+lldp run
+
+
+! Desabilitando a resolução automática de nomes:
+
+no ip domain-lookup
+
+
+ip domain-name vaamonde.pti
+
+ip name-server 192.168.3.1
+
+ip default-gateway 192.168.99.254
+
+ntp authenticate
+
+ntp authentication-key 123456 md5 vaamonde
+
+ntp server 192.168.3.1
+
+banner motd #AVISO: acesso autorizado somente a funcionarios#
+
+enable secret vaamonde@pti
+
+username robson secret vaamonde@pti
+
+username vaamonde password vaamonde@pti
+
+username admin privilege 15 secret vaamonde@pti
+
+
+! Gerando chaves RSA:
+
+crypto key generate rsa usage-keys modulus 1024
+
+ip ssh version 2
+
+ip ssh time-out 60
+
+ip ssh authentication-retries 2
+
+
+! Configurando Console:
+
+line console 0
+
+login local
+
+password vaamonde@pti
+
+logging synchronous
+
+exec-timeout 5 30
+
+exit
+
+
+! Configurando VTY:
+
+line vty 0 4
+
+login local
+
+password vaamonde@pti
+
+logging synchronous
+
+exec-timeout 5 30
+
+transport input ssh
+
+end
+
+
+write
+
+
+!======================================================================
+! 04 - CONFIGURAÇÃO BASE DO SWITCH LAYER 3 3560
+!======================================================================
+
+enable
+
+
+clock set 14:00:00 26 May 2020
+
+terminal history size 256
+
+terminal monitor
+
+
+configure terminal
+
+
+hostname sw-l3-3560-2
+
+service password-encryption
+
+service timestamps log datetime msec
+
+service timestamps debug datetime msec
+
+logging on
+
+logging host 192.168.3.1
+
+logging trap debugging
+
+
+! Configuração SNMP:
+
+snmp-server community ptiro ro
+
+snmp-server community ptirw rw
+
+
+! Configuração de descoberta:
+
+cdp run
+
+lldp run
+
+
+! Desabilitando resolução automática de nomes:
+
+no ip domain-lookup
+
+
+ip domain-name vaamonde.pti
+
+ip name-server 192.168.3.1
+
+ip default-gateway 192.168.99.254
+
+
+! Configuração NTP:
+
+ntp authenticate
+
+ntp authentication-key 123456 md5 vaamonde
+
+ntp server 192.168.3.1
+
+ntp update-calendar
+
+
+! Configuração do banner:
+
+banner motd #AVISO: acesso autorizado somente a funcionarios#
+
+
+! Configuração de senha privilegiada:
+
+enable secret vaamonde@pti
+
+
+! Configuração de usuários locais:
+
+username robson secret vaamonde@pti
+
+username vaamonde password vaamonde@pti
+
+username admin privilege 15 secret vaamonde@pti
+
+
+! Configuração das chaves RSA:
+
+crypto key generate rsa usage-keys modulus 1024
+
+
+! Configuração do SSH:
+
+ip ssh version 2
+
+ip ssh time-out 60
+
+ip ssh authentication-retries 2
+
+
+! Bloqueio após tentativas de autenticação:
+
+login block-for 120 attempts 2 within 60
+
+
+! Configuração do Console:
+
+line console 0
+
+login local
+
+password vaamonde@pti
+
+logging synchronous
+
+exec-timeout 5 30
+
+exit
+
+
+! Configuração das linhas VTY:
+
+line vty 0 4
+
+login local
+
+password vaamonde@pti
+
+logging synchronous
+
+exec-timeout 5 30
+
+transport input ssh
+
+end
+
+
+write
+
+
+!======================================================================
+! 05 - CONFIGURAÇÃO BASE DO ROUTER 2911
+!======================================================================
+
+enable
+
+
+clock set 14:00:00 26 May 2020
+
+terminal history size 256
+
+terminal monitor
+
+
+configure terminal
+
+
+hostname rt-2911-1
+
+service password-encryption
+
+service timestamps log datetime msec
+
+service timestamps debug datetime msec
+
+
+! Configuração do Syslog:
+
+logging on
+
+logging host 192.168.3.1
+
+logging trap debugging
+
+
+! Registro de autenticações:
+
+login on-success log
+
+login on-failure log
+
+logging userinfo
+
+
+! Configuração SNMP:
+
+snmp-server community ptiro ro
+
+snmp-server community ptirw rw
+
+
+! Configuração CDP e LLDP:
+
+cdp run
+
+lldp run
+
+
+! Configuração DNS:
+
+ip domain-lookup
+
+ip domain-name vaamonde.pti
+
+ip name-server 192.168.3.1
+
+
+! Configuração NTP:
+
+ntp authenticate
+
+ntp authentication-key 123456 md5 vaamonde
+
+ntp server 192.168.3.1
+
+ntp update-calendar
+
+
+! Configuração do banner:
+
+banner motd #AVISO: acesso autorizado somente a funcionarios#
+
+
+! Definindo tamanho mínimo das senhas:
+
+security passwords min-length 10
+
+
+! Configuração da senha privilegiada:
+
+enable secret vaamonde@pti
+
+
+! Configuração dos usuários locais:
+
+username robson secret vaamonde@pti
+
+username vaamonde password vaamonde@pti
+
+username admin privilege 15 secret vaamonde@pti
+
+
+! Gerando chaves RSA:
+
+crypto key generate rsa usage-keys modulus 1024
+
+
+! Configuração do SSH:
+
+ip ssh version 2
+
+ip ssh time-out 60
+
+ip ssh authentication-retries 2
+
+
+! Bloqueio de tentativas de autenticação:
+
+login block-for 120 attempts 2 within 60
+
+
+! Configuração do Console:
+
+line console 0
+
+login local
+
+password vaamonde@pti
+
+logging synchronous
+
+exec-timeout 5 30
+
+exit
+
+
+! Configuração da porta AUX:
+
+line aux 0
+
+login local
+
+password vaamonde@pti
+
+logging synchronous
+
+exec-timeout 5 30
+
+speed 115200
+
+flowcontrol hardware
+
+exit
+
+
+! Configuração das linhas VTY:
+
+line vty 0 4
+
+login local
+
+password vaamonde@pti
+
+logging synchronous
+
+exec-timeout 5 30
+
+transport input ssh
+
+end
+
+
+write
+
+
+!======================================================================
+! 06 - PRINCIPAIS RECURSOS CONFIGURADOS
+!======================================================================
+
+! Segurança:
+
+! - Enable Secret
+! - Usuários locais
+! - Password Encryption
+! - SSH
+! - Bloqueio de tentativas de login
+
+
+! Gerenciamento:
+
+! - Syslog
+! - SNMP
+! - NTP
+! - DNS
+
+
+! Descoberta de rede:
+
+! - CDP
+! - LLDP
+
+
+! Acesso administrativo:
+
+! - Console
+! - AUX
+! - VTY
+! - SSH
+
+
+!======================================================================
+! 07 - COMANDOS DE VERIFICAÇÃO
+!======================================================================
+
+! Visualizar configuração atual:
+
+show running-config
+
+
+! Verificar interfaces:
+
+show ip interface brief
+
+
+! Verificar usuários conectados:
+
+show users
+
+
+! Verificar configuração de SSH:
+
+show ip ssh
+
+
+! Verificar NTP:
+
+show ntp status
+
+show ntp associations
+
+
+! Verificar CDP:
+
+show cdp neighbors
+
+
+! Verificar LLDP:
+
+show lldp neighbors
+
+
+! Verificar Syslog:
+
+show logging
+
+
+! Verificar SNMP:
+
+show running-config | include snmp
+
+
+! Verificar DNS:
+
+show running-config | include domain
+
+show running-config | include name-server
+
+
+!======================================================================
+! 08 - RESULTADO ESPERADO
+!======================================================================
+
+! Ao finalizar o procedimento, o equipamento deverá possuir uma
+! configuração básica preparada para gerenciamento e administração
+! segura da infraestrutura.
+
+! O aluno deverá ser capaz de:
+
+! 01 - Configurar o hostname;
+! 02 - Configurar data e hora;
+! 03 - Configurar usuários locais;
+! 04 - Proteger o modo privilegiado;
+! 05 - Configurar acesso Console;
+! 06 - Configurar acesso VTY;
+! 07 - Habilitar SSH;
+! 08 - Configurar DNS;
+! 09 - Configurar NTP;
+! 10 - Configurar Syslog;
+! 11 - Configurar SNMP;
+! 12 - Configurar CDP;
+! 13 - Configurar LLDP;
+! 14 - Aplicar controles básicos de segurança.
+
+
+!======================================================================
+! CONCLUSÃO
+!======================================================================
+
+! Neste procedimento foi apresentada uma configuração base para
+! Switches Layer 2, Switches Layer 3 e Routers Cisco.
+
+! A padronização inicial facilita a administração, o monitoramento,
+! a segurança e a manutenção dos equipamentos de rede.
+
+! Os recursos configurados servem como base para procedimentos
+! posteriores relacionados a VLAN, STP, roteamento, segurança,
+! monitoramento e gerenciamento da infraestrutura.
+
+
+!======================================================================
+! FIM DO PROCEDIMENTO-34
+!======================================================================
