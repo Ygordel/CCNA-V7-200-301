@@ -1,0 +1,604 @@
+!======================================================================
+! PROCEDIMENTO-35 — CONFIGURAÇÃO DO VTP
+!======================================================================
+! Professor: Ygor Silva
+! Curso: Infraestrutura de Redes
+! Tecnologia: Cisco IOS
+! Ambiente: Cisco Packet Tracer / GNS3
+! Tema: VLAN Trunk Protocol
+! Versão: 1.00
+!======================================================================
+
+
+!======================================================================
+! 01 - OBJETIVO
+!======================================================================
+
+! Configurar e verificar o protocolo VTP em uma topologia Cisco.
+
+! A atividade demonstra:
+
+! - Conceito do VTP;
+! - Funcionamento do VTP Server;
+! - Funcionamento do VTP Client;
+! - Configuração do domínio VTP;
+! - Configuração da senha VTP;
+! - Configuração da versão do VTP;
+! - Sincronização das VLANs;
+! - Verificação do status do VTP;
+! - Verificação das VLANs;
+! - Verificação dos contadores do VTP.
+
+
+!======================================================================
+! 02 - VTP
+!======================================================================
+
+! VTP (VLAN Trunk Protocol) é um protocolo proprietário da Cisco
+! utilizado para facilitar a administração de VLANs em uma rede
+! composta por múltiplos Switches.
+
+! O VTP permite que informações sobre VLANs sejam distribuídas entre
+! Switches pertencentes ao mesmo domínio VTP.
+
+! Dessa forma, uma VLAN criada no VTP Server pode ser propagada para
+! os Switches configurados como VTP Client.
+
+
+!======================================================================
+! 03 - VERSÕES DO VTP
+!======================================================================
+
+! VTPv1:
+
+! - Versão tradicional do protocolo;
+! - Suporta VLANs de 1 até 1005.
+
+
+! VTPv2:
+
+! - Evolução da primeira versão;
+! - Suporta VLANs de 1 até 1005;
+! - Deve ser configurada de forma consistente nos equipamentos
+!   participantes do domínio.
+
+
+! VTPv3:
+
+! - Versão mais avançada do VTP;
+! - Possui recursos adicionais de segurança e gerenciamento;
+! - Suporta VLANs de 1 até 4094;
+! - Possui conceito de servidor VTP primário;
+! - Possui suporte a recursos adicionais de VLAN.
+
+! OBSERVAÇÃO: neste laboratório será utilizada a versão 2 do VTP,
+! conforme o ambiente Cisco Packet Tracer utilizado no procedimento.
+
+
+!======================================================================
+! 04 - MODOS DO VTP
+!======================================================================
+
+! VTP SERVER:
+
+! - Pode criar VLANs;
+! - Pode excluir VLANs;
+! - Pode alterar VLANs;
+! - Distribui informações de VLAN para os clientes.
+
+
+! VTP CLIENT:
+
+! - Recebe informações do VTP Server;
+! - Sincroniza informações de VLAN;
+! - Não realiza a administração principal das VLANs do domínio.
+
+
+! VTP TRANSPARENT:
+
+! - Não participa da sincronização das VLANs como cliente;
+! - Mantém sua própria configuração local de VLANs;
+! - Pode encaminhar mensagens VTP conforme a versão e plataforma.
+
+
+! VTP PRUNING:
+
+! - Funcionalidade utilizada para reduzir tráfego desnecessário;
+! - Pode evitar o encaminhamento de tráfego de VLANs que não possuem
+!   dispositivos no caminho correspondente.
+
+
+!======================================================================
+! 05 - TOPOLOGIA DO LABORATÓRIO
+!======================================================================
+
+! Neste laboratório será utilizado:
+
+! Switch Layer 3 3560:
+
+! - Função: VTP Server;
+! - Domínio: vaamonde;
+! - Versão: VTPv2.
+
+
+! Switch Layer 2 2960:
+
+! - Função: VTP Client;
+! - Domínio: vaamonde;
+! - Versão: VTPv2.
+
+
+! Os Switches devem possuir conectividade através de interfaces
+! configuradas para transportar as informações necessárias entre
+! os equipamentos.
+
+
+!======================================================================
+! 06 - CONFIGURAÇÃO DO VTP SERVER
+!======================================================================
+
+! Configuração do Switch Layer 3 3560.
+
+
+! Acessando o modo EXEC Privilegiado:
+
+enable
+
+
+! Acessando o modo de Configuração Global:
+
+configure terminal
+
+
+! Configurando a versão 2 do VTP:
+
+vtp version 2
+
+
+! Configurando o equipamento como VTP Server:
+
+vtp mode server
+
+
+! Configurando o domínio VTP:
+
+vtp domain vaamonde
+
+
+! Configurando a senha do domínio:
+
+vtp password vaamonde@pti
+
+
+! Retornando ao modo EXEC Privilegiado:
+
+end
+
+
+! Salvando as configurações:
+
+write
+
+
+!======================================================================
+! 07 - CONFIGURAÇÃO DO VTP CLIENT
+!======================================================================
+
+! Configuração do Switch Layer 2 2960.
+
+
+! Acessando o modo EXEC Privilegiado:
+
+enable
+
+
+! Acessando o modo de Configuração Global:
+
+configure terminal
+
+
+! Configurando a versão 2 do VTP:
+
+vtp version 2
+
+
+! Configurando o equipamento como VTP Client:
+
+vtp mode client
+
+
+! Configurando o domínio VTP:
+
+vtp domain vaamonde
+
+
+! Configurando a senha do domínio:
+
+vtp password vaamonde@pti
+
+
+! Retornando ao modo EXEC Privilegiado:
+
+end
+
+
+! Salvando as configurações:
+
+write
+
+
+!======================================================================
+! 08 - CONFIGURAÇÃO DE VLAN NO VTP SERVER
+!======================================================================
+
+! As VLANs deverão ser criadas no equipamento configurado como
+! VTP Server.
+
+! Exemplo:
+
+configure terminal
+
+
+! Criando a VLAN 10:
+
+vlan 10
+
+name SERVIDORES
+
+exit
+
+
+! Criando a VLAN 20:
+
+vlan 20
+
+name USUARIOS
+
+exit
+
+
+! Criando a VLAN 30:
+
+vlan 30
+
+name VOIP
+
+exit
+
+
+end
+
+
+! Salvando as configurações:
+
+write
+
+
+! OBSERVAÇÃO:
+
+! Em uma topologia VTP funcional, as informações das VLANs poderão
+! ser propagadas aos Switches configurados como VTP Client.
+
+
+!======================================================================
+! 09 - VERIFICAÇÃO DO VTP
+!======================================================================
+
+! Visualizando as VLANs:
+
+show vlan brief
+
+
+! Visualizando o status do VTP:
+
+show vtp status
+
+
+! Visualizando a senha do VTP:
+
+show vtp password
+
+
+! Visualizando os contadores do VTP:
+
+show vtp counters
+
+
+! Visualizando a configuração relacionada ao VTP:
+
+show running-config | section vtp
+
+
+! OBSERVAÇÃO:
+
+! Dependendo da versão do Cisco IOS e do Cisco Packet Tracer,
+! algumas informações do VTP podem não aparecer no running-config.
+
+
+!======================================================================
+! 10 - VERIFICAÇÃO NO VTP SERVER
+!======================================================================
+
+! No VTP Server, verificar:
+
+show vtp status
+
+
+! Conferir principalmente:
+
+! - VTP Version;
+! - VTP Operating Mode;
+! - VTP Domain Name;
+! - Configuration Revision;
+! - Número de VLANs;
+! - Informações de configuração do domínio.
+
+
+! Verificar as VLANs criadas:
+
+show vlan brief
+
+
+!======================================================================
+! 11 - VERIFICAÇÃO NO VTP CLIENT
+!======================================================================
+
+! No VTP Client:
+
+show vtp status
+
+
+! Conferir:
+
+! - VTP Version;
+! - VTP Operating Mode;
+! - VTP Domain Name;
+! - Configuration Revision.
+
+
+! Verificar as VLANs recebidas:
+
+show vlan brief
+
+
+! Verificar os contadores:
+
+show vtp counters
+
+
+! Verificar a senha:
+
+show vtp password
+
+
+!======================================================================
+! 12 - VTP DOMAIN
+!======================================================================
+
+! Todos os equipamentos participantes do mesmo domínio VTP precisam
+! utilizar o mesmo nome de domínio para que possam participar do
+! processo de sincronização.
+
+! Neste laboratório:
+
+! VTP Domain:
+
+vaamonde
+
+
+! Senha:
+
+vaamonde@pti
+
+
+! Versão:
+
+VTPv2
+
+
+!======================================================================
+! 13 - VTP PASSWORD
+!======================================================================
+
+! A senha pode ser utilizada para evitar a participação de
+! equipamentos que não possuam a mesma configuração de autenticação.
+
+! Configuração:
+
+vtp password vaamonde@pti
+
+
+! Verificação:
+
+show vtp password
+
+
+!======================================================================
+! 14 - CONFIGURAÇÃO DO VTP PRUNING
+!======================================================================
+
+! O VTP Pruning possui como objetivo reduzir o tráfego desnecessário
+! de VLANs através dos enlaces Trunk.
+
+! Em plataformas que suportam o recurso:
+
+configure terminal
+
+
+vtp pruning
+
+
+end
+
+
+! OBSERVAÇÃO:
+
+! O recurso de VTP Pruning pode possuir limitações ou não estar
+! disponível no Cisco Packet Tracer utilizado neste laboratório.
+
+
+!======================================================================
+! 15 - CONFIGURAÇÃO DO VTP TRANSPARENT
+!======================================================================
+
+! Para alterar um Switch para o modo Transparent:
+
+configure terminal
+
+
+vtp mode transparent
+
+
+end
+
+
+! Salvando:
+
+write
+
+
+! Verificando:
+
+show vtp status
+
+
+! Para retornar ao modo Client:
+
+configure terminal
+
+
+vtp mode client
+
+
+end
+
+
+write
+
+
+!======================================================================
+! 16 - PRINCIPAIS COMANDOS
+!======================================================================
+
+! Configurar versão:
+
+vtp version 2
+
+
+! Configurar Server:
+
+vtp mode server
+
+
+! Configurar Client:
+
+vtp mode client
+
+
+! Configurar Transparent:
+
+vtp mode transparent
+
+
+! Configurar domínio:
+
+vtp domain vaamonde
+
+
+! Configurar senha:
+
+vtp password vaamonde@pti
+
+
+! Habilitar Pruning:
+
+vtp pruning
+
+
+! Verificar status:
+
+show vtp status
+
+
+! Verificar senha:
+
+show vtp password
+
+
+! Verificar contadores:
+
+show vtp counters
+
+
+! Verificar VLANs:
+
+show vlan brief
+
+
+! Verificar configuração:
+
+show running-config | section vtp
+
+
+!======================================================================
+! 17 - PONTOS DE ATENÇÃO
+!======================================================================
+
+! O VTP deve ser utilizado com planejamento e controle.
+
+! Alterações realizadas em um ambiente VTP podem afetar múltiplos
+! Switches pertencentes ao mesmo domínio.
+
+! Antes de utilizar VTP em uma infraestrutura real, recomenda-se
+! verificar:
+
+! - Versão do VTP;
+! - Domínio VTP;
+! - Senha;
+! - Modo operacional;
+! - Número de revisão;
+! - VLANs existentes;
+! - Configuração dos enlaces Trunk;
+! - Compatibilidade dos equipamentos.
+
+
+!======================================================================
+! 18 - RESULTADO ESPERADO
+!======================================================================
+
+! Ao finalizar o procedimento, o aluno deverá ser capaz de:
+
+! 01 - Compreender o funcionamento do VTP;
+! 02 - Identificar as versões do VTP;
+! 03 - Diferenciar VTP Server e VTP Client;
+! 04 - Compreender o modo Transparent;
+! 05 - Configurar o domínio VTP;
+! 06 - Configurar a senha VTP;
+! 07 - Configurar VTPv2;
+! 08 - Criar VLANs no VTP Server;
+! 09 - Verificar VLANs no VTP Client;
+! 10 - Consultar o status do VTP;
+! 11 - Consultar os contadores do VTP;
+! 12 - Identificar informações do domínio VTP.
+
+
+!======================================================================
+! 19 - CONCLUSÃO
+!======================================================================
+
+! Neste procedimento foi apresentada a configuração do VTP em
+! equipamentos Cisco.
+
+! O VTP permite centralizar e distribuir informações relacionadas
+! às VLANs entre Switches pertencentes ao mesmo domínio.
+
+! O laboratório demonstrou a utilização do Switch Layer 3 3560
+! como VTP Server e do Switch Layer 2 2960 como VTP Client.
+
+! Também foram apresentados os principais comandos utilizados para
+! configuração, gerenciamento e verificação do protocolo.
+
+
+!======================================================================
+! FIM DO PROCEDIMENTO-35
+!======================================================================
