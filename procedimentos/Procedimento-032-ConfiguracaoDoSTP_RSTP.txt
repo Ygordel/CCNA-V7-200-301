@@ -1,0 +1,347 @@
+!======================================================================
+! PROCEDIMENTO-32 — CONFIGURAÇÃO DO STP E RSTP
+!======================================================================
+! Professor: Ygor Silva
+! Curso: Infraestrutura de Redes
+! Tecnologia: Cisco IOS
+! Ambiente: Cisco Packet Tracer / GNS3
+! Tema: Spanning Tree Protocol e Rapid Spanning Tree Protocol
+! Versão: 1.00
+!======================================================================
+
+
+!======================================================================
+! 01 - OBJETIVO
+!======================================================================
+
+! Configurar e verificar o STP (Spanning Tree Protocol) e o RSTP
+! (Rapid Spanning Tree Protocol) nos Switches Cisco.
+
+! A atividade demonstra:
+
+! - Funcionamento do STP;
+! - Prevenção de loops de Camada 2;
+! - Eleição do Root Bridge;
+! - Root Port;
+! - Designated Port;
+! - Blocked Port;
+! - Funcionamento das BPDUs;
+! - Estados das portas;
+! - Configuração do Rapid-PVST;
+! - Verificação da topologia STP.
+
+
+!======================================================================
+! 02 - STP
+!======================================================================
+
+! STP (Spanning Tree Protocol) é um protocolo de Camada 2 utilizado
+! para evitar loops em redes com caminhos redundantes entre Switches.
+
+! O STP cria uma árvore lógica da topologia e determina quais caminhos
+! serão utilizados para encaminhamento dos quadros.
+
+! O protocolo utiliza BPDUs (Bridge Protocol Data Units) para trocar
+! informações entre os Switches.
+
+
+!======================================================================
+! 03 - ROOT BRIDGE
+!======================================================================
+
+! O Root Bridge é o Switch de referência utilizado pelo STP para
+! construção da árvore da topologia.
+
+! A eleição considera:
+
+! - Bridge ID;
+! - Prioridade;
+! - Endereço MAC.
+
+! O Switch com o menor Bridge ID será eleito Root Bridge.
+
+
+!======================================================================
+! 04 - PRIORIDADE DO STP
+!======================================================================
+
+! A prioridade padrão utilizada pelo STP nos Switches Cisco é:
+
+! 32768 + System ID Extension da VLAN.
+
+! Para a VLAN 1:
+
+! Bridge ID Priority = 32769
+
+! A prioridade pode ser configurada em valores múltiplos de 4096.
+
+
+!======================================================================
+! 05 - PORTAS DO STP
+!======================================================================
+
+! Designated Port (DP):
+
+! Interface selecionada para encaminhamento em determinado segmento
+! da topologia STP.
+
+
+! Root Port (RP):
+
+! Interface do Switch Non-Root Bridge que possui o melhor caminho
+! até o Root Bridge.
+
+
+! Blocked Port (BLK):
+
+! Interface que permanece bloqueada para evitar a formação de loops
+! de Camada 2.
+
+
+!======================================================================
+! 06 - CUSTO DO STP
+!======================================================================
+
+! O STP utiliza o custo do caminho para determinar o melhor caminho
+! até o Root Bridge.
+
+! Valores apresentados neste laboratório:
+
+! 10 Mbps     = 100
+! 100 Mbps    = 19
+! 1 Gbps      = 4
+! 10 Gbps     = 2
+
+
+!======================================================================
+! 07 - ESTADOS DO STP
+!======================================================================
+
+! O STP tradicional possui cinco estados:
+
+! 01 - Disabled
+! 02 - Blocking
+! 03 - Listening
+! 04 - Learning
+! 05 - Forwarding
+
+
+!======================================================================
+! 08 - TEMPORIZADORES DO STP
+!======================================================================
+
+! Hello Time:
+
+! 2 segundos
+
+
+! Forward Delay:
+
+! 15 segundos
+
+
+! Max Age:
+
+! 20 segundos
+
+
+! A convergência do STP tradicional pode levar aproximadamente
+! 30 a 50 segundos, dependendo da topologia.
+
+
+!======================================================================
+! 09 - RSTP
+!======================================================================
+
+! RSTP (Rapid Spanning Tree Protocol) é uma evolução do STP criada
+! para reduzir o tempo de convergência da rede.
+
+! O RSTP é padronizado pelo IEEE 802.1w.
+
+! No Cisco IOS, o modo Rapid-PVST permite trabalhar com uma instância
+! de Spanning Tree por VLAN.
+
+
+!======================================================================
+! 10 - ESTADOS DO RSTP
+!======================================================================
+
+! O RSTP utiliza três estados principais:
+
+! 01 - Discarding
+! 02 - Learning
+! 03 - Forwarding
+
+
+!======================================================================
+! 11 - PORTAS DO RSTP
+!======================================================================
+
+! O RSTP utiliza os seguintes papéis de portas:
+
+! - Root Port;
+! - Designated Port;
+! - Alternate Port;
+! - Backup Port.
+
+
+!======================================================================
+! 12 - RAPID-PVST
+!======================================================================
+
+! Rapid-PVST permite criar uma instância individual do Spanning Tree
+! para cada VLAN.
+
+! Essa característica possibilita definir caminhos diferentes para
+! diferentes VLANs e melhorar a utilização da infraestrutura.
+
+
+!======================================================================
+! 13 - CONFIGURAÇÃO DO SWITCH LAYER 3 3560
+!======================================================================
+
+! Acessando o modo EXEC Privilegiado:
+
+enable
+
+
+! Acessando o modo de Configuração Global:
+
+configure terminal
+
+
+! Configurando o Switch Layer 3 como Root Bridge primário da VLAN 1:
+
+spanning-tree vlan 1 root primary
+
+
+! Configurando o modo Rapid-PVST:
+
+spanning-tree mode rapid-pvst
+
+
+! Retornando ao modo EXEC Privilegiado:
+
+end
+
+
+! Salvando as configurações:
+
+write
+
+
+!======================================================================
+! 14 - CONFIGURAÇÃO DOS SWITCHES LAYER 2 2960
+!======================================================================
+
+! Acessando o modo EXEC Privilegiado:
+
+enable
+
+
+! Acessando o modo de Configuração Global:
+
+configure terminal
+
+
+! Configurando o modo Rapid-PVST:
+
+spanning-tree mode rapid-pvst
+
+
+! Retornando ao modo EXEC Privilegiado:
+
+end
+
+
+! Salvando as configurações:
+
+write
+
+
+!======================================================================
+! 15 - VERIFICAÇÃO DA CONFIGURAÇÃO
+!======================================================================
+
+! Visualizando as configurações do Spanning Tree:
+
+show running-config | section spanning-tree
+
+
+! Visualizando a topologia STP:
+
+show spanning-tree
+
+
+! Visualizando o resumo do STP:
+
+show spanning-tree summary
+
+
+!======================================================================
+! 16 - PRINCIPAIS COMANDOS
+!======================================================================
+
+! Configurar Root Bridge primário:
+
+spanning-tree vlan 1 root primary
+
+
+! Configurar Rapid-PVST:
+
+spanning-tree mode rapid-pvst
+
+
+! Visualizar o Spanning Tree:
+
+show spanning-tree
+
+
+! Visualizar o resumo:
+
+show spanning-tree summary
+
+
+! Visualizar a configuração:
+
+show running-config | section spanning-tree
+
+
+!======================================================================
+! 17 - RESULTADO ESPERADO
+!======================================================================
+
+! Ao finalizar o laboratório, o aluno deverá ser capaz de:
+
+! 01 - Compreender o funcionamento do STP;
+! 02 - Identificar a função do Root Bridge;
+! 03 - Compreender a eleição do Root Bridge;
+! 04 - Identificar Root Ports;
+! 05 - Identificar Designated Ports;
+! 06 - Identificar portas bloqueadas;
+! 07 - Compreender o funcionamento das BPDUs;
+! 08 - Identificar os estados do STP;
+! 09 - Compreender o funcionamento do RSTP;
+! 10 - Configurar o Rapid-PVST;
+! 11 - Verificar a topologia do Spanning Tree;
+! 12 - Analisar a convergência da rede.
+
+
+!======================================================================
+! CONCLUSÃO
+!======================================================================
+
+! Neste procedimento foi configurado o STP e o RSTP nos Switches
+! Cisco para prevenção de loops de Camada 2.
+
+! O STP utiliza o Root Bridge, Root Ports, Designated Ports e portas
+! bloqueadas para construir uma topologia lógica sem loops.
+
+! O RSTP permite uma convergência mais rápida e, utilizando o
+! Rapid-PVST, possibilita trabalhar com instâncias individuais
+! de Spanning Tree por VLAN.
+
+
+!======================================================================
+! FIM DO PROCEDIMENTO-32
+!======================================================================
