@@ -1,0 +1,573 @@
+!======================================================================
+! PROCEDIMENTO-33 — CONFIGURAÇÃO DE AAA, RADIUS E TACACS+
+!======================================================================
+! Professor: Ygor Silva
+! Curso: Infraestrutura de Redes
+! Tecnologia: Cisco IOS
+! Ambiente: Cisco Packet Tracer / GNS3
+! Tema: Autenticação, Autorização e Contabilização
+! Versão: 1.00
+!======================================================================
+
+
+!======================================================================
+! 01 - OBJETIVO
+!======================================================================
+
+! Configurar e verificar o recurso AAA (Authentication, Authorization
+! and Accounting) utilizando os protocolos TACACS+ e RADIUS.
+
+! A atividade demonstra:
+
+! - Autenticação de usuários;
+! - Autorização de acesso;
+! - Contabilização de sessões;
+! - Servidor AAA;
+! - TACACS+;
+! - RADIUS;
+! - Autenticação local como backup;
+! - Configuração de linhas VTY;
+! - Configuração do Console;
+! - Verificação das configurações AAA.
+
+
+!======================================================================
+! 02 - AAA
+!======================================================================
+
+! AAA significa:
+
+! Authentication  = Autenticação
+! Authorization   = Autorização
+! Accounting      = Contabilização
+
+! O AAA permite centralizar o controle de acesso aos equipamentos
+! e serviços da infraestrutura de rede.
+
+
+!======================================================================
+! 03 - RADIUS
+!======================================================================
+
+! RADIUS (Remote Authentication Dial-In User Service) é um protocolo
+! utilizado para gerenciamento centralizado de autenticação,
+! autorização e contabilização.
+
+! O RADIUS utiliza UDP.
+
+! Porta tradicional de autenticação:
+
+! UDP 1812
+
+! Porta tradicional de contabilização:
+
+! UDP 1813
+
+! Também podem existir implementações utilizando:
+
+! UDP 1645
+! UDP 1646
+
+
+!======================================================================
+! 04 - TACACS+
+!======================================================================
+
+! TACACS+ (Terminal Access Controller Access-Control System Plus)
+! é um protocolo utilizado para autenticação e controle de acesso
+! a equipamentos de rede.
+
+! O TACACS+ utiliza:
+
+! TCP 49
+
+
+!======================================================================
+! 05 - CONFIGURAÇÃO DO SERVIDOR AAA
+!======================================================================
+
+! No Cisco Packet Tracer, o serviço AAA deve ser habilitado
+! diretamente no servidor.
+
+! Configuração:
+
+Service                 On
+
+
+! Usuário utilizado no laboratório:
+
+Username                pti
+Password                pti
+
+
+! Chave compartilhada:
+
+Secret                  pti
+
+
+!======================================================================
+! 06 - CLIENTES AAA
+!======================================================================
+
+! Switch Layer 3:
+
+Client Name             sw-l3-3560-1
+Client IP               192.168.3.254
+Secret                  pti
+Server Type             Tacacs
+
+
+! Switch Layer 2:
+
+Client Name             sw-l2-2960-3
+Client IP               192.168.3.250
+Secret                  pti
+Server Type             Tacacs
+
+
+! Switch Layer 2:
+
+Client Name             sw-l2-2960-4
+Client IP               192.168.3.251
+Secret                  pti
+Server Type             Tacacs
+
+
+! Router:
+
+Client Name             rt-1941-2
+Client IP               192.168.2.254
+Secret                  pti
+Server Type             Radius
+
+
+!======================================================================
+! 07 - CONFIGURAÇÃO DO SWITCH LAYER 3 3560
+!======================================================================
+
+! Acessando o modo EXEC Privilegiado:
+
+enable
+
+
+! Acessando o modo de Configuração Global:
+
+configure terminal
+
+
+! Habilitando o modelo AAA:
+
+aaa new-model
+
+
+! Configurando autenticação de Login:
+
+aaa authentication login default group tacacs+ local
+
+
+! Configurando autenticação para o modo EXEC Privilegiado:
+
+aaa authentication enable default group tacacs+ local
+
+
+! Configurando autorização do modo EXEC:
+
+aaa authorization exec default group tacacs+ local
+
+
+! Configurando contabilização das sessões:
+
+aaa accounting exec default start-stop group tacacs+
+
+
+! Configurando o servidor TACACS+:
+
+tacacs-server host 192.168.3.1 key pti
+
+
+!======================================================================
+! 08 - CONFIGURAÇÃO DAS LINHAS VTY
+!======================================================================
+
+! Acessando as linhas VTY:
+
+line vty 0 5
+
+
+! Utilizando a lista padrão de autenticação AAA:
+
+login authentication default
+
+
+! Habilitando contabilização das sessões:
+
+accounting exec default
+
+
+! Retornando ao modo anterior:
+
+exit
+
+
+!======================================================================
+! 09 - CONFIGURAÇÃO DO CONSOLE
+!======================================================================
+
+! Acessando a linha Console:
+
+line console 0
+
+
+! Utilizando autenticação AAA:
+
+login authentication default
+
+
+! Habilitando contabilização:
+
+accounting exec default
+
+
+! Retornando ao modo EXEC Privilegiado:
+
+end
+
+
+! Salvando as configurações:
+
+write
+
+
+!======================================================================
+! 10 - SWITCH LAYER 2 2960
+!======================================================================
+
+! O recurso AAA utilizado neste laboratório depende da versão
+! do IOS disponível no Switch.
+
+! Para utilizar os recursos apresentados, o laboratório considera
+! a utilização do IOS 15.
+
+
+! Copiando o IOS para a memória Flash:
+
+enable
+
+copy tftp: flash:
+
+
+! Endereço do servidor TFTP:
+
+192.168.3.1
+
+
+! Arquivo IOS:
+
+c2960-lanbasek9-mz.150-2.SE4.bin
+
+
+! Configurando o IOS para inicialização:
+
+configure terminal
+
+boot system c2960-lanbasek9-mz.150-2.SE4.bin
+
+end
+
+
+! Salvando as configurações:
+
+write
+
+
+! Reiniciando o Switch:
+
+reload
+
+
+!======================================================================
+! 11 - CONFIGURAÇÃO AAA DO SWITCH LAYER 2 2960
+!======================================================================
+
+enable
+
+configure terminal
+
+
+! Habilitando AAA:
+
+aaa new-model
+
+
+! Configurando autenticação de Login:
+
+aaa authentication login default group tacacs+ local
+
+
+! Configurando autenticação do modo EXEC Privilegiado:
+
+aaa authentication enable default group tacacs+ local
+
+
+! Configurando autorização:
+
+aaa authorization exec default group tacacs+ local
+
+
+! Configurando contabilização:
+
+aaa accounting exec default start-stop group tacacs+
+
+
+! Configurando servidor TACACS+:
+
+tacacs-server host 192.168.3.1 key pti
+
+
+! Configurando as linhas VTY:
+
+line vty 0 5
+
+login authentication default
+
+accounting exec default
+
+exit
+
+
+! Configurando o Console:
+
+line console 0
+
+login authentication default
+
+accounting exec default
+
+end
+
+
+! Salvando as configurações:
+
+write
+
+
+!======================================================================
+! 12 - CONFIGURAÇÃO DO ROUTER 1941-2
+!======================================================================
+
+! Neste equipamento será utilizado o servidor RADIUS.
+
+enable
+
+configure terminal
+
+
+! Habilitando AAA:
+
+aaa new-model
+
+
+! Configurando autenticação de Login:
+
+aaa authentication login default group radius local
+
+
+! Configurando autenticação do modo EXEC Privilegiado:
+
+aaa authentication enable default group radius local
+
+
+! Configurando autorização:
+
+aaa authorization exec default group radius local
+
+
+! Configurando contabilização:
+
+aaa accounting exec default start-stop group radius
+
+
+! Configurando o servidor RADIUS:
+
+radius-server host 192.168.3.1 key pti
+
+
+!======================================================================
+! 13 - CONFIGURAÇÃO DAS LINHAS VTY DO ROUTER
+!======================================================================
+
+line vty 0 5
+
+
+! Utilizando a autenticação AAA:
+
+login authentication default
+
+
+! Habilitando contabilização:
+
+accounting exec default
+
+
+exit
+
+
+!======================================================================
+! 14 - CONFIGURAÇÃO DO CONSOLE DO ROUTER
+!======================================================================
+
+line console 0
+
+login authentication default
+
+accounting exec default
+
+end
+
+
+! Salvando as configurações:
+
+write
+
+
+!======================================================================
+! 15 - AUTENTICAÇÃO LOCAL DE BACKUP
+!======================================================================
+
+! A opção:
+
+group tacacs+ local
+
+
+! ou:
+
+group radius local
+
+
+! permite utilizar o servidor AAA como primeira opção e os usuários
+! locais como alternativa caso o servidor AAA esteja indisponível.
+
+
+!======================================================================
+! 16 - VERIFICAÇÃO DA CONFIGURAÇÃO AAA
+!======================================================================
+
+! Visualizando as configurações AAA:
+
+show running-config | section aaa
+
+
+! Visualizando a configuração do TACACS+:
+
+show running-config | include tacacs
+
+
+! Visualizando a configuração do RADIUS:
+
+show running-config | include radius
+
+
+! Visualizando os usuários conectados:
+
+show users
+
+
+!======================================================================
+! 17 - PRINCIPAIS COMANDOS
+!======================================================================
+
+! Habilitar AAA:
+
+aaa new-model
+
+
+! Autenticação TACACS+:
+
+aaa authentication login default group tacacs+ local
+
+
+! Autenticação RADIUS:
+
+aaa authentication login default group radius local
+
+
+! Autorização:
+
+aaa authorization exec default group tacacs+ local
+
+
+! Contabilização:
+
+aaa accounting exec default start-stop group tacacs+
+
+
+! Servidor TACACS+:
+
+tacacs-server host 192.168.3.1 key pti
+
+
+! Servidor RADIUS:
+
+radius-server host 192.168.3.1 key pti
+
+
+! Verificar AAA:
+
+show running-config | section aaa
+
+
+! Verificar TACACS+:
+
+show running-config | include tacacs
+
+
+! Verificar RADIUS:
+
+show running-config | include radius
+
+
+! Verificar usuários:
+
+show users
+
+
+!======================================================================
+! 18 - RESULTADO ESPERADO
+!======================================================================
+
+! Ao finalizar o laboratório, o aluno deverá ser capaz de:
+
+! 01 - Compreender o conceito de AAA;
+! 02 - Compreender autenticação;
+! 03 - Compreender autorização;
+! 04 - Compreender contabilização;
+! 05 - Identificar o funcionamento do RADIUS;
+! 06 - Identificar o funcionamento do TACACS+;
+! 07 - Configurar um servidor AAA;
+! 08 - Configurar autenticação remota;
+! 09 - Configurar autenticação local como backup;
+! 10 - Configurar linhas VTY;
+! 11 - Configurar autenticação do Console;
+! 12 - Verificar as configurações AAA.
+
+
+!======================================================================
+! CONCLUSÃO
+!======================================================================
+
+! Neste procedimento foi configurado o modelo AAA para centralizar
+! os processos de autenticação, autorização e contabilização dos
+! acessos aos equipamentos de rede.
+
+! Foram demonstradas configurações utilizando TACACS+ nos Switches
+! e RADIUS no Router, além da utilização de usuários locais como
+! mecanismo de autenticação de backup.
+
+! A utilização de servidores AAA permite melhorar o controle,
+! a administração e a auditoria dos acessos à infraestrutura
+! de rede.
+
+
+!======================================================================
+! FIM DO PROCEDIMENTO-33
+!======================================================================
