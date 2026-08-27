@@ -1,0 +1,321 @@
+!======================================================================
+! PROCEDIMENTO-31 — CONFIGURAÇÃO DO DYNAMIC ARP INSPECTION (DAI)
+!======================================================================
+! Professor: Ygor Silva
+! Curso: Infraestrutura de Redes
+! Tecnologia: Cisco IOS
+! Ambiente: Cisco Packet Tracer / GNS3
+! Tema: Segurança de Rede — Dynamic ARP Inspection
+! Versão: 1.00
+!======================================================================
+
+
+!======================================================================
+! 01 - OBJETIVO
+!======================================================================
+
+! Configurar e verificar o recurso Dynamic ARP Inspection (DAI)
+! nos Switches Cisco.
+
+! A atividade demonstra:
+
+! - Funcionamento do Dynamic ARP Inspection;
+! - Proteção contra ARP Poisoning;
+! - Proteção contra ataques Man-in-the-Middle;
+! - Integração entre DAI e DHCP Snooping;
+! - Configuração de VLAN protegida;
+! - Configuração de interfaces confiáveis;
+! - Verificação das estatísticas do DAI;
+! - Consulta da tabela de associações do DHCP Snooping.
+
+
+!======================================================================
+! 02 - DYNAMIC ARP INSPECTION
+!======================================================================
+
+! DAI (Dynamic ARP Inspection) é um recurso de segurança utilizado
+! para validar pacotes ARP (Address Resolution Protocol) na rede.
+
+! O DAI permite interceptar, registrar e descartar pacotes ARP que
+! apresentem associações inválidas entre endereços IP e MAC.
+
+! O recurso ajuda a proteger a rede contra ataques como:
+
+! - ARP Poisoning;
+! - ARP Spoofing;
+! - Man-in-the-Middle.
+
+
+!======================================================================
+! 03 - FUNCIONAMENTO DO DAI
+!======================================================================
+
+! O DAI verifica a validade das mensagens ARP utilizando informações
+! armazenadas em uma base de dados confiável.
+
+! Essa base pode ser criada dinamicamente pelo DHCP Snooping.
+
+! Por esse motivo, o DAI trabalha de forma integrada com o
+! DHCP Snooping.
+
+! As interfaces podem ser classificadas como:
+
+! - Trusted: interface confiável;
+! - Untrusted: interface não confiável.
+
+! As interfaces não confiáveis possuem seus pacotes ARP submetidos
+! ao processo de inspeção.
+
+
+!======================================================================
+! 04 - INTEGRAÇÃO COM DHCP SNOOPING
+!======================================================================
+
+! O DHCP Snooping mantém informações de associação entre:
+
+! - Endereço IP;
+! - Endereço MAC;
+! - Interface;
+! - VLAN;
+! - Informações de concessão DHCP.
+
+! O DAI utiliza essas informações para validar os pacotes ARP.
+
+! Portanto, em ambientes que utilizam DHCP Snooping, é importante
+! configurar corretamente as interfaces Trusted.
+
+
+!======================================================================
+! 05 - CONFIGURAÇÃO DO SWITCH LAYER 3 3560
+!======================================================================
+
+! Acessando o modo EXEC Privilegiado:
+
+enable
+
+
+! Acessando o modo de Configuração Global:
+
+configure terminal
+
+
+! Habilitando o Dynamic ARP Inspection na VLAN 1:
+
+ip arp inspection vlan 1
+
+
+! Acessando a interface do servidor SERVER-02:
+
+interface fastEthernet 0/1
+
+
+! Configurando a interface como confiável:
+
+ip arp inspection trust
+
+
+! Retornando ao modo EXEC Privilegiado:
+
+end
+
+
+! Salvando as configurações:
+
+write
+
+
+!======================================================================
+! 06 - CONFIGURAÇÃO DOS SWITCHES LAYER 2 2960
+!======================================================================
+
+! Acessando o modo EXEC Privilegiado:
+
+enable
+
+
+! Acessando o modo de Configuração Global:
+
+configure terminal
+
+
+! Habilitando o Dynamic ARP Inspection na VLAN 1:
+
+ip arp inspection vlan 1
+
+
+! Configurando as interfaces de Trunk:
+
+interface range gigabitEthernet 0/1 - 2
+
+
+! Configurando as interfaces como confiáveis:
+
+ip arp inspection trust
+
+
+! Retornando ao modo EXEC Privilegiado:
+
+end
+
+
+! Salvando as configurações:
+
+write
+
+
+!======================================================================
+! 07 - INTERFACES TRUSTED E UNTRUSTED
+!======================================================================
+
+! Trusted:
+
+! Interfaces confiáveis não possuem os pacotes ARP submetidos ao
+! mesmo processo de validação aplicado às interfaces não confiáveis.
+
+! Normalmente são utilizadas em conexões com:
+
+! - Servidores;
+! - Equipamentos de infraestrutura;
+! - Links de Trunk;
+! - Equipamentos confiáveis da rede.
+
+
+! Untrusted:
+
+! Interfaces não confiáveis são submetidas à inspeção do DAI.
+
+! Normalmente são utilizadas em portas destinadas aos dispositivos
+! finais da rede.
+
+
+!======================================================================
+! 08 - VERIFICAÇÃO DA CONFIGURAÇÃO
+!======================================================================
+
+! Visualizando as configurações relacionadas ao DAI:
+
+show running-config | section ip arp
+
+
+! Visualizando as configurações das interfaces:
+
+show running-config | section interface
+
+
+!======================================================================
+! 09 - VERIFICAÇÃO DO DYNAMIC ARP INSPECTION
+!======================================================================
+
+! Visualizando o estado do DAI:
+
+show ip arp inspection
+
+
+! Visualizando o DAI configurado na VLAN 1:
+
+show ip arp inspection vlan 1
+
+
+! Visualizando as estatísticas do DAI na VLAN 1:
+
+show ip arp inspection statistics vlan 1
+
+
+! Visualizando as interfaces configuradas para o DAI:
+
+show ip arp inspection interfaces
+
+
+! Visualizando informações do DAI na interface GigabitEthernet 0/1:
+
+show ip arp inspection interfaces gigabitEthernet 0/1
+
+
+!======================================================================
+! 10 - VERIFICAÇÃO DO DHCP SNOOPING
+!======================================================================
+
+! Visualizando a tabela de associações criada pelo DHCP Snooping:
+
+show ip dhcp snooping binding
+
+
+! Essa tabela pode ser utilizada pelo DAI como referência para
+! validar associações entre endereços IP e MAC.
+
+
+!======================================================================
+! 11 - PRINCIPAIS COMANDOS
+!======================================================================
+
+! Habilitar DAI em uma VLAN:
+
+ip arp inspection vlan 1
+
+
+! Configurar uma interface como Trusted:
+
+ip arp inspection trust
+
+
+! Verificar o estado do DAI:
+
+show ip arp inspection
+
+
+! Verificar uma VLAN:
+
+show ip arp inspection vlan 1
+
+
+! Verificar estatísticas:
+
+show ip arp inspection statistics vlan 1
+
+
+! Verificar interfaces:
+
+show ip arp inspection interfaces
+
+
+! Verificar informações do DHCP Snooping:
+
+show ip dhcp snooping binding
+
+
+!======================================================================
+! 12 - RESULTADO ESPERADO
+!======================================================================
+
+! Ao finalizar o laboratório, o aluno deverá ser capaz de:
+
+! 01 - Compreender o funcionamento do DAI;
+! 02 - Identificar ataques relacionados ao ARP;
+! 03 - Compreender o ARP Poisoning;
+! 04 - Compreender o ataque Man-in-the-Middle;
+! 05 - Habilitar o DAI em uma VLAN;
+! 06 - Configurar interfaces Trusted;
+! 07 - Identificar interfaces Untrusted;
+! 08 - Integrar DAI com DHCP Snooping;
+! 09 - Consultar estatísticas do DAI;
+! 10 - Verificar a tabela de associações do DHCP Snooping.
+
+
+!======================================================================
+! CONCLUSÃO
+!======================================================================
+
+! Neste procedimento foi configurado o Dynamic ARP Inspection (DAI)
+! nos Switches Cisco para aumentar a segurança da infraestrutura
+! contra ataques relacionados à falsificação de mensagens ARP.
+
+! O DAI trabalha de forma integrada ao DHCP Snooping, utilizando
+! informações de associações IP e MAC para validar as mensagens ARP.
+
+! A correta configuração das interfaces Trusted e Untrusted permite
+! aplicar a inspeção de ARP de forma adequada à topologia da rede.
+
+
+!======================================================================
+! FIM DO PROCEDIMENTO-31
+!======================================================================
