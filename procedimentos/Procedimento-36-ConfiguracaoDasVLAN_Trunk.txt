@@ -1,0 +1,801 @@
+!======================================================================
+! PROCEDIMENTO-34 — CONFIGURAÇÃO DE VLAN, ACCESS E TRUNK
+!======================================================================
+! Professor: Ygor Silva
+! Curso: Infraestrutura de Redes
+! Tecnologia: Cisco IOS
+! Ambiente: Cisco Packet Tracer / GNS3
+! Tema: VLAN, Access Port, Trunk Port e Segmentação de Rede
+! Versão: 1.00
+!======================================================================
+
+
+!======================================================================
+! 01 - OBJETIVO
+!======================================================================
+
+! Configurar VLANs em Switches Cisco, associar interfaces às VLANs,
+! configurar portas de acesso e portas de tronco e realizar a
+! verificação das configurações.
+
+! A atividade demonstra:
+
+! - Criação de VLANs;
+! - Identificação de VLANs;
+! - Configuração de portas Access;
+! - Configuração de portas Trunk;
+! - Configuração de VLAN Nativa;
+! - Configuração de SVI;
+! - Configuração de Port Security;
+! - Desativação de interfaces não utilizadas;
+! - Configuração de VTP;
+! - Verificação das VLANs;
+! - Verificação das portas Trunk;
+! - Verificação das interfaces do Switch.
+
+
+!======================================================================
+! 02 - CONCEITO DE VLAN
+!======================================================================
+
+! VLAN significa Virtual Local Area Network.
+
+! Uma VLAN permite dividir logicamente uma rede física em diferentes
+! redes locais virtuais.
+
+! Várias VLANs podem existir simultaneamente em um mesmo Switch.
+
+! Cada VLAN representa um domínio de Broadcast independente.
+
+! A comunicação entre dispositivos pertencentes a VLANs diferentes
+! necessita de um equipamento ou recurso capaz de realizar roteamento.
+
+
+!======================================================================
+! 03 - VANTAGENS DAS VLANs
+!======================================================================
+
+! As VLANs proporcionam:
+
+! - Segmentação da rede;
+! - Organização da infraestrutura;
+! - Separação de domínios de Broadcast;
+! - Maior flexibilidade;
+! - Melhor gerenciamento;
+! - Escalabilidade;
+! - Possibilidade de aplicação de políticas de segurança;
+! - Redução de custos com infraestrutura.
+
+
+!======================================================================
+! 04 - TIPOS DE PORTAS
+!======================================================================
+
+! Os Switches Cisco utilizam principalmente dois tipos de portas
+! relacionadas às VLANs:
+
+! ACCESS:
+
+! Porta destinada normalmente à conexão de dispositivos finais.
+
+! Exemplos:
+
+! - Computadores;
+! - Notebooks;
+! - Impressoras;
+! - Access Points;
+! - Servidores.
+
+
+! TRUNK:
+
+! Porta utilizada normalmente para transportar múltiplas VLANs entre
+! equipamentos de rede.
+
+! Exemplos:
+
+! - Switch para Switch;
+! - Switch para Router;
+! - Switch para servidor com suporte a VLAN;
+! - Interligações entre equipamentos de infraestrutura.
+
+
+!======================================================================
+! 05 - FAIXA DE VLANs
+!======================================================================
+
+! Principais faixas utilizadas pelos Switches Cisco:
+
+! VLAN 1:
+
+! - VLAN padrão;
+! - Associada inicialmente às interfaces do Switch;
+! - Não pode ser excluída.
+
+
+! VLANs 2 até 1001:
+
+! - VLANs Ethernet da faixa normal;
+! - Podem ser criadas e utilizadas;
+! - São armazenadas no arquivo vlan.dat.
+
+
+! VLANs 1002 até 1005:
+
+! - VLANs reservadas para compatibilidade com tecnologias legadas.
+
+
+! VLANs 1006 até 4094:
+
+! - Faixa de VLANs estendidas;
+! - Utilizada principalmente em ambientes que necessitam de uma
+!   quantidade maior de identificadores de VLAN.
+
+
+!======================================================================
+! 06 - VLANs ESTÁTICAS E DINÂMICAS
+!======================================================================
+
+! VLAN ESTÁTICA:
+
+! A associação da interface à VLAN é realizada manualmente pelo
+! administrador da rede.
+
+
+! VLAN DINÂMICA:
+
+! A associação pode ser realizada de forma dinâmica por mecanismos
+! específicos de gerenciamento de VLAN.
+
+
+!======================================================================
+! 07 - CONFIGURAÇÃO DAS VLANs
+!======================================================================
+
+! Configuração no Switch Layer 3 3560.
+
+
+enable
+
+configure terminal
+
+
+! Criando a VLAN 10:
+
+vlan 10
+
+name adm
+
+
+! Criando a VLAN 20:
+
+vlan 20
+
+name cap
+
+
+! Criando a VLAN 30:
+
+vlan 30
+
+name car
+
+
+! Criando a VLAN 40:
+
+vlan 40
+
+name est
+
+
+! Criando a VLAN 50:
+
+vlan 50
+
+name guest
+
+
+! Criando a VLAN 90:
+
+vlan 90
+
+name native
+
+
+! Criando a VLAN 99:
+
+vlan 99
+
+name admin
+
+
+! Criando a VLAN 100:
+
+vlan 100
+
+name server
+
+
+exit
+
+
+!======================================================================
+! 08 - CONFIGURAÇÃO DAS PORTAS TRUNK
+!======================================================================
+
+! As interfaces GigabitEthernet 0/1 e 0/2 serão utilizadas para
+! interligação com os Switches Layer 2.
+
+
+interface range gigabitEthernet 0/1 - 2
+
+description Interface de Trunk com os Switches Layer 2
+
+
+! Configurando o encapsulamento IEEE 802.1Q:
+
+switchport trunk encapsulation dot1q
+
+
+! Configurando a interface como Trunk:
+
+switchport mode trunk
+
+
+! Desabilitando a negociação automática DTP:
+
+switchport nonegotiate
+
+
+! Configurando a VLAN nativa:
+
+switchport trunk native vlan 90
+
+
+exit
+
+
+!======================================================================
+! 09 - TRUNK COM O ROUTER
+!======================================================================
+
+! Configuração da interface FastEthernet 0/24 para conexão com
+! o Router 2911.
+
+
+interface fastEthernet 0/24
+
+description Interface de Trunk com o Router 2911
+
+switchport trunk encapsulation dot1q
+
+switchport mode trunk
+
+switchport nonegotiate
+
+switchport trunk native vlan 90
+
+
+exit
+
+
+!======================================================================
+! 10 - CONFIGURAÇÃO DA PORTA ACCESS
+!======================================================================
+
+! A interface FastEthernet 0/1 será utilizada para conexão com
+! um servidor pertencente à VLAN 100.
+
+
+interface fastEthernet 0/1
+
+description Interface de Acesso da VLAN 100 do Servidor
+
+
+! Configurando a porta como Access:
+
+switchport mode access
+
+
+! Desabilitando negociação DTP:
+
+switchport nonegotiate
+
+
+! Habilitando Port Security:
+
+switchport port-security
+
+
+! Limitando a quantidade de endereços MAC:
+
+switchport port-security maximum 1
+
+
+! Aprendizado automático do endereço MAC:
+
+switchport port-security mac-address sticky
+
+
+! Configurando a ação em caso de violação:
+
+switchport port-security violation restrict
+
+
+! Associando a porta à VLAN 100:
+
+switchport access vlan 100
+
+
+exit
+
+
+!======================================================================
+! 11 - CONFIGURAÇÃO DA PORTA DO ACCESS POINT
+!======================================================================
+
+! A interface FastEthernet 0/2 será associada à VLAN 50.
+
+
+interface fastEthernet 0/2
+
+description Interface de Acesso da VLAN 50 do Access Point
+
+
+switchport mode access
+
+switchport access vlan 50
+
+switchport nonegotiate
+
+
+! Habilitando Port Security:
+
+switchport port-security
+
+switchport port-security mac-address sticky
+
+switchport port-security maximum 5
+
+switchport port-security violation restrict
+
+
+exit
+
+
+!======================================================================
+! 12 - CONFIGURAÇÃO DA SVI DE GERENCIAMENTO
+!======================================================================
+
+! A VLAN 99 será utilizada para gerenciamento do Switch Layer 3.
+
+
+interface vlan 99
+
+description Interface de SVI de Gerenciamento Switch Layer 3 3560
+
+ip address 192.168.99.252 255.255.255.0
+
+no shutdown
+
+
+exit
+
+
+!======================================================================
+! 13 - DESATIVANDO INTERFACES NÃO UTILIZADAS
+!======================================================================
+
+! As interfaces FastEthernet 0/3 até 0/23 não utilizadas serão
+! administrativamente desativadas.
+
+
+interface range fastEthernet 0/3 - 23
+
+shutdown
+
+
+exit
+
+
+!======================================================================
+! 14 - GATEWAY DE GERENCIAMENTO
+!======================================================================
+
+! Configurando o Gateway padrão para gerenciamento:
+
+
+ip default-gateway 192.168.99.254
+
+
+end
+
+
+! Salvando as configurações:
+
+write
+
+
+!======================================================================
+! 15 - CONFIGURAÇÃO DOS SWITCHES LAYER 2
+!======================================================================
+
+! A configuração será realizada nos Switches Catalyst 2960.
+
+
+enable
+
+configure terminal
+
+
+! Configurando as interfaces GigabitEthernet como Trunk:
+
+
+interface range gigabitEthernet 0/1 - 2
+
+description Interface de Trunk com os Switches Layer 2 e 3
+
+switchport mode trunk
+
+switchport nonegotiate
+
+switchport trunk native vlan 90
+
+
+exit
+
+
+!======================================================================
+! 16 - PORTAS DA VLAN 10
+!======================================================================
+
+! As interfaces FastEthernet 0/1 até 0/5 serão associadas à VLAN 10.
+
+
+interface range fastEthernet 0/1 - 5
+
+description Interface de Acesso do Desktop da VLAN 10
+
+switchport mode access
+
+switchport access vlan 10
+
+switchport nonegotiate
+
+
+! Habilitando Port Security:
+
+switchport port-security
+
+switchport port-security maximum 1
+
+switchport port-security mac-address sticky
+
+switchport port-security violation restrict
+
+
+exit
+
+
+!======================================================================
+! 17 - PORTAS DA VLAN 20
+!======================================================================
+
+! As interfaces FastEthernet 0/6 até 0/10 serão associadas à VLAN 20.
+
+
+interface range fastEthernet 0/6 - 10
+
+description Interface de Acesso do Desktop da VLAN 20
+
+switchport mode access
+
+switchport access vlan 20
+
+switchport nonegotiate
+
+switchport port-security
+
+switchport port-security maximum 1
+
+switchport port-security mac-address sticky
+
+switchport port-security violation restrict
+
+
+exit
+
+
+!======================================================================
+! 18 - PORTAS DA VLAN 30
+!======================================================================
+
+! As interfaces FastEthernet 0/11 até 0/15 serão associadas à VLAN 30.
+
+
+interface range fastEthernet 0/11 - 15
+
+description Interface de Acesso do Desktop da VLAN 30
+
+switchport mode access
+
+switchport access vlan 30
+
+switchport nonegotiate
+
+switchport port-security
+
+switchport port-security maximum 1
+
+switchport port-security mac-address sticky
+
+switchport port-security violation restrict
+
+
+exit
+
+
+!======================================================================
+! 19 - PORTAS DA VLAN 40
+!======================================================================
+
+! As interfaces FastEthernet 0/16 até 0/20 serão associadas à VLAN 40.
+
+
+interface range fastEthernet 0/16 - 20
+
+description Interface de Acesso do Desktop da VLAN 40
+
+switchport mode access
+
+switchport access vlan 40
+
+switchport nonegotiate
+
+switchport port-security
+
+switchport port-security maximum 1
+
+switchport port-security mac-address sticky
+
+switchport port-security violation restrict
+
+
+exit
+
+
+!======================================================================
+! 20 - DESATIVANDO PORTAS NÃO UTILIZADAS
+!======================================================================
+
+! As interfaces FastEthernet 0/21 até 0/24 serão desativadas.
+
+
+interface range fastEthernet 0/21 - 24
+
+shutdown
+
+
+exit
+
+
+!======================================================================
+! 21 - SVI DE GERENCIAMENTO DO SWITCH LAYER 2
+!======================================================================
+
+! Configurando a interface VLAN 99 para gerenciamento.
+
+
+interface vlan 99
+
+description Interface de SVI de Gerenciamento Switch Layer 2 2960
+
+ip address 192.168.99.251 255.255.255.0
+
+no shutdown
+
+
+exit
+
+
+! Configurando o Gateway padrão:
+
+ip default-gateway 192.168.99.254
+
+
+end
+
+
+! Salvando as configurações:
+
+write
+
+
+!======================================================================
+! 22 - VERIFICAÇÃO DAS VLANs
+!======================================================================
+
+! Visualizando todas as VLANs configuradas:
+
+show vlan brief
+
+
+! Visualizando informações da VLAN 10:
+
+show vlan id 10
+
+
+! Visualizando uma VLAN pelo nome:
+
+show vlan name adm
+
+
+!======================================================================
+! 23 - VERIFICAÇÃO DO VTP
+!======================================================================
+
+! Visualizando o estado do VTP:
+
+show vtp status
+
+
+! Visualizando os contadores do VTP:
+
+show vtp counters
+
+
+!======================================================================
+! 24 - VERIFICAÇÃO DAS INTERFACES
+!======================================================================
+
+! Visualizando o estado das interfaces:
+
+show interface status
+
+
+! Visualizando as interfaces configuradas como Trunk:
+
+show interface trunk
+
+
+! Visualizando o estado de uma interface específica:
+
+show interfaces gigabitEthernet 0/1 status
+
+
+! Visualizando as características da porta:
+
+show interfaces gigabitEthernet 0/1 switchport
+
+
+!======================================================================
+! 25 - VERIFICAÇÃO DA CONFIGURAÇÃO
+!======================================================================
+
+! Visualizando as configurações das interfaces:
+
+show running-config | section interface
+
+
+!======================================================================
+! 26 - PRINCIPAIS COMANDOS
+!======================================================================
+
+! Criar VLAN:
+
+vlan 10
+
+
+! Definir nome:
+
+name adm
+
+
+! Configurar porta Access:
+
+switchport mode access
+
+
+! Associar porta à VLAN:
+
+switchport access vlan 10
+
+
+! Configurar porta Trunk:
+
+switchport mode trunk
+
+
+! Definir VLAN Nativa:
+
+switchport trunk native vlan 90
+
+
+! Definir encapsulamento 802.1Q:
+
+switchport trunk encapsulation dot1q
+
+
+! Desabilitar DTP:
+
+switchport nonegotiate
+
+
+! Habilitar Port Security:
+
+switchport port-security
+
+
+! Aprendizado Sticky:
+
+switchport port-security mac-address sticky
+
+
+! Verificar VLANs:
+
+show vlan brief
+
+
+! Verificar Trunks:
+
+show interface trunk
+
+
+! Verificar portas:
+
+show interface status
+
+
+! Verificar configuração de Switchport:
+
+show interfaces gigabitEthernet 0/1 switchport
+
+
+! Verificar VTP:
+
+show vtp status
+
+
+!======================================================================
+! 27 - RESULTADO ESPERADO
+!======================================================================
+
+! Ao finalizar o laboratório, o aluno deverá ser capaz de:
+
+! 01 - Compreender o conceito de VLAN;
+! 02 - Criar VLANs em Switches Cisco;
+! 03 - Associar interfaces às VLANs;
+! 04 - Configurar portas Access;
+! 05 - Configurar portas Trunk;
+! 06 - Configurar VLAN Nativa;
+! 07 - Compreender o funcionamento do 802.1Q;
+! 08 - Configurar SVI de gerenciamento;
+! 09 - Configurar Port Security;
+! 10 - Desativar interfaces não utilizadas;
+! 11 - Verificar o estado das VLANs;
+! 12 - Verificar interfaces Trunk;
+! 13 - Verificar configurações de Switchport;
+! 14 - Analisar a configuração de VTP.
+
+
+!======================================================================
+! CONCLUSÃO
+!======================================================================
+
+! Neste procedimento foram configuradas VLANs em equipamentos Cisco,
+! permitindo a segmentação lógica da rede e a criação de diferentes
+! domínios de Broadcast.
+
+! Foram configuradas portas Access para conexão de dispositivos finais
+! e portas Trunk para o transporte de múltiplas VLANs entre equipamentos.
+
+! Também foram demonstradas configurações de VLAN Nativa, SVI de
+! gerenciamento, Port Security e desativação de interfaces não utilizadas.
+
+! Os comandos de verificação permitem analisar o funcionamento das
+! VLANs, interfaces, Trunks, VTP e configurações de Switchport.
+
+
+!======================================================================
+! FIM DO PROCEDIMENTO-34
+!======================================================================
